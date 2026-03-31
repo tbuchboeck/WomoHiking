@@ -201,7 +201,7 @@ const routeUrls={
   19:'https://www.outdooractive.com/de/route/wanderung/nationalpark-berchtesgaden/malerwinkel-rundweg-wandern-im-nationalpark-berchtesgaden/800513173/',
   20:'https://www.outdooractive.com/de/route/wanderung/abtenau/abtenau-ivv-rundwanderweg-postalm-rundweg-2-8-punkte-/1358920/',
   21:'https://www.alpenvereinaktiv.com/de/tour/gollinger-wasserfall-ein-naturschauspiel/23184843/',
-  22:'https://www.outdooractive.com/en/route/hiking-trail/dachstein-salzkammergut/east-bank-hiking-trail-on-lake-hallstatt/48109672/',
+  22:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/ostuferwanderweg-am-hallstaettersee/48109672/',
   23:null
 };
 
@@ -380,7 +380,7 @@ function cardHTML(t){
       <div class="section"><div class="section-title" style="color:${t.color}"><span>⚠️</span>Einschränkungen</div><div class="restrict">${t.restrictions}</div></div>
       <div class="section"><div class="section-title" style="color:${t.color}"><span>💡</span>Gut zu wissen</div><div class="section-body" style="font-size:12px;color:#9CA3AF">${t.extraInfo}</div></div>
       ${t.personal?`<div class="section"><div class="section-title" style="color:${t.color}"><span>👨‍👩‍🐕</span>Für euch</div><div class="section-body">${personalHTML(t.personal,t.color)}</div></div>`:''}
-      ${routeUrls[t.id]?`<a href="${routeUrls[t.id]}" target="_blank" rel="noopener" class="link-btn" style="background:#1A2530;border:1px solid #f9731644;color:#FB923C;margin-top:10px;display:flex;justify-content:center;width:100%;padding:8px 12px;border-radius:8px;font-size:12px">🗺️ Route & Karte auf Alpenvereinaktiv ↗</a>`:''}
+      ${routeUrls[t.id]?`<a href="${routeUrls[t.id]}" target="_blank" rel="noopener" class="link-btn" style="background:#1A2530;border:1px solid #f9731644;color:#FB923C;margin-top:10px;display:flex;justify-content:center;width:100%;padding:8px 12px;border-radius:8px;font-size:12px">🗺️ Route & Karte auf ${routeUrls[t.id].includes('outdooractive.com')?'Outdooractive':'Alpenvereinaktiv'} ↗</a>`:''}
       <div class="highlight-box" style="background:${t.color}0D;color:${t.color};border-color:${t.color}30">✨ ${t.highlight}</div>
     </div>
   </div>`;
