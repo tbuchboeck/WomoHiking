@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>23 Wanderungen für euch · Salzkammergut & Salzburger Land</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A12;--card:#13131D;--card-border:#252535;--card-hover:#1A1A28;--text:#E5E7EB;--text-dim:#9CA3AF;--text-faint:#6B7280;--accent:#3B82F6;--accent-glow:#3B82F620;--green:#059669;--warn:#92400E;--filter-bg:#111119}
+*{box-sizing:border-box;-webkit-font-smoothing:antialiased;margin:0;padding:0}
+body{background:var(--bg);font-family:'DM Sans','Avenir',-apple-system,sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none}
+
+/* HEADER */
+.header{background:linear-gradient(160deg,#0B1120 0%,#122040 40%,#0C3547 70%,#0A2A1F 100%);padding:28px 20px 22px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-30px;left:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(6,182,212,.06) 0%,transparent 70%);border-radius:50%}
+.header-sub{font-size:10px;opacity:.45;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;position:relative;z-index:1}
+.header h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;line-height:1.1;color:#F9FAFB;margin-bottom:4px;position:relative;z-index:1}
+.header h1 em{font-style:italic;color:#67E8F9;font-weight:700}
+.header p{font-size:12px;opacity:.55;position:relative;z-index:1}
+.header-stats{display:flex;gap:12px;margin-top:14px;position:relative;z-index:1}
+.stat{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.06);border-radius:10px;padding:8px 14px;min-width:70px;backdrop-filter:blur(4px)}
+.stat-val{font-size:16px;font-weight:900;color:#F9FAFB}
+.stat-label{font-size:9px;color:#94A3B8;text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+.vehicle{margin-top:12px;background:rgba(255,255,255,.06);border-radius:9px;padding:7px 12px;display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;position:relative;z-index:1;backdrop-filter:blur(4px)}
+
+/* FILTERS */
+.filter-wrap{position:sticky;top:0;z-index:100;background:var(--filter-bg);border-bottom:1px solid var(--card-border);backdrop-filter:blur(12px)}
+.filter-row{display:flex;gap:5px;padding:10px 16px 6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-row-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint);padding:8px 16px 0;margin-bottom:-2px}
+.fbtn{padding:5px 11px;border-radius:7px;font-size:10.5px;font-weight:600;border:1px solid transparent;cursor:pointer;background:#1A1A28;color:var(--text-faint);transition:.2s;white-space:nowrap;flex-shrink:0}
+.fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fbtn.type-active{background:#0F766E;color:#fff;border-color:#0F766E}
+.filter-count{font-size:10px;color:var(--text-faint);padding:2px 16px 8px}
+
+/* CARDS */
+.cards{padding:10px 14px;display:flex;flex-direction:column;gap:9px;max-width:640px;margin:0 auto}
+.group-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--text-faint);padding:8px 4px 2px;display:flex;align-items:center;gap:6px}
+.group-label::after{content:'';flex:1;height:1px;background:var(--card-border)}
+.card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--card-border);transition:border-color .3s,box-shadow .3s}
+.card.open{border-color:color-mix(in srgb,var(--c) 50%,transparent);box-shadow:0 8px 32px color-mix(in srgb,var(--c) 12%,transparent)}
+.card-header{width:100%;padding:13px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;border:none;background:none;text-align:left;color:var(--text)}
+.card-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.card-info{flex:1;min-width:0}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.card-title{font-size:14.5px;font-weight:800;color:#F3F4F6}
+.card-subtitle{font-size:11px;color:var(--text-faint);margin:1px 0 4px}
+.card-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;font-size:10.5px;color:var(--text-dim)}
+.card-meta .tag{font-weight:700;padding:1px 6px;border-radius:5px}
+.water-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.arrow{transition:transform .3s;font-size:15px;color:var(--text-faint);flex-shrink:0;margin-left:4px}
+.card.open .arrow{transform:rotate(180deg)}
+.card-body{padding:0 14px 16px;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:2px}
+.pill{border-radius:8px;padding:5px 8px;display:flex;flex-direction:column;align-items:center;min-width:58px;flex:1 1 58px}
+.pill-label{font-size:9px;color:var(--text-dim);letter-spacing:.04em;text-transform:uppercase}
+.pill-value{font-size:12px;font-weight:700}
+.section{margin-top:11px}
+.section-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.section-title span{font-size:12px}
+.section-body{font-size:12.5px;line-height:1.6;color:#D1D5DB}
+.parking-box{background:#1A1A28;border-radius:10px;padding:10px 12px;border:1px solid var(--card-border);margin-bottom:6px}
+.parking-box.warn{border-color:var(--warn)}
+.parking-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.parking-name{font-weight:700;font-size:12.5px;color:#F3F4F6;margin-bottom:2px}
+.parking-addr{font-size:11px;color:var(--text-dim);margin-bottom:3px}
+.parking-cost{display:inline-block;background:var(--green);color:#fff;font-weight:800;font-size:11.5px;padding:2px 7px;border-radius:5px;margin-bottom:3px}
+.parking-extras{font-size:11px;color:var(--text-dim)}
+.link-btn{display:inline-flex;align-items:center;gap:4px;margin-top:5px;padding:5px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.link-btn.p4n{background:#1A3A2A;border:1px solid #22C55E44;color:#4ADE80}
+.link-btn.gmaps{background:#1A2A3A;border:1px solid #3B82F644;color:#60A5FA}
+.paws{display:flex;gap:1px}
+.paws span{font-size:12px}
+.restrict{background:#2A2215;border-radius:8px;padding:8px 10px;font-size:11.5px;color:#FCD34D;border:1px solid #92400E44;line-height:1.5}
+.personal-tip{margin-bottom:5px;padding:2px 0 2px 4px;margin-left:2px;font-size:12px;color:#D1D5DB;line-height:1.65}
+.highlight-box{margin-top:10px;border-radius:8px;padding:8px 10px;font-size:11.5px;font-weight:600;border-style:dashed;border-width:1px}
+.tip-box{background:var(--card);border-radius:14px;padding:14px;border:1px solid var(--card-border)}
+.tip-box h3{font-size:13px;font-weight:800;color:#F3F4F6;margin-bottom:6px}
+.tip-box p{font-size:11.5px;line-height:1.65;color:var(--text-dim);margin-bottom:4px}
+.tip-box strong{color:#D1D5DB}
+.tip-box .warn-text{color:#FCD34D}
+.footer{text-align:center;padding:12px 0 28px;font-size:9.5px;color:var(--text-faint)}
+table{width:100%;font-size:10.5px;border-collapse:collapse;min-width:520px}
+th{padding:5px 6px;text-align:left;font-weight:700;color:var(--text-faint);font-size:9.5px;border-bottom:1px solid var(--card-border);cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--accent)}
+th:active{color:#fff}
+td{padding:5px 6px;border-bottom:1px solid #1A1A28}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.new-badge{font-size:8px;font-weight:800;background:#EF4444;color:#fff;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div class="header-sub">Salzkammergut · Salzburger Land · Berchtesgaden · Ab Bad Ischl</div>
+<h1>23 Wanderungen <em>für euch</em></h1>
+<p>Seen · Flüsse · Klammen · Almen · mit Hund 🐕 · Wohnmobil-Stellplätze</p>
+<div class="header-stats">
+<div class="stat"><span class="stat-val">23</span><span class="stat-label">Touren</span></div>
+<div class="stat"><span class="stat-val">3–12 km</span><span class="stat-label">Distanz</span></div>
+<div class="stat"><span class="stat-val">0–100 km</span><span class="stat-label">Radius</span></div>
+<div class="stat"><span class="stat-val">🐾 3–5</span><span class="stat-label">Hund</span></div>
+</div>
+<div class="vehicle"><span>🚐 Elnagh Baron 531</span><span>5,99m · 3,20m H · 3.500kg</span></div>
+</div>
+
+<div class="filter-wrap" id="filterWrap">
+<div class="filter-row-label">📍 Entfernung</div>
+<div class="filter-row" id="distFilters"></div>
+<div class="filter-row-label">💧 Gewässer</div>
+<div class="filter-row" id="typeFilters"></div>
+<div class="filter-row-label">🐕 Hund baden</div>
+<div class="filter-row" id="swimFilters"></div>
+<div class="filter-count" id="filterCount"></div>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<script>
+const tours=[
+// === NAH (0-30 km) ===
+{id:1,group:"nah",type:"see-fluss",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
+
+{id:2,group:"nah",type:"see",name:"Altausseer Seerundweg",subtitle:"Altaussee · Dachsteinblick",distance:"7,5 km",duration:"2–2,5 h",difficulty:"Sehr leicht",elevation:"58 Hm",water:"Altausseer See",dogRating:5,dogInfo:"Zahlreiche naturbelassene Buchten zum Baden. Offizielle Strandbäder meiden. Am Süd-/Ostufer spontane Einstiege.",parking:{name:"Kurhausparkplatz P1",address:"Altaussee Zentrum",cost:"9 €/Tag",extras:"Gebührenpflichtig 9–19 Uhr · keine Höhenbeschränkung",p4n:"https://www.google.com/maps?q=47.6362,13.7628"},stellplatz:{name:"Caravanpark Ausseerland",address:"Ischlbergstraße 52, 8990 Bad Aussee",cost:"30–35 €/Nacht",extras:"10 Plätze · Sanitär · Dusche · ganzjährig · 4,7★",p4n:"https://park4night.com/en/place/229737"},restrictions:"Steiermark: Leinen-/Maulkorbpflicht überall! Nachtparkverbot für Womos in Altaussee.",description:"Einer der schönsten Seewanderungen der Alpen. Komplett um den kristallklaren Altausseer See. Blick auf Trisselwand, Loser & Dachsteingletscher. Jausenstation Seewiese (James Bond 'Spectre').",highlight:"Spektakulärstes Panorama · James-Bond-Drehlocation · kinderwagentauglich",color:"#4895EF",icon:"🏔️",distanceFromBase:"30 km",driveTime:"35 Min.",extraInfo:"Salzbergwerk Altaussee · Loser-Panoramastraße · Grundlsee + Toplitzsee",personal:"🏰 Burg Pflindsberg (Ruine oberhalb Altaussee) — kurzer Abstecher, tolle Aussicht|🥗 Bad Aussee: Lebzelter (vegetarische Menüs), Café Lewandofsky (vegan-freundlich)",isNew:false},
+
+{id:3,group:"nah",type:"see",name:"Bürglstein Runde",subtitle:"Wolfgangsee · Holzstege über türkisem Wasser",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht",elevation:"40 Hm",water:"Wolfgangsee",dogRating:4,dogInfo:"Hundebadestellen bei Abersee (Zinkenbach), Berau & Schwarzenbach. Offizielle Strandbäder: Hunde verboten.",parking:{name:"P7 Schafbergbahn",address:"Au 22, 5360 St. Wolfgang",cost:"10–25 €/Tag",extras:"Offen · keine Höhenbeschränkung · WC",p4n:"https://park4night.com/en/place/58708"},stellplatz:{name:"Camping Berau",address:"Schwarzenbach 16, St. Wolfgang",cost:"ca. 30 €/Nacht",extras:"4★ · direkt am See · ganzjährig · Hunde erlaubt",p4n:"https://park4night.com/en/place/131827"},restrictions:"Salzburger Land: Leinenpflicht im Ortsgebiet. Strandbäder ohne Hund.",description:"Von St. Wolfgang am Seeufer über Schwarzenbach nach Strobl, dann auf die Bürglpromenade — Holzstege über türkisblauem Wasser. Seerosenförmige Holzliegen. Blick auf Schafberg & Bleckwand.",highlight:"Holzstege über dem Wasser · Wolfgangsee-Flair",color:"#4361EE",icon:"🌊",distanceFromBase:"12 km",driveTime:"15 Min.",extraInfo:"Schafbergbahn am Parkplatz · Wolfgangsee-Schifffahrt · Kurze Variante ab Strobl: 5 km",personal:"🏰 Burg Falkenstein am Wolfgangsee-Nordufer — mystische Felskapelle|🥗 Strobl: Gasthof Brunnwirt (veg. Optionen), St. Wolfgang: Cafés mit Strudel",isNew:false},
+
+{id:4,group:"nah",type:"bergsee",name:"Langbathseen",subtitle:"Ebensee · Zwei Bergseen im Höllengebirge",distance:"7,5 km",duration:"2 h",difficulty:"Leicht",elevation:"140 Hm",water:"Vorderer & Hinterer Langbathsee",dogRating:3,dogInfo:"Naturschutzgebiet — strikte Leinenpflicht! Kleine Buchten nutzbar. Hinterer See: Badeverbot. Tipp: Traun-Mündung bei Ebensee.",parking:{name:"Tagesparkplatz Langbathsee",address:"Langbathseestraße, 4802 Ebensee",cost:"12 €/Tag",extras:"1,50€/Std · 8–18 Uhr · Münzen! · Nachtparkverbot",p4n:"https://park4night.com/en/place/256696"},stellplatz:{name:"Stellplatz Trauneck",address:"9 Trauneck, 4802 Ebensee",cost:"30 €/24h + Kurtaxe",extras:"25 Plätze · Strom · V+E · WC · am Traunsee · max. 3 Nächte",p4n:"https://park4night.com/en/place/20458"},restrictions:"Naturschutzgebiet — Leinenpflicht! Hinterer See: Badeverbot. Nachtparkverbot.",description:"Dramatische Gebirgslandschaft am Fuß des Höllengebirges. Türkis-schimmerndes Wasser, Brunnkogel, kaiserliches Jagdschloss.",highlight:"Kaiserliches Jagdschloss · dramatische Felsen · Kombi mit Offensee",color:"#7209B7",icon:"⛰️",distanceFromBase:"20 km",driveTime:"25 Min.",extraInfo:"Kombination mit Offensee ideal — gleiche Basis Ebensee · Münzen mitnehmen!",personal:"🏰 Schloss Orth am Traunsee (Gmunden, 20 Min.) — Seeschloss mit Brücke|🥗 Ebensee: Konditorei Wallner, Gmunden: Restaurants mit veg. Angebot",isNew:false},
+
+{id:5,group:"nah",type:"bergsee",name:"Offensee Rundweg",subtitle:"Ebensee · Karibisches Grün",distance:"5 km",duration:"1,5 h",difficulty:"Sehr leicht",elevation:"19 Hm",water:"Offensee",dogRating:3,dogInfo:"Europaschutzgebiet — Leinenpflicht. Liegewiese gesperrt. Südufer: Wasserzugang. Traun-Mündung danach.",parking:{name:"Tagesparkplatz Offensee",address:"Offensee, 4802 Ebensee",cost:"12 €/Tag",extras:"1,50€/Std · Nachtparkverbot · schlechter Mobilfunk!",p4n:"https://park4night.com/en/place/463732"},stellplatz:{name:"Stellplatz Rindbach",address:"15 Strandbadstraße, 4802 Ebensee",cost:"30 €/24h",extras:"30 Plätze · Wiese am Traunsee · Mai–Okt. · ⚠️ Übernachtungsverbot prüfen!",p4n:"https://park4night.com/en/place/52703"},restrictions:"Europaschutzgebiet — Leinenpflicht. Kein SUP/Kajak. Mobilfunk schlecht!",description:"Kürzeste Tour. Karibisch-grüner See auf 650m. Breite Forststraße, schmaler Pfad am Südufer. Jausenstation Seeau. 22–24°C im Sommer.",highlight:"Kürzeste Tour · unwirklich grünes Wasser · 22–24°C",color:"#3A86FF",icon:"💎",distanceFromBase:"15 km",driveTime:"20 Min.",extraInfo:"EasyPark VOR Fahrt aktivieren! · Kombination mit Langbathseen · Seeau Mai–Okt.",personal:"🏰 Schloss Orth + Landschloss Ort (Gmunden, 20 Min.) — TV-Serie 'Schlosshotel Orth'|🥗 Jausenstation Seeau: Kuchen — vorab fragen ob veg. möglich",isNew:false},
+
+// === MITTEL (30-60 km) ===
+{id:6,group:"mittel",type:"bergsee",name:"Gosausee Rundweg",subtitle:"Gosau · Dachstein-Spiegelung",distance:"5 km",duration:"1,5 h",difficulty:"Sehr leicht",elevation:"20 Hm",water:"Vorderer Gosausee",dogRating:4,dogInfo:"Hunde erlaubt, Leinenpflicht. Kleine Pfade ans Wasser. Sehr kaltes Wasser.",parking:{name:"P5 Gosausee (Camper!)",address:"Gosausee Bezirksstraße, 4825 Gosau",cost:"20 €/24h",extras:"Einziger Platz für Womos! P0–P4 nur PKW. 35 Plätze.",p4n:"https://park4night.com/en/place/489470"},stellplatz:{name:"Womo-Stellplatz Gosau (Steinermühle)",address:"790 Gosau, 4824 Gosau",cost:"20 €/Nacht",extras:"~10 Plätze · Automat · SPAR nah · Öko-Toilette",p4n:"https://park4night.com/en/place/450004"},restrictions:"Leinenpflicht! Fahrradverbot. Am Wochenende extrem voll — früh kommen!",description:"Das 'Auge Gottes'. Rundweg mit Spitzmauer-/Priel-Spiegelung. Themenweg, 11 Stationen. Verlängerung Hinterer Gosausee möglich (+6,5 km, +300 Hm).",highlight:"Dachstein-Spiegelung · P5 für Camper · Themenweg",color:"#E63946",icon:"🪞",distanceFromBase:"45 km",driveTime:"50 Min.",extraInfo:"Gosaukammbahn am P5 · Hinterer Gosausee +3h · Wochenende vor 9 Uhr!",personal:"🏰 Burg Golling (35 Min.) — mittelalterliche Burg mit Museum|🥗 Gosau: Kirchenwirt, Gasthof Gosausee — veg. Optionen erfragen",isNew:false},
+
+{id:7,group:"mittel",type:"see",name:"Fuschlsee Rundweg",subtitle:"Fuschl am See · Türkis-Karibik",distance:"11,5 km",duration:"3 h",difficulty:"Leicht",elevation:"140 Hm",water:"Fuschlsee",dogRating:5,dogInfo:"Einer der hundefreundlichsten Seen! Fast überall Wasserzugang. Hundestrand. Radfahrverbot = kein Stress.",parking:{name:"Parkplatz Thalgauegg",address:"B158, 5322 Hof bei Salzburg",cost:"5–8 €/Tag",extras:"Offen · keine Höhenbeschränkung",p4n:"https://www.google.com/maps?q=47.8060,13.2830"},stellplatz:{name:"Nachtparkplatz Fuschl Dorfstraße",address:"Dorfstraße 43, 5330 Fuschl am See",cost:"25 €/Nacht",extras:"10 Plätze <8m · Sand · Strandbad nebenan · kein Service · Campieren verboten · ganzjährig",p4n:"https://park4night.com/en/place/440800"},restrictions:"Leinenpflicht im Ortsgebiet. Südseite: Privatgrund. Steile Stücke mit Böschung. Stellplatz: nur Übernachten, kein Campieren!",description:"Türkisblaues Juwel östlich von Salzburg. Meist direkt am Ufer, durch Wälder, vorbei am Schloss Fuschl. 21–23°C im Sommer. Radfahrverbot = ruhig.",highlight:"Türkisblau · 21–23°C · Hundestrand · Schloss Fuschl",color:"#FF6B6B",icon:"🏝️",distanceFromBase:"35 km",driveTime:"30 Min.",extraInfo:"Verlängerung Filbling +500 Hm · Schloss Fuschl = Luxushotel · Längste Tour",personal:"🏰 Schloss Fuschl (am Rundweg!) — Jagdschloss der Erzbischöfe + Burgruine Wartenfels|🥗 Fuschl: Brunnwirt. Hof bei Salzburg: TAPS Gastrobar (veg./vegan freundlich)",isNew:false},
+
+{id:8,group:"mittel",type:"see",name:"Hintersee Rundweg",subtitle:"Faistenau · Stilles Idyll",distance:"5 km",duration:"1,5 h",difficulty:"Sehr leicht",elevation:"15 Hm",water:"Hintersee",dogRating:4,dogInfo:"Hunde am Westufer ins Wasser erlaubt (einzige Stelle!). Sonst Leinenpflicht. Schöne Kiesbuchten.",parking:{name:"Wanderparkplatz Hintersee",address:"Seestraße, 5324 Faistenau",cost:"5 €/Tag",extras:"Großer Parkplatz · Kneippbecken · WC · Kartenakzeptanz",p4n:"https://www.google.com/maps?q=47.7537,13.2408"},stellplatz:{name:"Stellplatz Wunderburg Gmunden",address:"Wunderburgstraße 30, 4810 Gmunden",cost:"Gratis (Spende ~20€)",extras:"7 Plätze · nur Womos · Schotter · eben · kein Service · privat · mit Liebe gestaltet",p4n:"https://park4night.com/en/place/412332"},restrictions:"Hundeleinenzwang im gesamten Gemeindegebiet Faistenau. Westufer: Hunde ins Wasser erlaubt.",description:"Stiller Natursee in der Fuschlseeregion. Unverbautes Ufer, Schautafeln zu Flora & Fauna. Ende Mai/Anfang Juni: Sibirische Schwertlilien tauchen die Wiesen in Lila. Kneipp-Anlage am Parkplatz.",highlight:"Gratis-Parken · Schwertlilien-Blüte Mai/Juni · Kneipp · unverbaut",color:"#0EA5E9",icon:"🦋",distanceFromBase:"40 km",driveTime:"35 Min.",extraInfo:"Kombinierbar mit Fuschlsee (15 Min.) · 3 Badeplätze am Rundweg · Lago Bar · Bramsau Bräu in Faistenau",personal:"🏰 Burgruine Wartenfels (bei Hof b. Salzburg, 15 Min.) — Aussichtspunkt über Fuschlseeregion|🥗 Lago Bar am Badeplatz Faistenau: Snacks. Faistenau: Bramsau Bräu (veg. Optionen)",isNew:true},
+
+{id:9,group:"mittel",type:"see",name:"Grundlsee Nordufer",subtitle:"Grundlsee · Via-Artis-Kunstweg",distance:"8 km",duration:"2,5 h",difficulty:"Leicht",elevation:"60 Hm",water:"Grundlsee",dogRating:4,dogInfo:"Hunde an Schotterstränden bei Gößl erlaubt. Offizielle Badeplätze meiden. Hundesackerlspender überall aufgestellt.",parking:{name:"Parkplatz Gößl",address:"231 Gößl, 8993 Grundlsee",cost:"2 €/h · 8 €/24h",extras:"Gebührenpflichtig · am Ostufer · ⚠️ Übernachtung 22–6 Uhr verboten!",p4n:"https://park4night.com/en/place/94083"},stellplatz:{name:"See-Camping Grundlsee (Stellplatz)",address:"201a Gößl, 8993 Grundlsee",cost:"17–22 €/Nacht",extras:"Max. 10 Plätze · Strom für 8 Fahrzeuge · Wiese direkt am See · kein Schatten · telefonische Anmeldung! · Drohnenverbot · öffentl. WC 30m",p4n:"https://park4night.com/en/place/207134"},restrictions:"Steiermark: Leinen-/Maulkorbpflicht. Alle Parkplätze gebührenpflichtig! Stellplatz: telefonische Voranmeldung nötig!",description:"Größter See der Steiermark. Am Nordufer entlang des Via-Artis-Kunstwegs mit Infos über Künstler der Region. Geo-Trail mit 34 Stationen. Blick auf Backenstein und Totes Gebirge. Schifffahrt mit Hund möglich.",highlight:"Größter See der Steiermark · Via-Artis-Kunstweg · Schifffahrt mit Hund · Stellplatz direkt am See",color:"#059669",icon:"🎨",distanceFromBase:"40 km",driveTime:"40 Min.",extraInfo:"Drei-Seen-Tour möglich (Grundlsee → Toplitzsee → Kammersee) · Narzissenfest Ende Mai · Schloss Castiglioni am Ufer",personal:"🏰 Schloss Castiglioni am Nordufer — Renaissance-Juwel direkt am See|🥗 Gasthaus Veit (Gößl): vegetarische Auswahl vorhanden! Gasthaus Rostiger Anker: Fischgerichte, veg. begrenzt",isNew:true},
+
+{id:10,group:"mittel",type:"see-fluss",name:"Gößl → Toplitzsee",subtitle:"Grundlsee · Legendärer Schatz-See",distance:"6 km",duration:"1,5–2 h",difficulty:"Leicht",elevation:"50 Hm",water:"Toplitzsee, Toplitzbach, Stimitzbach",dogRating:4,dogInfo:"Toplitzbach: bacherlwarm, Hund kann plantschen. Stimitzbach: eiskalt! Schotterwege hundefreundlich. Leinenpflicht.",parking:{name:"Parkplatz Gößl / Rostiger Anker",address:"231 Gößl, 8993 Grundlsee",cost:"2 €/h · 8 €/24h",extras:"Gebührenpflichtig · GH Rostiger Anker daneben · ⚠️ Übernachtung 22–6 Uhr verboten (50€ Strafe)!",p4n:"https://park4night.com/en/place/94083"},stellplatz:{name:"See-Camping Grundlsee (Stellplatz)",address:"201a Gößl, 8993 Grundlsee",cost:"17–22 €/Nacht",extras:"Max. 10 Plätze · Strom für 8 Fahrzeuge · Wiese direkt am See · kein Schatten · telefonische Anmeldung! · Hinterausgang direkt in Wald/Fluss · Drohnenverbot",p4n:"https://park4night.com/en/place/207134"},restrictions:"Steiermark: Leinen-/Maulkorbpflicht. Toplitzsee nur per Plätte erreichbar (Schiff, Hunde erlaubt). Stellplatz: telefonische Voranmeldung nötig!",description:"Von Gößl am Grundlsee durch schattigen Wald zum mystischen Toplitzsee. Geo-Trail, Ranftlmühle, Gößler Wand (180m hoch!). Der See, in dem laut Legende Nazi-Gold versenkt wurde. Fischerhütte am Toplitzsee.",highlight:"Mystischer Schatz-See · Geo-Trail · Gößler Wand · Fischerhütte",color:"#7C3AED",icon:"🔮",distanceFromBase:"45 km",driveTime:"45 Min.",extraInfo:"Plätte über Toplitzsee zum Kammersee buchbar (Mai–Okt.) · Fischerhütte: frischer Fisch! · Rückweg über Forststraße (Alternativroute)",personal:"🏰 Schloss Grundlsee (am Seeufer sichtbar) — historisches Jagdschloss|🥗 Fischerhütte am Toplitzsee: Fisch, vorab nach veg. Optionen fragen. Gasthaus Veit: besser für Vegetarier",isNew:true},
+
+{id:11,group:"mittel",type:"bergsee",name:"Laudachsee via Grünberg",subtitle:"Gmunden · Moorsee + Seilbahn",distance:"5 km",duration:"2 h (ab Bergstation)",difficulty:"Leicht–Mittel",elevation:"250 Hm",water:"Laudachsee, Traunsee",dogRating:4,dogInfo:"Seilbahn: Hunde mit Maulkorb. Am See: naturbelassene Ufer. Moorsee = wärmer. Gmunden: Traunsee-Ufer.",parking:{name:"⚠️ Parkhaus Seilbahn: 2,10m!",address:"Freygasse 4, 4810 Gmunden",cost:"8–12 €/Tag",extras:"ACHTUNG: Elnagh passt NICHT! → Toscanapark",p4n:"https://www.google.com/maps?q=47.9135,13.7975"},stellplatz:{name:"Stellplatz Toscanapark",address:"2 Toscanapark, 4810 Gmunden",cost:"18–25 €/24h",extras:"Am Traunsee · offen · Strom · WC (50 Cent) · 15 Min. zur Seilbahn",p4n:"https://park4night.com/en/place/13538"},restrictions:"Parkhaus 2,10m = NICHT für Elnagh (3,20m)! Toscanapark nutzen. Seilbahn: Maulkorb.",description:"Seilbahn auf den Grünberg, dann zum Laudachsee — Moorsee auf 894m. Ramsaualm: Schweinsbraten aus Holzofen. Baumwipfelpfad. Rückfahrt Seilbahn, Traunsee-Spaziergang.",highlight:"Seilbahn-Komfort · Ramsaualm · Baumwipfelpfad · Traunsee",color:"#F4A261",icon:"🌿",distanceFromBase:"35 km",driveTime:"35 Min.",extraInfo:"Baumwipfelpfad (Hunde erlaubt) · Gmundner Keramik · Traunsee-Schifffahrt · Seilbahn ca. 20€",personal:"🏰 Schloss Orth + Landschloss Ort — Seeschloss auf Insel, Wahrzeichen!|🥗 Gmunden: Konditorei Grellinger, Pizzeria. Ramsaualm: Käsespätzle als veg. Option",isNew:false},
+
+{id:12,group:"mittel",type:"see",name:"Almsee Rundweg",subtitle:"Grünau im Almtal · Spiegelsee",distance:"6,5 km",duration:"1,5–2 h",difficulty:"Sehr leicht",elevation:"30 Hm",water:"Almsee, Almfluss",dogRating:4,dogInfo:"Hunde erlaubt, viele Hundebesitzer. Kiesbuchten. Almfluss zum Baden. Naturschutzgebiet — anleinen! Wildpark: Hunde NICHT erlaubt.",parking:{name:"Parkplatz Almsee / GH Seehaus",address:"Seehaus, 4645 Grünau im Almtal",cost:"5–8 €/Tag",extras:"Großer Parkplatz · WC · GH Seehaus (seit 1652!)",p4n:"https://www.google.com/maps?q=47.7390,13.9540"},stellplatz:{name:"Almcamp Schatzlmühle",address:"1a Viechtwang, 4644 Scharnstein",cost:"25–33 €/Nacht",extras:"Am Almfluss · Hunde erlaubt · ganzjährig · 4,8★ · 20 Min. zum See",p4n:"https://park4night.com/en/place/97721"},restrictions:"⚠️ WOMO am Almsee-Parkplatz VERBOTEN — aggressiv kontrolliert! Almcamp nutzen. Leinenpflicht.",description:"Fotogenster See OÖ. Ikonisches Häuschen im See. Totes Gebirge spiegelt sich. Auwälder, Flussläufe, 'Echoplatzerl'. Cumberland Wildpark auf Anfahrt.",highlight:"Instagram-Ikone Seehaus · Totes-Gebirge-Spiegelung · Wildpark",color:"#606C38",icon:"🦌",distanceFromBase:"50 km",driveTime:"50 Min.",extraInfo:"Cumberland Wildpark (Hunde verboten!) · GH Seehaus seit 1652 · Ameisstein-Tour möglich",personal:"🏰 Schloss Scharnstein (am Weg!) — Renaissanceschloss mit Krippenmuseum|🥗 GH Seehaus: Kuchen ok. Grünau: eingeschränkte veg. Auswahl — Jause mitnehmen!",isNew:false},
+
+// === WEIT (60+ km) ===
+{id:13,group:"weit",type:"fluss-klamm",name:"Schiederweiher & Polsterlucke",subtitle:"Hinterstoder · Perle des Stodertals",distance:"7 km",duration:"2 h",difficulty:"Leicht",elevation:"50 Hm",water:"Schiederweiher, Krumme Steyr",dogRating:5,dogInfo:"Sehr hundefreundlich! Krumme Steyr: viele Flussstellen. Schiederweiher: Buchten. Polsterstüberl: Hunde im Gastgarten.",parking:{name:"Parkplatz Schiederweiher",address:"Goierweg, 4573 Hinterstoder",cost:"5 €/24h",extras:"Großer Schotterparkplatz · offen · Kiosk",p4n:"https://park4night.com/en/place/213799"},stellplatz:{name:"Womo-Stellplatz Hinterstoder",address:"Hinterstoder 5A (Hössbahn)",cost:"15 €/Nacht + 3 € Kurtaxe",extras:"30 Plätze · Strom · V+E · Hunde erlaubt · Online-Buchung · 7.4.–24.5. ZU!",p4n:"https://park4night.com/en/place/482487"},restrictions:"Polsterstüberl: Mo+Di Ruhetag. Wochenende: Parkplatz-Lotsen.",description:"2018 'Schönster Platz Österreichs' (ORF). Über Johannishof entlang der Krummen Steyr zum türkisfarbenen Schiederweiher. Weiter zur Polsterlucke (Ponys, Biergarten).",highlight:"ORF-Sieger · Fluss + Stausee · Polsterstüberl · nur 15€/Nacht",color:"#2EC4B6",icon:"✨",distanceFromBase:"55 km",driveTime:"55 Min.",extraInfo:"Dr. Vogelgesang Klamm in der Nähe · Prielschutzhaus +1.000 Hm · Nur online buchbar!",personal:"🏰 Schloss Leonstein (20 Min.) — Renaissanceschloss an der Steyr|🥗 Polsterstüberl: Kuchen, veg. begrenzt. Hinterstoder: Hotels mit besserer Auswahl",isNew:false},
+
+{id:14,group:"weit",type:"fluss-klamm",name:"Rinnende Mauer",subtitle:"Molln · Naturwunder Steyrschlucht",distance:"8,7 km",duration:"2,5–3 h",difficulty:"Mittel",elevation:"70 Hm",water:"Steyr, Krumme Steyrling",dogRating:4,dogInfo:"Mit Hund gut machbar. Steyr: Badeplätze an Schotterbänken. Alpiner Steig: Hund muss trittsicher sein! Leinenpflicht.",parking:{name:"Parkplatz Stefaniebrücke",address:"Buseckerstraße 2, 4591 Molln",cost:"Kostenlos",extras:"Großer Parkplatz · Pizzeria Dolce Vita daneben · Bus 433",p4n:"https://www.google.com/maps?q=47.8836,14.2526"},stellplatz:{name:"Parkplatz Gradau (kurze Runde)",address:"Haunoldmühlstr., 4591 Breitenau",cost:"Kostenlos",extras:"Kürzere Runde: 4,7 km, 1:15h",p4n:"https://www.google.com/maps?q=47.8780,14.2680"},restrictions:"Naturschutzgebiet — Leinenpflicht! Trittsicherheit nötig! Steinschlaggefahr bei Regen. 1.4.–1.7.: Schotterinsel gesperrt.",description:"Naturwunder: 50m lange Konglomeratwand, aus der Grundwasser als Sprühregen austritt — 5–7m über der smaragdgrünen Steyr. Schluchtweg ab Stefaniebrücke, über Zinkensteg zur Rinnenden Mauer. Spektakuläre Tiefblicke.",highlight:"Einzigartiges Naturwunder · smaragdgrüne Steyr · KOSTENLOS · Pizza danach",color:"#7B2D8E",icon:"💧",distanceFromBase:"75 km",driveTime:"1:10 h",extraInfo:"3 Routen: Schluchtweg (8,7 km), Flötzersteig (1:15h), Gradau-Runde (4,7 km) · Maultrommel-Werkstatt · Dolce Vita (4,3★) · Badeschuhe!",personal:"🏰 Schloss Leonstein — Renaissance-Juwel an der Steyr! Burg Altpernstein (30 Min.) — mittelalterlich mit Führungen|🥗 Pizzeria Dolce Vita: Pizza, Pasta, Salate — vegetarisch top! Landgasthof Klausner: Käsegerichte",isNew:false},
+
+{id:15,group:"weit",type:"bergsee",name:"Leopoldsteiner See",subtitle:"Eisenerz · Wasserperle Österreichs",distance:"4 km",duration:"1–1,5 h",difficulty:"Sehr leicht",elevation:"15 Hm",water:"Leopoldsteiner See, Seeaubach",dogRating:3,dogInfo:"Hunde am Rundweg erlaubt (Leinenpflicht). Hundebaden im See offiziell NICHT mehr erlaubt! Aber: Seezu-/ablauf & Kneippanlage zum Plantschen. Schotterbänke am Seeaubach weiter hinten ruhiger.",parking:{name:"Parkplatz Seestüberl",address:"9 Seestraße, 8790 Eisenerz",cost:"4 €/Tag",extras:"Großer Parkplatz · Seestüberl Restaurant · 7–23 Uhr · im Sommer schnell voll!",p4n:"https://park4night.com/en/place/65608"},stellplatz:{name:"Camping Stellplatz Eisenerz",address:"Eisenerz (beim Hallenbad)",cost:"Kostenlos",extras:"Strom/Wasser 1€/8h · Panoramablick Eisenerzer Alpen · 5 Min. zum See",p4n:"https://park4night.com/en/place/501526"},restrictions:"Hundebaden im See offiziell verboten (Schilder). Seezu-/ablauf als Alternative. Sommer-Wochenende: sehr voll!",description:"2013 zur 'Wasserperle Österreichs' gewählt. Smaragdgrüner Bergsee am Fuß der Seemauer (Hochschwab). 4 km Rundweg auf Schotterstraße. Bootsverleih am Ostufer. Schloss Leopoldstein am Zufahrtsweg. Erzberg nur 5 km entfernt.",highlight:"Wasserperle Österreichs · Erzberg-Kombi · KOSTENLOS · Schloss Leopoldstein",color:"#B45309",icon:"⚒️",distanceFromBase:"100 km",driveTime:"1:20 h",extraInfo:"Erzberg-Abenteuer (Hauly-Tour!) kombinierbar · Seestüberl: Steirerkasnockn · Hochblaser-Gipfeltour möglich (+1.170 Hm) · Klettersteige in Eisenerzer Alpen",personal:"🏰 Schloss Leopoldstein (direkt an der Zufahrt!) — Denkmalgeschütztes Schloss mit Sage vom Wassermann|🥗 Seestüberl: Steirerkasnockn, Geröstete Knödel — veg. machbar. JUFA Eisenerz: günstiges Hotel mit Terrasse & Erzberg-Blick",isNew:true},
+
+{id:16,group:"weit",type:"see",name:"Zeller See Rundweg",subtitle:"Zell am See · Hohe-Tauern-Panorama",distance:"12 km",duration:"3–3,5 h",difficulty:"Leicht",elevation:"30 Hm",water:"Zeller See",dogRating:4,dogInfo:"Viele Hundebadestellen am Nord- und Westufer. Thumersbach Park: offiziell hundefreundlich. Strandbäder: Hunde meist verboten. Erlberg: eingezäunter Hundefreilaufplatz (aber kein Seezugang). Leinenpflicht.",parking:{name:"Parkplatz Strandbad Erlberg",address:"Thomas-Bernhardweg, 5700 Zell am See",cost:"1,80 €/h · 8 €/Tag",extras:"Großer Parkplatz · Strandbad · Hundefreilaufplatz · ⚠️ Übernachtung verboten (150€ Strafe)!",p4n:"https://park4night.com/en/place/78757"},stellplatz:{name:"Seecamp Zell am See",address:"34 Thumersbacher Str., 5700 Zell am See",cost:"30–45 €/Nacht",extras:"160 Plätze · direkt am See · ganzjährig · Hunde 4,70€ · Reservierung empfohlen",p4n:"https://park4night.com/en/place/51913"},restrictions:"Salzburger Land: Leinenpflicht oder Maulkorb. Kaum Schatten — nicht bei Hitze! Ostseite: Gehsteig an Straße, wenig reizvoll.",description:"12 km Rundweg um den Zeller See im Pinzgau. Westufer: traumhafte Seepromenade mit uraltem Baumbestand. Südufer: Naturschutzgebiet 'Zeller Moos'. Blick auf Kitzsteinhorn, Steinernes Meer & Hohe Tauern. Altstadt Zell am See mit Hundertwasser-Brunnen.",highlight:"Hohe-Tauern-Panorama · Kitzsteinhorn-Blick · Seecamp · Altstadt Zell am See",color:"#DC2626",icon:"🏔️",distanceFromBase:"90 km",driveTime:"1:15 h",extraInfo:"Schmittenhöhe-Seilbahn (Hunde erlaubt) · Schifffahrt am See · Kaprun & Kitzsteinhorn 15 Min. · Seevilla Freiberg: Kaffee auf dem Steg (Hunde willkommen)",personal:"🏰 Schloss Rosenberg (Rathaus Zell am See) — mitten in der Altstadt! Schloss Prielau am Nordufer|🥗 Zell am See Altstadt: viele Cafés & Restaurants. Seevilla Freiberg: Terrasse am Steg. Generell gutes veg. Angebot in der Tourismusstadt",isNew:true},
+
+{id:17,group:"weit",type:"fluss-klamm",name:"Sigmund-Thun-Klamm",subtitle:"Kaprun · Klamm + Klammsee",distance:"2,8 km",duration:"1–1,5 h",difficulty:"Leicht",elevation:"145 Hm",water:"Kapruner Ache, Klammsee",dogRating:4,dogInfo:"Hunde erlaubt (Leinenpflicht). Holzstege in der Klamm — Hund muss trittsicher sein. Klammsee: Kneipp-Anlage am Südufer. Wasser sehr kalt!",parking:{name:"Parkplatz Krafthaus Hauptstufe",address:"Krafthausstraße 22, 5710 Kaprun",cost:"Kostenlos",extras:"Am Eingang der Klamm · WC",p4n:"https://www.google.com/maps?q=47.2650,12.7550"},stellplatz:{name:"Seecamp Zell am See",address:"34 Thumersbacher Str., 5700 Zell am See",cost:"30–45 €/Nacht",extras:"160 Plätze · 15 Min. nach Kaprun · ganzjährig",p4n:"https://park4night.com/en/place/51913"},restrictions:"Klamm: Eintritt ca. 6–8€ (Hunde frei). Holzstege — bei Nässe rutschig! Saison: Mai–Oktober.",description:"Spektakuläre Klamm, in der sich die Kapruner Ache bis zu 32m tief ins Gestein gegraben hat. Holzstege führen durch die enge Schlucht. Oben: Klammsee mit Bürgersperre-Staudamm. Klammseestüberl zur Einkehr. Kneipp-Anlage am Südufer. Ideal als Kombi mit Zeller See.",highlight:"Spektakuläre Klamm · Klammsee · Kneipp · Kombi mit Zeller See · kurz & knackig",color:"#0891B2",icon:"🌊",distanceFromBase:"95 km",driveTime:"1:15 h",extraInfo:"Perfekte Kombi mit Zeller See (15 Min.)! · Kitzsteinhorn-Seilbahn in Kaprun · Naturdenkmal seit 1930er · Klammseestüberl: Terrasse mit Seeblick",personal:"🏰 Burg Kaprun (Ruine oberhalb Kaprun) — kurzer Abstecher, Panoramablick auf Kitzsteinhorn|🥗 Klammseestüberl: Kuchen & Getränke. Kaprun Ortszentrum: mehrere Restaurants mit veg. Optionen",isNew:true},
+
+{id:18,group:"mittel",type:"fluss-klamm",name:"Bluntautal",subtitle:"Golling · Märchental an der Torrener Ache",distance:"8 km",duration:"2–2,5 h",difficulty:"Leicht",elevation:"80 Hm",water:"Torrener Ache, Bluntauseen",dogRating:4,dogInfo:"Hunde erlaubt (Leinenpflicht). Baden in den Bluntauseen VERBOTEN. Torrener Ache: Pfoten eintauchen ok. Kneipp-Anlage am Weg.",parking:{name:"Parkplatz P1 Bluntautal",address:"56 Bluntaustraße, 5440 Golling",cost:"7 €/Tag",extras:"Großer Schotterparkplatz · GH Göllhof daneben · WC · Mo–Fr frei (außerhalb 1.5.–31.10.)",p4n:"https://park4night.com/en/place/66585"},stellplatz:{name:"Wohnmobilpark Aqua Salza",address:"Möslstraße 199, 5440 Golling",cost:"18,50 €/Nacht",extras:"15 Plätze · ganzjährig · Strom · V+E · Hunde erlaubt · direkt am Schwimmbad/Sauna · keine Voranmeldung nötig",p4n:"https://park4night.com/en/place/16209"},restrictions:"Naturschutzgebiet seit 1980 — Leinenpflicht! Baden in Bluntauseen verboten. Forststraße für Verkehr gesperrt. Wochenende: stark frequentiert.",description:"Märchenhaftes Tal mit 1.500m hohen Felswänden des Göllstocks. Glasklare Torrener Ache, tiefgrüne Bluntauseen. Hin auf Waldweg, zurück auf Forststraße (Rundweg). Gasthof Bärenwirt auf halber Strecke. Kneipp-Anlage. Kombinierbar mit Gollinger Wasserfall.",highlight:"Märchental · glasklare Seen · Burg Golling · 18,50€ Stellplatz mit Sauna · Gollinger Wasserfall",color:"#15803D",icon:"🏞️",distanceFromBase:"65 km",driveTime:"50 Min.",extraInfo:"Gollinger Wasserfall (3€ Eintritt) kombinierbar · Salzachöfen in der Nähe · Burg Golling mit Museum · Kutschfahrten im Winter · ab Golling alle 30 Min. Zug nach Salzburg",personal:"🏰 Burg Golling — mittelalterliche Burg mit Heimatmuseum, direkt im Ort!|🥗 Gasthof Göllhof am Eingang: Kaffee & Kuchen. Gasthof Bärenwirt im Tal: Einkehr (veg. begrenzt). Golling Zentrum: mehrere Restaurants",isNew:true},
+
+{id:19,group:"weit",type:"bergsee",name:"Malerwinkel Königssee",subtitle:"Schönau · Smaragdgrüner Nationalpark-See",distance:"4 km",duration:"1,5 h",difficulty:"Leicht",elevation:"80 Hm",water:"Königssee",dogRating:3,dogInfo:"Hunde erlaubt (Leinenpflicht im gesamten Nationalpark!). Baden im Königssee für Hunde NICHT erlaubt (Trinkwasser). Bootsfahrt: Hunde mit Maulkorb erlaubt. Kein Wasserzugang für Hund.",parking:{name:"Großparkplatz Königssee P2",address:"Seestraße, 83471 Schönau am Königssee",cost:"25 €/24h",extras:"40 Plätze für Womos · Schotter · eben · max. 48h · Parkster-App",p4n:"https://www.google.com/maps?q=47.5910,12.9870"},stellplatz:{name:"Stellplatz Mobiler Alpengenuss",address:"Allweggasse 4, 83471 Berchtesgaden",cost:"25–30 €/Nacht",extras:"28 Plätze · 24h Check-in · Strom · V+E · Hunde erlaubt · Pool · Restaurant · Brötchenservice",p4n:"https://www.google.com/maps?q=47.6310,13.0020"},restrictions:"Deutschland/Bayern: Leinenpflicht im Nationalpark! Hundebaden im See verboten. Bootsfahrt nur mit Maulkorb. Parkplatz: kein Campingverhalten!",description:"Der ikonischste See der Alpen. Malerwinkel-Rundweg mit Traumblick auf smaragdgrünes Wasser, Watzmann-Ostwand & Nationalpark. Villa Beust (Café). Jennerbahn-Talstation am Rückweg. Bootsfahrt nach St. Bartholomä möglich (Hunde mit Maulkorb).",highlight:"Ikonischster Alpen-See · Watzmann · Nationalpark · Bootsfahrt St. Bartholomä",color:"#1D4ED8",icon:"⛰️",distanceFromBase:"85 km",driveTime:"1:10 h",extraInfo:"Bootsfahrt St. Bartholomä: ca. 19€ retour · Jennerbahn am Rundweg · Salzbergwerk Berchtesgaden · Wimbachklamm (6 km, mittelschwer) · ACHTUNG: Deutschland — andere Hundegesetze als Österreich",personal:"🏰 Schloss Berchtesgaden (Residenz der Wittelsbacher) — 10 Min. Fahrt, Museum|🥗 Schönau: Gasthaus Seealm (Salat, Pizza, veg. machbar). Berchtesgaden: gute Restaurantauswahl",isNew:true},
+
+{id:20,group:"nah",type:"alm",name:"Postalm Almrunde",subtitle:"Strobl · Größtes Almgebiet Österreichs",distance:"5–9 km",duration:"1–3 h",difficulty:"Leicht",elevation:"60–250 Hm",water:"Kein Gewässer — Almwiesen, Panorama, Hütten",dogRating:4,dogInfo:"Hundefreundliche Almwege. Leinenpflicht wegen Weidevieh (Kühe, Pferde, Kalbinnen)! Kein Badesee, aber Bäche zum Trinken. 16 bewirtschaftete Hütten.",parking:{name:"Postalm Parkplatz P1",address:"Postalm, via Mautstraße ab Strobl",cost:"20 €/Nacht (Nachtparkticket am Automaten)",extras:"Großer Parkplatz · WC 24h (kaltes Wasser) · kein Strom · kein V+E · Nachtparkticket am Automaten auf P1 · Maut: 18€ (Womo bis 3,5t)",p4n:"https://park4night.com/en/place/107622"},stellplatz:null,restrictions:"Mautstraße: 18€ Womo bis 3,5t (ab Strobl). Nachtparkticket 20€ am Automaten auf P1 — seit Sommer 2022 offiziell erlaubt (vorher verboten, davor gratis geduldet). Kein Campingverhalten (keine Stühle/Markise)! Weidevieh — Hund IMMER anleinen! Eingezäunten Parkbereich im Sommer nutzen (Kühe!).",description:"Größtes zusammenhängendes Almgebiet Österreichs (42 km²). Mehrere Rundwege (R1–R4) über saftige Almwiesen mit Panoramablick auf Wolfgangsee, Dachstein & Bischofsmütze. 16 bewirtschaftete Hütten mit Almkäse, Buttermilch & Kaiserschmarrn. Postalmkapelle. Pferde & Kühe auf den Wiesen. Klettersteig Postalm (B/C) für Thomas!",highlight:"Größtes Almgebiet Österreichs · 16 Hütten · Postalmkapelle · Klettersteig · nur 20 km von Bad Ischl",color:"#D97706",icon:"🏔️",distanceFromBase:"20 km",driveTime:"30 Min. + Mautstraße",extraInfo:"Rundweg R2 (9 km, 2,5h) mit Pitscherbergalm & Labenbergalm am schönsten · R4 Almblumenweg (2 km, 45 Min.) für kurze Runde · Mautstraße auch von Abtenau befahrbar · Dachstein-Panorama bei Abfahrt Richtung Abtenau · Postalm-Klettersteig (B/C) direkt am P3",personal:"🏰 Keine Burg direkt — aber Wolfgangsee-Burgen (Falkenstein) in 20 Min. erreichbar|🥗 16 Almhütten! Pitscherbergalm: Almkäse, Buttermilch. Schnitzhofalm: eigene Käserei (400 Jahre alt!). Rosserhütte am P1. Kaiserschmarrn überall — veg. gut machbar auf der Alm!",isNew:true},
+
+{id:21,group:"mittel",type:"fluss-klamm",name:"Gollinger Wasserfall",subtitle:"Golling · 75m Naturwunder + Regenbogenbrücke",distance:"2,5 km",duration:"1–1,5 h",difficulty:"Leicht–Mittel",elevation:"90 Hm",water:"Schwarzbach (Wasserfall), Torrener Ache",dogRating:3,dogInfo:"Hunde erlaubt (Leinenpflicht). Metallgitter am oberen Wasserfall — evtl. Hund tragen! Steig teils steil, rutschig & nass. Laute Geräuschkulisse — lärmempfindliche Hunde beachten!",parking:{name:"Parkplatz P2 Wasserfall",address:"Wasserfallstraße, 5440 Golling (Torren)",cost:"5 €/Tag",extras:"Privater Schotterparkplatz · 5 Min. zum Kassenhaus · P1 gesperrt!",p4n:"https://park4night.com/en/place/149187"},stellplatz:{name:"Wohnmobilpark Aqua Salza",address:"Möslstraße 199, 5440 Golling",cost:"18,50 €/Nacht",extras:"15 Plätze · ganzjährig · Strom · V+E · Hunde erlaubt · Schwimmbad/Sauna direkt daneben · keine Voranmeldung",p4n:"https://park4night.com/en/place/16209"},restrictions:"Eintritt: 5€ Erw. / 3€ Kinder / 12€ Familienkarte. Mai–Oktober, 9–18 Uhr. Winter: kostenlos aber auf eigene Gefahr. Steig nass & rutschig! Metallgitter am oberen Fall. P1 gesperrt — nur P2/P3!",description:"Einer der größten Wasserfälle im Salzburger Land. 75m Fallhöhe in zwei Stufen, bis zu 42.000 Liter/Sekunde. Steig durch Wald zum unteren Wasserfall (10 Min.), weiter über Regenbogenbrücke zur Quelle in der Schwarzbachfall-Höhle. Nikolauskirche (Sound of Music-Drehort!) direkt am Parkplatz.",highlight:"75m Wasserfall · Regenbogenbrücke · Sound of Music · Kombi mit Bluntautal · 18,50€ Stellplatz mit Sauna",color:"#0E7490",icon:"💦",distanceFromBase:"65 km",driveTime:"50 Min.",extraInfo:"Vom Wasserfall ins Bluntautal wanderbar (30 Min. zum Göllhof) · Burg Golling mit Museum · Salzachöfen in der Nähe · Nikolauskirche: Sound-of-Music-Drehort! · Winter: kostenloser Zugang (auf eigene Gefahr) · Eintritt ab 18 Uhr frei",personal:"🏰 Burg Golling — mittelalterliche Burg mit Heimatmuseum, direkt im Ort! Nikolauskirche (Sound of Music) am Parkplatz|🥗 Gasthof Torrenerhof am Parkplatz: Einkehr. Aqua Salza Stellplatz: Golling Zentrum 5 Min. zu Fuß — mehrere Restaurants",isNew:true},
+
+{id:22,group:"nah",type:"see",name:"Hallstättersee Ostufer",subtitle:"Obertraun · UNESCO-Welterbe am Fjord",distance:"9,8 km",duration:"3 h",difficulty:"Leicht",elevation:"130 Hm",water:"Hallstättersee",dogRating:4,dogInfo:"Hunde am Wanderweg erlaubt (Leinenpflicht). Mehrere Badestellen entlang des Ostufers. Strandbad Obertraun: Hunde NICHT auf Liegewiese. Frei zugängliche Buchten nutzen!",parking:{name:"Stellplatz Obertraun P5 Winkl",address:"Winkl, 4831 Obertraun",cost:"22 €/24h + Kurtaxe",extras:"8 markierte Womo-Plätze · EasyPark/Karte/Münzen · Strom · Wasser · V+E · WC · Dusche (kalt) · direkt am See · ganzjährig",p4n:"https://park4night.com/en/place/146303"},stellplatz:{name:"Stellplatz Obertraun Strandbad",address:"Bahnhofstraße, 4831 Obertraun",cost:"12–22 €/24h + Kurtaxe",extras:"Am Strandbad · WC/Dusche (tagsüber) · Seecafé · Spielplatz · Hallstatt 4 km zu Fuß oder per Bus/Boot",p4n:"https://park4night.com/en/place/60083"},restrictions:"Leinenpflicht! Hunde nicht auf Strandbad-Liegewiese. Kein Campingverhalten (keine Stühle/Markise)! Kurtaxe extra (3€/P). Sommer-WE: früh da sein!",description:"Einer der schönsten Wanderwege im Salzkammergut. Am Ostufer des fjordartigen Hallstättersees von Obertraun nach Steeg. Botanischer Lehrpfad, Hängebrücke am tiefsten Punkt des Sees (125m), Lindwurm-Skulptur, Jausenstation Seeraunzn. Option: Fähre nach Hallstatt vom Bahnhof.",highlight:"UNESCO-Welterbe · Fjord-Landschaft · Hängebrücke · Fähre nach Hallstatt · Womo-Stellplatz am See",color:"#1E3A5F",icon:"⚓",distanceFromBase:"25 km",driveTime:"25 Min.",extraInfo:"Fähre Hallstatt Bf → Hallstatt Ort (2,50€/P) · Dachstein-Eishöhle ab Obertraun · Schifffahrt Hallstättersee · Salzbergwerk Hallstatt · Rückfahrt per Bahn möglich (Steeg → Obertraun, 10 Min.)",personal:"🏰 Hallstatt Welterbe-Ort — 7.000 Jahre Salzgeschichte! Salzbergwerk + Skywalk|🥗 Seeraunzn (am Weg): regionale Küche, veg. begrenzt. Obertraun: Pizzeria Kegelbahnen (Pizza/Pasta). Hallstatt: viele Restaurants (Boot/Fähre nehmen)",isNew:true},
+
+{id:23,group:"mittel",type:"see",name:"Traunsee-Westufer",subtitle:"Gmunden · Promenade + Schlösser",distance:"7 km",duration:"2 h",difficulty:"Sehr leicht",elevation:"20 Hm",water:"Traunsee",dogRating:4,dogInfo:"Promenade hundefreundlich, Leinenpflicht. Kiesstrand bei Toscanapark: Hund kann ins Wasser. Strandbad Gmunden: Hunde nicht erlaubt. Traunstein-Blick garantiert!",parking:{name:"Stellplatz Wunderburg",address:"Wunderburgstraße 30, 4810 Gmunden",cost:"Gratis (Spende ~20€)",extras:"7 Plätze · nur Womos · Schotter · eben · kein Service · privat · Herz-Projekt einer Familie",p4n:"https://park4night.com/en/place/412332"},stellplatz:{name:"Stellplatz Toscanapark",address:"2 Toscanapark, 4810 Gmunden",cost:"18–25 €/24h",extras:"Am Traunsee · offen · WC (50 Cent) · 15 Min. zum Zentrum",p4n:"https://park4night.com/en/place/13538"},restrictions:"Leinenpflicht im Ortsgebiet Gmunden. Strandbad: Hunde nicht erlaubt. Toscanapark: am WE laut (Jugendliche).",description:"Gemütliche Seepromenade entlang des Westufers. Start am Toscanapark bei Schloss Ort, vorbei am Rathausplatz, Kammerhof & Gmundner Keramik, weiter nach Altmünster. Traunstein-Blick. Seeschwalben. Optional: Grünberg-Seilbahn zum Laudachsee (Tour 11).",highlight:"Schloss Ort · Gmundner Keramik · Gratis Stellplatz Wunderburg · Traunstein-Panorama · Kombi mit Laudachsee",color:"#2563EB",icon:"🏰",distanceFromBase:"35 km",driveTime:"30 Min.",extraInfo:"Schloss Ort = Wahrzeichen Gmundens · Gmundner Keramik Manufaktur · Traunsee-Schifffahrt (Hunde erlaubt) · Grünberg-Seilbahn 5 Min. entfernt · Altmünster: Bärensaal + Schloss Ebenzweier",personal:"🏰 Schloss Ort + Landschloss Ort — DAS Seeschloss auf der Insel, Wahrzeichen! Schloss Ebenzweier in Altmünster (15 Min.)|🥗 Gmunden: Konditorei Grellinger (Torten), Bootshaus STEG Altmünster (modern, veg. Optionen). Pizzeria am Rathausplatz",isNew:true}
+];
+
+const distGroups={nah:{label:'📍 Nahbereich · 0–30 km',order:0},mittel:{label:'🗺️ Entdeckungen · 30–60 km',order:1},weit:{label:'🌍 Abenteuer · 60+ km',order:2}};
+const typeLabels={'see':'🏊 See-Runde','bergsee':'⛰️ Bergsee','fluss-klamm':'🏞️ Fluss & Klamm','see-fluss':'🌊 See + Fluss','alm':'🏔️ Alm & Panorama'};
+const typeColors={'see':'#4895EF','bergsee':'#7209B7','fluss-klamm':'#2EC4B6','see-fluss':'#2D6A4F','alm':'#D97706'};
+
+let sortCol=-1;
+let sortAsc=true;
+
+// Alpenvereinaktiv / Outdooractive Route-URLs
+const routeUrls={
+  1:'https://www.alpenvereinaktiv.com/de/tour/nussenseerunde-ruine-wildenstein-nussensee-/7850475/',
+  2:'https://www.outdooractive.com/de/route/wanderung/ausseerland-salzkammergut/altausseer-seeweg/107668990/',
+  3:'https://www.outdooractive.com/de/route/wanderung/wolfgangsee/buergl-panoramaweg/33304774/',
+  4:null,
+  5:'https://www.alpenvereinaktiv.com/de/tour/familienwanderung-rund-um-den-offensee/8816026/',
+  6:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/rund-um-den-gosausee/35874289/',
+  7:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/fuschlsee-rundwanderweg/109173527/',
+  8:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/hintersee-rundwanderweg/109173525/',
+  9:'https://www.alpenvereinaktiv.com/de/tour/grundlsee-umrundung-mit-toplitzsee/24777331/',
+  10:null,
+  11:'https://www.alpenvereinaktiv.com/de/tour/gruenberg-rund-um-laudachsee/120789153/',
+  12:'https://www.outdooractive.com/de/route/wanderung/traunsee-almtal/almsee-rundwanderweg/202358443/',
+  13:'https://www.alpenvereinaktiv.com/de/tour/zu-schiederweiher-und-polsterlucke/802279569/',
+  14:'https://www.outdooractive.com/de/route/wanderweg/molln/rinnende-mauer-schluchtweg/55526269/',
+  15:'https://www.outdooractive.com/de/route/wanderung/erzberg-leoben/leopoldsteinerseerunde/805110987/',
+  16:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundwanderweg-zeller-see/7750068/',
+  17:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundweg-klammsee/1362539/',
+  18:'https://www.outdooractive.com/de/route/wanderung/tennengau/wanderung-druch-das-bluntautal/23040799/',
+  19:'https://www.outdooractive.com/de/route/wanderung/nationalpark-berchtesgaden/malerwinkel-rundweg-wandern-im-nationalpark-berchtesgaden/800513173/',
+  20:'https://www.outdooractive.com/de/route/wanderung/abtenau/abtenau-ivv-rundwanderweg-postalm-rundweg-2-8-punkte-/1358920/',
+  21:'https://www.alpenvereinaktiv.com/de/tour/gollinger-wasserfall-ein-naturschauspiel/23184843/',
+  22:'https://www.outdooractive.com/en/route/hiking-trail/dachstein-salzkammergut/east-bank-hiking-trail-on-lake-hallstatt/48109672/',
+  23:null
+};
+
+function parseKm(s){const m=s.match(/[\d,.]+/);return m?parseFloat(m[0].replace(',','.')):0}
+function parseDrive(s){
+  if(!s)return 0;
+  const hm=s.match(/(\d+):(\d+)/);if(hm)return parseInt(hm[1])*60+parseInt(hm[2]);
+  const h=s.match(/([\d,.]+)\s*h/i);if(h)return parseFloat(h[1].replace(',','.'))*60;
+  const min=s.match(/([\d,.]+)\s*Min/i);if(min)return parseFloat(min[1].replace(',','.'));
+  return 0;
+}
+function parseCost(s){
+  if(!s)return 999;
+  if(s.toLowerCase().includes('kostenlos')||s.toLowerCase().includes('gratis'))return 0;
+  const m=s.match(/([\d,.]+)/);return m?parseFloat(m[0].replace(',','.')):999;
+}
+
+function sortTable(col){
+  const table=document.getElementById('compareTable');
+  if(!table)return;
+  const tbody=table.querySelector('tbody');
+  const rows=Array.from(tbody.querySelectorAll('tr'));
+  if(sortCol===col){sortAsc=!sortAsc}else{sortCol=col;sortAsc=true}
+  rows.sort((a,b)=>{
+    const aVal=a.cells[col].getAttribute('data-sort')||a.cells[col].textContent;
+    const bVal=b.cells[col].getAttribute('data-sort')||b.cells[col].textContent;
+    const aNum=parseFloat(aVal);
+    const bNum=parseFloat(bVal);
+    let result;
+    if(!isNaN(aNum)&&!isNaN(bNum)){result=aNum-bNum}
+    else{result=aVal.localeCompare(bVal,'de')}
+    return sortAsc?result:-result;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+  // Update header arrows
+  table.querySelectorAll('th').forEach((th,i)=>{
+    const base=th.textContent.replace(/[⇅↑↓]/g,'').trim();
+    th.textContent=base+(i===col?(sortAsc?' ↑':' ↓'):' ⇅');
+  });
+}
+
+// Hund-Baden-Status: 'ja' = frei baden, 'teils' = eingeschränkt, 'nein' = verboten/kein Wasser
+const dogSwimMap={
+  1:'ja',    // Nussensee: frei ins Wasser
+  2:'ja',    // Altaussee: Buchten zum Baden
+  3:'ja',    // Wolfgangsee: Hundebadestellen
+  4:'teils', // Langbathseen: kleine Buchten, Hinterer See Verbot
+  5:'teils', // Offensee: Europaschutzgebiet, Südufer eingeschränkt
+  6:'teils', // Gosausee: kleine Pfade, sehr kalt
+  7:'ja',    // Fuschlsee: fast überall, Hundestrand!
+  8:'teils', // Hintersee: NUR Westufer erlaubt
+  9:'ja',    // Grundlsee: Schotterstränden Gößl
+  10:'ja',   // Toplitzsee: Toplitzbach plantschen
+  11:'teils',// Laudachsee: Moorsee, naturbelassen
+  12:'ja',   // Almsee: Kiesbuchten, Almfluss
+  13:'ja',   // Schiederweiher: Krumme Steyr viele Stellen
+  14:'ja',   // Rinnende Mauer: Steyr Schotterbänke
+  15:'nein', // Leopoldsteiner See: offiziell verboten!
+  16:'teils',// Zeller See: Nord/West ja, Strandbäder nein
+  17:'nein', // Sigmund-Thun-Klamm: kein Schwimmen
+  18:'nein', // Bluntautal: Seen verboten, nur Pfoten in Ache
+  19:'nein', // Königssee: komplett verboten (Trinkwasser)
+  20:'nein', // Postalm: kein Gewässer
+  21:'nein', // Gollinger Wasserfall: kein Badesee
+  22:'teils',// Hallstättersee: Buchten ja, Strandbad nein
+  23:'teils' // Traunsee: Kiesstrand ja, Strandbad nein
+};
+
+let activeDist='alle';
+let activeType='alle';
+let activeSwim='alle';
+
+function initFilters(){
+  const df=document.getElementById('distFilters');
+  const tf=document.getElementById('typeFilters');
+  const sf=document.getElementById('swimFilters');
+  df.innerHTML=`<button class="fbtn active" onclick="setDist('alle')">Alle 21</button>
+    <button class="fbtn" onclick="setDist('nah')">Nah (0–30)</button>
+    <button class="fbtn" onclick="setDist('mittel')">Mittel (30–60)</button>
+    <button class="fbtn" onclick="setDist('weit')">Weit (60+)</button>`;
+  tf.innerHTML=`<button class="fbtn active" onclick="setType('alle')">Alle Gewässer</button>
+    <button class="fbtn" onclick="setType('see')">🏊 See</button>
+    <button class="fbtn" onclick="setType('bergsee')">⛰️ Bergsee</button>
+    <button class="fbtn" onclick="setType('fluss-klamm')">🏞️ Fluss & Klamm</button>
+    <button class="fbtn" onclick="setType('see-fluss')">🌊 See + Fluss</button>
+    <button class="fbtn" onclick="setType('alm')">🏔️ Alm & Panorama</button>`;
+  sf.innerHTML=`<button class="fbtn active" onclick="setSwim('alle')">Alle</button>
+    <button class="fbtn" onclick="setSwim('ja')" style="border-color:#22C55E44">✅ Hund darf baden</button>
+    <button class="fbtn" onclick="setSwim('teils')" style="border-color:#F59E0B44">⚠️ Eingeschränkt</button>
+    <button class="fbtn" onclick="setSwim('nein')" style="border-color:#EF444444">❌ Kein Baden</button>`;
+}
+
+function setDist(d){activeDist=d;updateFilters();render()}
+function setType(t){activeType=t;updateFilters();render()}
+function setSwim(s){activeSwim=s;updateFilters();render()}
+
+function updateFilters(){
+  document.querySelectorAll('#distFilters .fbtn').forEach(b=>{
+    b.classList.remove('active');
+    if(b.textContent.toLowerCase().includes(activeDist==='alle'?'alle 21':activeDist))b.classList.add('active');
+  });
+  document.querySelectorAll('#typeFilters .fbtn').forEach(b=>{
+    b.classList.remove('active','type-active');
+    const t=b.onclick.toString();
+    if(t.includes("'"+activeType+"'")){b.classList.add(activeType==='alle'?'active':'type-active')}
+  });
+  document.querySelectorAll('#swimFilters .fbtn').forEach(b=>{
+    b.classList.remove('active','type-active');
+    const t=b.onclick.toString();
+    if(t.includes("'"+activeSwim+"'")){b.classList.add(activeSwim==='alle'?'active':'type-active')}
+  });
+}
+
+function getFiltered(){
+  return tours.filter(t=>{
+    const distOk=activeDist==='alle'||t.group===activeDist;
+    const typeOk=activeType==='alle'||t.type===activeType;
+    const swimOk=activeSwim==='alle'||(dogSwimMap[t.id]||'nein')===activeSwim;
+    return distOk&&typeOk&&swimOk;
+  });
+}
+
+function paws(n){let s='';for(let i=1;i<=5;i++)s+=`<span style="opacity:${i<=n?1:.15}">🐾</span>`;return s}
+
+function parkingHTML(title,d,color){
+  if(!d)return'';
+  const isP4N=d.p4n&&d.p4n.includes('park4night');
+  const isWarn=(d.name&&d.name.includes('⚠️'))||(d.extras&&d.extras.includes('NICHT'));
+  const btnClass=isP4N?'p4n':'gmaps';
+  const btnText=isP4N?'🅿️ Park4Night öffnen ↗':'📍 Google Maps öffnen ↗';
+  return `<div class="parking-box${isWarn?' warn':''}">
+    <div class="parking-label" style="color:${color}">${title}</div>
+    <div class="parking-name">📍 ${d.name}</div>
+    <div class="parking-addr">${d.address}</div>
+    <span class="parking-cost">${d.cost}</span>
+    <div class="parking-extras">${d.extras}</div>
+    ${d.p4n?`<a href="${d.p4n}" target="_blank" rel="noopener" class="link-btn ${btnClass}">${btnText}</a>`:''}
+  </div>`;
+}
+
+function personalHTML(p,color){
+  if(!p)return'';
+  return p.split('|').map(t=>`<div class="personal-tip" style="border-left:2px solid ${color}44">${t.trim()}</div>`).join('');
+}
+
+function cardHTML(t){
+  const tc=typeColors[t.type]||'#666';
+  const tl=typeLabels[t.type]||t.type;
+  return `<div class="card" id="card-${t.id}" style="--c:${t.color}" onclick="toggleCard(${t.id})">
+    <div class="card-header">
+      <div class="card-icon" style="background:linear-gradient(135deg,${t.color},${t.color}AA);box-shadow:0 3px 10px ${t.color}33">${t.icon}</div>
+      <div class="card-info">
+        <div class="card-top">
+          <div class="card-title">${t.name}${t.isNew?'<span class="new-badge">NEU</span>':''}</div>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="card-subtitle">${t.subtitle}</div>
+        <div class="card-meta">
+          <span class="tag" style="color:${t.color};background:${t.color}18">${t.distance}</span>
+          <span>${t.duration}</span>
+          <span style="color:#333">·</span>
+          <span class="paws">${paws(t.dogRating)}</span>
+          <span style="color:#333">·</span>
+          <span class="water-badge" style="color:${tc};background:${tc}15">${tl}</span>
+          ${(()=>{const s=dogSwimMap[t.id];return s==='ja'?'<span class="water-badge" style="color:#22C55E;background:#22C55E15">🏊 Hund</span>':s==='teils'?'<span class="water-badge" style="color:#F59E0B;background:#F59E0B15">⚠️ Hund</span>':'';})()}
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="body-${t.id}" style="display:none" onclick="event.stopPropagation()">
+      <div class="pills">
+        ${['Distanz|'+t.distance,'Dauer|'+t.duration,'Höhe|'+t.elevation,'Anfahrt|'+t.distanceFromBase].map(p=>{const[l,v]=p.split('|');return`<div class="pill" style="background:${t.color}12;border:1px solid ${t.color}25"><span class="pill-label">${l}</span><span class="pill-value" style="color:${t.color}">${v}</span></div>`}).join('')}
+      </div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>🗺️</span>Route</div><div class="section-body">${t.description}</div></div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>🐕</span>Hund & Wasser</div><div class="section-body"><div class="paws" style="margin-bottom:3px">${paws(t.dogRating)} <span style="font-size:9px;color:#6B7280;margin-left:3px">Hundefreundlichkeit</span></div>${t.dogInfo}</div></div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>🚐</span>Parken & Stellplätze</div><div class="section-body">${parkingHTML('Tages-Parkplatz',t.parking,t.color)}${parkingHTML('Übernachtung',t.stellplatz,t.color)}</div></div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>⚠️</span>Einschränkungen</div><div class="restrict">${t.restrictions}</div></div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>💡</span>Gut zu wissen</div><div class="section-body" style="font-size:12px;color:#9CA3AF">${t.extraInfo}</div></div>
+      ${t.personal?`<div class="section"><div class="section-title" style="color:${t.color}"><span>👨‍👩‍🐕</span>Für euch</div><div class="section-body">${personalHTML(t.personal,t.color)}</div></div>`:''}
+      ${routeUrls[t.id]?`<a href="${routeUrls[t.id]}" target="_blank" rel="noopener" class="link-btn" style="background:#1A2530;border:1px solid #f9731644;color:#FB923C;margin-top:10px;display:flex;justify-content:center;width:100%;padding:8px 12px;border-radius:8px;font-size:12px">🗺️ Route & Karte auf Alpenvereinaktiv ↗</a>`:''}
+      <div class="highlight-box" style="background:${t.color}0D;color:${t.color};border-color:${t.color}30">✨ ${t.highlight}</div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const c=document.getElementById('cards');
+  const filtered=getFiltered();
+  let html='';
+
+  document.getElementById('filterCount').textContent=`${filtered.length} Tour${filtered.length!==1?'en':''} gefunden`;
+
+  const groups=['nah','mittel','weit'];
+  groups.forEach(g=>{
+    const inGroup=filtered.filter(t=>t.group===g);
+    if(inGroup.length===0)return;
+    html+=`<div class="group-label">${distGroups[g].label}</div>`;
+    inGroup.forEach(t=>html+=cardHTML(t));
+  });
+
+  // Comparison table with sortable columns
+  html+=`<div class="tip-box" style="margin-top:6px"><h3>📊 Schnellvergleich <span style="font-size:10px;font-weight:400;color:#6B7280">· Spalte antippen zum Sortieren</span></h3><div class="table-wrap"><table id="compareTable">
+  <thead><tr>
+    <th onclick="sortTable(0)" style="cursor:pointer">Tour ⇅</th>
+    <th onclick="sortTable(1)" style="cursor:pointer">km ⇅</th>
+    <th onclick="sortTable(2)" style="cursor:pointer">🐾 ⇅</th>
+    <th onclick="sortTable(3)" style="cursor:pointer">Typ ⇅</th>
+    <th onclick="sortTable(4)" style="cursor:pointer">Fahrzeit ⇅</th>
+    <th onclick="sortTable(5)" style="cursor:pointer">Stellplatz ⇅</th>
+  </tr></thead><tbody>`;
+  filtered.forEach(t=>{
+    const tc=typeColors[t.type]||'#666';
+    html+=`<tr>
+      <td style="font-weight:600;color:#D1D5DB" data-sort="${t.name}">${t.icon} ${t.name}${t.isNew?' <span style="color:#EF4444;font-size:8px">●</span>':''}</td>
+      <td style="color:#9CA3AF" data-sort="${parseKm(t.distance)}">${t.distance}</td>
+      <td data-sort="${t.dogRating}">${'🐾'.repeat(t.dogRating)}</td>
+      <td data-sort="${t.type}"><span style="color:${tc};font-size:9px;font-weight:700">${(typeLabels[t.type]||'').replace(/^.+\s/,'')}</span></td>
+      <td style="color:#9CA3AF" data-sort="${parseDrive(t.driveTime)}">${t.driveTime}</td>
+      <td style="font-weight:700;color:#34D399" data-sort="${parseCost((t.stellplatz||t.parking).cost)}">${(t.stellplatz||t.parking).cost}</td>
+    </tr>`;
+  });
+  html+=`</tbody></table></div></div>`;
+
+  // Tips
+  html+=`<div class="tip-box"><h3>💡 Allgemeine Tipps</h3>
+  <p><strong>Höhenbeschränkungen:</strong> Gmunden Seilbahn-Parkhaus nur 2,10m — Elnagh mit 3,20m passt NICHT!</p>
+  <p><strong>EasyPark-App:</strong> Vorher installieren — Gosausee, Offensee, Langbathsee kein Mobilfunk!</p>
+  <p><strong>Wochenenden:</strong> Gosausee & Schiederweiher vor 9 Uhr. Leopoldsteiner See & Almsee ebenfalls früh.</p>
+  <p><strong>Hund:</strong> OÖ Ortsgebiet = Leinen-/Maulkorbpflicht. Steiermark = überall! Fließgewässer meist erlaubt.</p>
+  <p><strong>Kombis:</strong> Langbathseen + Offensee (Basis Ebensee) · Hintersee + Fuschlsee (20 Min.) · Grundlsee + Toplitzsee (gleicher Parkplatz!) · Leopoldsteiner See + Erzberg · <strong>Zeller See + Sigmund-Thun-Klamm (15 Min.!)</strong> · <strong>Bluntautal + Gollinger Wasserfall</strong> · <strong>Hallstättersee + Dachstein-Eishöhle</strong> · <strong>Traunsee-Westufer + Laudachsee (Grünberg-Seilbahn)</strong></p>
+  <p><strong>🇩🇪 Königssee:</strong> Einzige Tour in Deutschland — andere Hundegesetze! Maulkorb für Bootsfahrt Pflicht.</p>
+  <p><strong class="warn-text">⚠️ Almsee:</strong> Womo-Übernachtung am Parkplatz VERBOTEN — streng kontrolliert!</p>
+  <p><strong class="warn-text">⚠️ Leopoldsteiner See:</strong> Hundebaden im See offiziell verboten — Seeaubach als Alternative!</p></div>`;
+
+  html+='<div class="footer">Alle Angaben ohne Gewähr · Stand März 2026 · Links öffnen Park4Night / Google Maps<br>Park4Night-Links verifiziert: #54915 #229737 #207134 #131827 #20458 #52703 #450004 #13538 #97721 #482487 #501526 #51913 #58708 #256696 #463732 #489470 #94083 #213799 #65608 #78757 #440800 #412332 #146303 #60083<br>Nicht auf P4N: Altaussee P1, Thalgauegg, Hintersee Faistenau, Molln, Kaprun Krafthaus, Königssee P2, Berchtesgaden · Dort: Google Maps Koordinaten</div>';
+  c.innerHTML=html;
+}
+
+function toggleCard(id){
+  const body=document.getElementById('body-'+id);
+  const card=document.getElementById('card-'+id);
+  if(body.style.display==='none'){body.style.display='block';card.classList.add('open')}
+  else{body.style.display='none';card.classList.remove('open')}
+}
+
+initFilters();
+render();
+</script>
+</body>
+</html>
