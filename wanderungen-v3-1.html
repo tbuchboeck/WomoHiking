@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>23 Wanderungen für euch · Salzkammergut & Salzburger Land</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0A0A12;--card:#13131D;--card-border:#252535;--card-hover:#1A1A28;--text:#E5E7EB;--text-dim:#9CA3AF;--text-faint:#6B7280;--accent:#3B82F6;--accent-glow:#3B82F620;--green:#059669;--warn:#92400E;--filter-bg:#111119}
@@ -90,9 +91,64 @@ th:active{color:#fff}
 td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .new-badge{font-size:8px;font-weight:800;background:#EF4444;color:#fff;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;letter-spacing:.04em}
+
+/* PIN Lock Screen */
+.pin-overlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+.pin-overlay.hidden{display:none}
+.pin-box{background:var(--card);border-radius:16px;border:1px solid var(--card-border);box-shadow:0 8px 32px rgba(0,0,0,.5);padding:2rem;max-width:320px;width:100%;text-align:center}
+.pin-icon{width:64px;height:64px;background:linear-gradient(160deg,#122040,#0C3547);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem}
+.pin-box h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#F9FAFB;margin-bottom:.25rem}
+.pin-subtitle{color:var(--text-faint);font-size:.85rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.pin-dots{display:flex;justify-content:center;gap:1rem;margin-bottom:1.5rem}
+.pin-dot{width:16px;height:16px;border-radius:50%;background:#1A1A28;border:1px solid var(--card-border);transition:background .15s,transform .15s}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent);transform:scale(1.15)}
+.pin-error{background:#2A1515;color:#FCA5A5;border-radius:8px;padding:.5rem .75rem;font-size:.85rem;margin-bottom:1rem;display:none}
+.pin-error.visible{display:block}
+.pin-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;max-width:220px;margin:0 auto}
+.pin-numpad button{height:52px;border-radius:10px;border:none;background:#1A1A28;color:var(--text);font-size:1.3rem;font-weight:600;cursor:pointer;transition:background .1s}
+.pin-numpad button:hover{background:var(--card-border)}
+.pin-numpad button:active{background:var(--accent);color:#fff}
+.pin-numpad button.pin-del{font-size:1rem;color:var(--text-faint)}
+.pin-numpad button:disabled{opacity:.3;cursor:default}
+.pin-spinner{display:none;margin:1rem auto 0;width:20px;height:20px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:pin-spin .6s linear infinite}
+.pin-spinner.visible{display:block}
+@keyframes pin-spin{to{transform:rotate(360deg)}}
+@keyframes pin-shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pin-shake{animation:pin-shake .4s ease-in-out}
 </style>
 </head>
 <body>
+
+<!-- PIN Lock Screen -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-box">
+    <div class="pin-icon">🥾</div>
+    <h2>Wanderungen für euch</h2>
+    <p class="pin-subtitle">&#128274; PIN eingeben</p>
+    <div class="pin-error" id="pinError"></div>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+    </div>
+    <div class="pin-numpad" id="pinNumpad">
+      <button type="button" onclick="pinPress(1)">1</button>
+      <button type="button" onclick="pinPress(2)">2</button>
+      <button type="button" onclick="pinPress(3)">3</button>
+      <button type="button" onclick="pinPress(4)">4</button>
+      <button type="button" onclick="pinPress(5)">5</button>
+      <button type="button" onclick="pinPress(6)">6</button>
+      <button type="button" onclick="pinPress(7)">7</button>
+      <button type="button" onclick="pinPress(8)">8</button>
+      <button type="button" onclick="pinPress(9)">9</button>
+      <div></div>
+      <button type="button" onclick="pinPress(0)">0</button>
+      <button type="button" class="pin-del" onclick="pinDelete()">&larr;</button>
+    </div>
+    <div class="pin-spinner" id="pinSpinner"></div>
+  </div>
+</div>
 
 <div class="header">
 <div class="header-sub">Salzkammergut · Salzburger Land · Berchtesgaden · Ab Bad Ischl</div>
@@ -120,6 +176,71 @@ td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 <div class="cards" id="cards"></div>
 
 <script>
+// --- Supabase ---
+const SUPABASE_URL='https://wyiafjbpxbhaflhqvwcu.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5aWFmamJweGJoYWZsaHF2d2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODIzMTAsImV4cCI6MjA4OTE1ODMxMH0.zxwOwAp_Nj3j6wX1KUMOFecEXl0cnQ8EjvKMUu4Xv_8';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+// --- PIN Lock ---
+const PIN_SESSION_KEY='womoHikingPinVerified';
+const PIN_LENGTH=4;
+let pinBuffer='';
+let pinLoading=false;
+
+async function hashPin(pin){
+  const data=new TextEncoder().encode(pin);
+  const buf=await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function updatePinDots(){
+  document.querySelectorAll('#pinDots .pin-dot').forEach((dot,i)=>{
+    dot.classList.toggle('filled',i<pinBuffer.length);
+  });
+}
+function showPinError(msg){
+  const el=document.getElementById('pinError');
+  el.textContent=msg;el.classList.add('visible');
+  const dots=document.getElementById('pinDots');
+  dots.classList.add('pin-shake');
+  setTimeout(()=>dots.classList.remove('pin-shake'),500);
+}
+function clearPinError(){document.getElementById('pinError').classList.remove('visible')}
+async function verifyPin(pin){
+  try{
+    const{data,error}=await sb.from('app_config').select('value').eq('key','pin_hash').single();
+    if(error||!data)return{success:false,error:'Verbindungsfehler'};
+    const hash=await hashPin(pin);
+    if(hash===data.value){sessionStorage.setItem(PIN_SESSION_KEY,'true');return{success:true}}
+    return{success:false,error:'Falscher PIN'};
+  }catch(e){return{success:false,error:'Verbindungsfehler'}}
+}
+function pinPress(digit){
+  if(pinLoading||pinBuffer.length>=PIN_LENGTH)return;
+  clearPinError();pinBuffer+=digit;updatePinDots();
+  if(pinBuffer.length===PIN_LENGTH)pinSubmit();
+}
+function pinDelete(){
+  if(pinLoading||pinBuffer.length===0)return;
+  clearPinError();pinBuffer=pinBuffer.slice(0,-1);updatePinDots();
+}
+async function pinSubmit(){
+  pinLoading=true;
+  document.getElementById('pinSpinner').classList.add('visible');
+  document.querySelectorAll('#pinNumpad button').forEach(b=>b.disabled=true);
+  const result=await verifyPin(pinBuffer);
+  if(result.success){document.getElementById('pinOverlay').classList.add('hidden');init()}
+  else{showPinError(result.error);pinBuffer='';updatePinDots()}
+  pinLoading=false;
+  document.getElementById('pinSpinner').classList.remove('visible');
+  document.querySelectorAll('#pinNumpad button').forEach(b=>b.disabled=false);
+}
+document.addEventListener('keydown',(e)=>{
+  if(document.getElementById('pinOverlay').classList.contains('hidden'))return;
+  if(e.key>='0'&&e.key<='9')pinPress(parseInt(e.key));
+  else if(e.key==='Backspace')pinDelete();
+});
+
+// --- Tour Data ---
 const tours=[
 // === NAH (0-30 km) ===
 {id:1,group:"nah",type:"see-fluss",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
@@ -170,9 +291,9 @@ const tours=[
 
 {id:23,group:"mittel",type:"see",name:"Traunsee-Westufer",subtitle:"Gmunden · Promenade + Schlösser",distance:"7 km",duration:"2 h",difficulty:"Sehr leicht",elevation:"20 Hm",water:"Traunsee",dogRating:4,dogInfo:"Promenade hundefreundlich, Leinenpflicht. Kiesstrand bei Toscanapark: Hund kann ins Wasser. Strandbad Gmunden: Hunde nicht erlaubt. Traunstein-Blick garantiert!",parking:{name:"Stellplatz Wunderburg",address:"Wunderburgstraße 30, 4810 Gmunden",cost:"Gratis (Spende ~20€)",extras:"7 Plätze · nur Womos · Schotter · eben · kein Service · privat · Herz-Projekt einer Familie",p4n:"https://park4night.com/en/place/412332"},stellplatz:{name:"Stellplatz Toscanapark",address:"2 Toscanapark, 4810 Gmunden",cost:"18–25 €/24h",extras:"Am Traunsee · offen · WC (50 Cent) · 15 Min. zum Zentrum",p4n:"https://park4night.com/en/place/13538"},restrictions:"Leinenpflicht im Ortsgebiet Gmunden. Strandbad: Hunde nicht erlaubt. Toscanapark: am WE laut (Jugendliche).",description:"Gemütliche Seepromenade entlang des Westufers. Start am Toscanapark bei Schloss Ort, vorbei am Rathausplatz, Kammerhof & Gmundner Keramik, weiter nach Altmünster. Traunstein-Blick. Seeschwalben. Optional: Grünberg-Seilbahn zum Laudachsee (Tour 11).",highlight:"Schloss Ort · Gmundner Keramik · Gratis Stellplatz Wunderburg · Traunstein-Panorama · Kombi mit Laudachsee",color:"#2563EB",icon:"🏰",distanceFromBase:"35 km",driveTime:"30 Min.",extraInfo:"Schloss Ort = Wahrzeichen Gmundens · Gmundner Keramik Manufaktur · Traunsee-Schifffahrt (Hunde erlaubt) · Grünberg-Seilbahn 5 Min. entfernt · Altmünster: Bärensaal + Schloss Ebenzweier",personal:"🏰 Schloss Ort + Landschloss Ort — DAS Seeschloss auf der Insel, Wahrzeichen! Schloss Ebenzweier in Altmünster (15 Min.)|🥗 Gmunden: Konditorei Grellinger (Torten), Bootshaus STEG Altmünster (modern, veg. Optionen). Pizzeria am Rathausplatz",isNew:true},
 
-{id:24,group:"weit",type:"bergsee",name:"Lago di Molveno",subtitle:"Molveno · Schönster See Italiens am Fuß der Brenta-Dolomiten",distance:"10 km",duration:"2,5–3 h",difficulty:"Leicht",elevation:"120 Hm",water:"Lago di Molveno",dogRating:3,dogInfo:"Hunde am Seeufer teilweise erlaubt. Offizielle Strandbäder meiden. Nördliches & westliches Ufer naturbelassener — dort Wasserzugang möglich. Leinenpflicht im Ort Molveno.",parking:{name:"Area Sosta Camper Lago di Molveno",address:"Via Lungo Lago 27-30, 38018 Molveno (TN), Italien",cost:"19–38 €/Nacht (saisonabhängig)",extras:"52 Plätze · Strom (660 W) · Frischwasser · V+E · videoüberwacht · max. 48h · keine Markise/Stühle! · Automat (keine Buchung)",p4n:"https://www.google.com/maps?q=46.1389,10.9664"},stellplatz:null,restrictions:"Italien: Leinenpflicht. Stellplatz max. 48h! Kein Campingverhalten (keine Markise, Stühle, Auffahrkeile). Mautstraße Brenner (A13/A22). Höhe 3,20m — kein Problem.",description:"Mehrfach zum schönsten See Italiens gewählt (Legambiente). Türkisfarbener Bergsee auf 864 m am Fuß der Brenta-Dolomiten. Seerundweg durch Wälder mit Blick auf Cima Tosa (3.173 m) & Paganella. Weißer Sandstrand, kristallklares Wasser, spektakuläre Bergkulisse.",highlight:"Schönster See Italiens · Brenta-Dolomiten (UNESCO) · 864 m Höhe · Türkiswasser · Womo-Stellplatz am See",color:"#0891B2",icon:"🏔️",distanceFromBase:"310 km",driveTime:"3,5 h (via Brenner)",extraInfo:"Brenta-Dolomiten: Mehrtages-Hüttentour möglich · Pradel-Seilbahn zu Rifugio Croz dell'Altissimo · Klettersteige (Via Ferrata delle Bocchette) · See bis 24°C im Juli · Molveno Adventure Park · Andalo Skigebiet im Winter",personal:"🏰 Castel Thun (30 Min.) — prächtigstes Schloss im Trentino, komplett möbliert! Castel Beseno (40 Min.) — größte Burganlage Trentinos|🥗 Molveno: Ristorante El Filò (lokale Küche, veg. Optionen), Ristorante Antica Bosnia (Terrasse mit Seeblick). Trento (50 Min.): große veg./vegane Auswahl",isNew:true},
+{id:24,group:"weit",type:"bergsee",name:"Lago di Molveno",subtitle:"Molveno · Schönster See Italiens am Fuß der Brenta-Dolomiten",distance:"10 km",duration:"2,5–3 h",difficulty:"Leicht",elevation:"120 Hm",water:"Lago di Molveno",dogRating:3,dogInfo:"Hunde am Seeufer teilweise erlaubt. Offizielle Strandbäder meiden. Nördliches & westliches Ufer naturbelassener — dort Wasserzugang möglich. Leinenpflicht im Ort Molveno.",parking:{name:"Area Sosta Camper Lago di Molveno",address:"Via Lungo Lago 30, 38018 Molveno (TN), Italien",cost:"32–50 €/24h (saisonabhängig)",extras:"50 Plätze · Strom (660 W) · Frischwasser · V+E · videoüberwacht · max. 48h · keine Markise/Stühle! · Automat (keine Buchung)",p4n:"https://park4night.com/en/place/20460"},stellplatz:{name:"Parkplatz Lago di Nembia",address:"SS421, San Lorenzo in Banale (TN), Italien",cost:"12–15 €/Tag",extras:"10 Plätze · WC · Wasser · direkt am Nembia-See · ruhig · 8 km südlich Molveno",p4n:"https://park4night.com/en/place/214786"},restrictions:"Italien: Leinenpflicht. Stellplatz max. 48h! Kein Campingverhalten (keine Markise, Stühle, Auffahrkeile). Mautstraße Brenner (A13/A22). Höhe 3,20m — kein Problem.",description:"Mehrfach zum schönsten See Italiens gewählt (Legambiente). Türkisfarbener Bergsee auf 864 m am Fuß der Brenta-Dolomiten. Seerundweg durch Wälder mit Blick auf Cima Tosa (3.173 m) & Paganella. Weißer Sandstrand, kristallklares Wasser, spektakuläre Bergkulisse.",highlight:"Schönster See Italiens · Brenta-Dolomiten (UNESCO) · 864 m Höhe · Türkiswasser · Womo-Stellplatz am See",color:"#0891B2",icon:"🏔️",distanceFromBase:"310 km",driveTime:"3,5 h (via Brenner)",extraInfo:"Brenta-Dolomiten: Mehrtages-Hüttentour möglich · Pradel-Seilbahn zu Rifugio Croz dell'Altissimo · Klettersteige (Via Ferrata delle Bocchette) · See bis 24°C im Juli · Molveno Adventure Park · Andalo Skigebiet im Winter",personal:"🏰 Castel Thun (30 Min.) — prächtigstes Schloss im Trentino, komplett möbliert! Castel Beseno (40 Min.) — größte Burganlage Trentinos|🥗 Molveno: Ristorante El Filò (lokale Küche, veg. Optionen), Ristorante Antica Bosnia (Terrasse mit Seeblick). Trento (50 Min.): große veg./vegane Auswahl",isNew:true},
 
-{id:25,group:"weit",type:"bergsee",name:"Jasna-See",subtitle:"Kranjska Gora · Smaragdsee unter dem Prisank",distance:"4–8 km",duration:"1,5–3 h",difficulty:"Leicht–Mittel",elevation:"50–350 Hm",water:"Jezero Jasna, Pišnica",dogRating:4,dogInfo:"Hunde willkommen, Leinenpflicht empfohlen. Kiesufer mit direktem Wasserzugang. Klares Gebirgswasser — sehr kalt! Pišnica-Bach zum Plantschen.",parking:{name:"Parkplatz Jasna See",address:"Medvedova cesta, 4280 Kranjska Gora, Slowenien",cost:"5–10 €/Tag (saisonabhängig)",extras:"Großer Parkplatz · direkt am See · auch für Womos geeignet · keine Höhenbeschränkung",p4n:"https://www.google.com/maps?q=46.4757,13.7834"},stellplatz:{name:"Camping Kamne",address:"Dovje 9, 4281 Mojstrana, Slowenien",cost:"25–35 €/Nacht",extras:"Strom · Sanitär · Hunde erlaubt · 10 Min. nach Kranjska Gora · Triglav-Nationalpark",p4n:"https://www.google.com/maps?q=46.4380,13.9430"},restrictions:"Slowenien: Kein Wildcamping/Freistehen! Triglav-Nationalpark-Regeln beachten. Vignette für slowenische Autobahnen nötig (e-Vignette online). Vršič-Pass: Steigung bis 14%, eng, Womo nur bei Erfahrung!",description:"Smaragdgrüner Bergsee auf 933 m am Fuß des Prisank (2.547 m) in den Julischen Alpen. Zwei verbundene Seen (2,2 ha), gespeist von der kristallklaren Pišnica. Zlatorog-Bronzestatue (Goldhorn-Sage) am Ufer. Kulisse wie aus dem Bilderbuch — Bergzacken spiegeln sich im türkisen Wasser. Nahe am Vršič-Pass (1.611 m), höchster Straßenpass Sloweniens.",highlight:"Smaragdgrünes Wasser · Zlatorog-Statue · Julische Alpen · Vršič-Pass · Triglav-Nationalpark · SUP-Verleih",color:"#059669",icon:"💎",distanceFromBase:"230 km",driveTime:"2,5 h (via Villach)",extraInfo:"Vršič-Pass (1.611 m): höchster Straßenpass Sloweniens, 50 Kehren! · Russische Kapelle am Pass · Zelenci Naturreservat (5 Min.) — Sava-Quelle · Planica Skiflug-Schanze · Soča-Tal (Smaragdfluss) über den Pass erreichbar · Slemenova Špica (1.911 m) ab Vršič · SUP-Verleih am See (~7,50€/30 Min.) · Fliegenfischen erlaubt · Eintritt frei, nur Parken kostenpflichtig",personal:"🏰 Burg Bled (30 Min.) — ikonische Burg über dem Bleder See! Inselkirche im See · Vintgar-Klamm (20 Min.)|🥗 Kranjska Gora: Gostilna Pri Martinu (slowenische Küche, veg. Optionen), Hotel Kotnik Restaurant. Bled (30 Min.): Slascicarna Zima (Original Bled-Cremeschnitte!)",isNew:true}
+{id:25,group:"weit",type:"bergsee",name:"Jasna-See",subtitle:"Kranjska Gora · Smaragdsee unter dem Prisank",distance:"4–8 km",duration:"1,5–3 h",difficulty:"Leicht–Mittel",elevation:"50–350 Hm",water:"Jezero Jasna, Pišnica",dogRating:4,dogInfo:"Hunde willkommen, Leinenpflicht empfohlen. Kiesufer mit direktem Wasserzugang. Klares Gebirgswasser — sehr kalt! Pišnica-Bach zum Plantschen.",parking:{name:"Parkplatz Vršič/Jasna See",address:"38 Vršiška cesta, 4280 Kranjska Gora, Slowenien",cost:"10 €/Tag (Womo)",extras:"~20 Plätze · Schotter · Bergblick · kurzer Weg zum See · nur Tagesparken (22–7 Uhr verboten!)",p4n:"https://park4night.com/en/place/26306"},stellplatz:{name:"Womo-Stellplatz Planica/Rateče",address:"Rateče, 4283 Rateče, Slowenien",cost:"18–23 €/24h",extras:"~30 Plätze · Strom (0,50 €/kWh) · Frischwasser · V+E · beheizte WCs · Übernachtung erlaubt · 5 km westlich Kranjska Gora",p4n:"https://park4night.com/en/place/31051"},restrictions:"Slowenien: Kein Wildcamping/Freistehen! Kranjska Gora: Nachtparken (22–7 Uhr) für Womos verboten — Strafen 40–200 €! Stellplatz Planica/Rateče nutzen. Vignette nötig (e-Vignette online). Vršič-Pass: Steigung bis 14%, eng, Womo nur bei Erfahrung!",description:"Smaragdgrüner Bergsee auf 933 m am Fuß des Prisank (2.547 m) in den Julischen Alpen. Zwei verbundene Seen (2,2 ha), gespeist von der kristallklaren Pišnica. Zlatorog-Bronzestatue (Goldhorn-Sage) am Ufer. Kulisse wie aus dem Bilderbuch — Bergzacken spiegeln sich im türkisen Wasser. Nahe am Vršič-Pass (1.611 m), höchster Straßenpass Sloweniens.",highlight:"Smaragdgrünes Wasser · Zlatorog-Statue · Julische Alpen · Vršič-Pass · Triglav-Nationalpark · SUP-Verleih",color:"#059669",icon:"💎",distanceFromBase:"230 km",driveTime:"2,5 h (via Villach)",extraInfo:"Vršič-Pass (1.611 m): höchster Straßenpass Sloweniens, 50 Kehren! · Russische Kapelle am Pass · Zelenci Naturreservat (5 Min.) — Sava-Quelle · Planica Skiflug-Schanze · Soča-Tal (Smaragdfluss) über den Pass erreichbar · Slemenova Špica (1.911 m) ab Vršič · SUP-Verleih am See (~7,50€/30 Min.) · Fliegenfischen erlaubt · Eintritt frei, nur Parken kostenpflichtig",personal:"🏰 Burg Bled (30 Min.) — ikonische Burg über dem Bleder See! Inselkirche im See · Vintgar-Klamm (20 Min.)|🥗 Kranjska Gora: Gostilna Pri Martinu (slowenische Küche, veg. Optionen), Hotel Kotnik Restaurant. Bled (30 Min.): Slascicarna Zima (Original Bled-Cremeschnitte!)",isNew:true}
 ];
 
 const distGroups={nah:{label:'📍 Nahbereich · 0–30 km',order:0},mittel:{label:'🗺️ Entdeckungen · 30–60 km',order:1},weit:{label:'🌍 Abenteuer · 60+ km',order:2}};
@@ -182,33 +303,49 @@ const typeColors={'see':'#4895EF','bergsee':'#7209B7','fluss-klamm':'#2EC4B6','s
 let sortCol=-1;
 let sortAsc=true;
 
-// Alpenvereinaktiv / Outdooractive Route-URLs
+// Alpenvereinaktiv / Outdooractive Route-URLs (Arrays: mehrere Tracks pro Tour)
 const routeUrls={
-  1:'https://www.alpenvereinaktiv.com/de/tour/nussenseerunde-ruine-wildenstein-nussensee-/7850475/',
-  2:'https://www.outdooractive.com/de/route/wanderung/ausseerland-salzkammergut/altausseer-seeweg/107668990/',
-  3:'https://www.outdooractive.com/de/route/wanderung/wolfgangsee/buergl-panoramaweg/33304774/',
-  4:null,
-  5:'https://www.alpenvereinaktiv.com/de/tour/familienwanderung-rund-um-den-offensee/8816026/',
-  6:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/rund-um-den-gosausee/35874289/',
-  7:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/fuschlsee-rundwanderweg/109173527/',
-  8:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/hintersee-rundwanderweg/109173525/',
-  9:'https://www.alpenvereinaktiv.com/de/tour/grundlsee-umrundung-mit-toplitzsee/24777331/',
-  10:null,
-  11:'https://www.alpenvereinaktiv.com/de/tour/gruenberg-rund-um-laudachsee/120789153/',
-  12:'https://www.outdooractive.com/de/route/wanderung/traunsee-almtal/almsee-rundwanderweg/202358443/',
-  13:'https://www.alpenvereinaktiv.com/de/tour/zu-schiederweiher-und-polsterlucke/802279569/',
-  14:'https://www.outdooractive.com/de/route/wanderweg/molln/rinnende-mauer-schluchtweg/55526269/',
-  15:'https://www.outdooractive.com/de/route/wanderung/erzberg-leoben/leopoldsteinerseerunde/805110987/',
-  16:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundwanderweg-zeller-see/7750068/',
-  17:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundweg-klammsee/1362539/',
-  18:'https://www.outdooractive.com/de/route/wanderung/tennengau/wanderung-druch-das-bluntautal/23040799/',
-  19:'https://www.outdooractive.com/de/route/wanderung/nationalpark-berchtesgaden/malerwinkel-rundweg-wandern-im-nationalpark-berchtesgaden/800513173/',
-  20:'https://www.outdooractive.com/de/route/wanderung/abtenau/abtenau-ivv-rundwanderweg-postalm-rundweg-2-8-punkte-/1358920/',
-  21:'https://www.alpenvereinaktiv.com/de/tour/gollinger-wasserfall-ein-naturschauspiel/23184843/',
-  22:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/ostuferwanderweg-am-hallstaettersee/48109672/',
-  23:null,
-  24:null,
-  25:null
+  1:[{l:'Nussensee-Runde',u:'https://www.alpenvereinaktiv.com/de/tour/nussenseerunde-ruine-wildenstein-nussensee-/7850475/'}],
+  2:[{l:'Altausseer Seeweg',u:'https://www.outdooractive.com/de/route/wanderung/ausseerland-salzkammergut/altausseer-seeweg/107668990/'}],
+  3:[{l:'Bürgl-Panoramaweg',u:'https://www.outdooractive.com/de/route/wanderung/wolfgangsee/buergl-panoramaweg/33304774/'}],
+  4:[
+    {l:'Langbathseen–Hochsteinalm (18,5 km)',u:'https://www.outdooractive.com/de/route/wanderung/traunsee-almtal/langbathseen-hochsteinalm-zellerweg/292121353/'},
+    {l:'Signalkogel über Langbathseen',u:'https://www.outdooractive.com/de/route/wanderung/traunsee/vord-signalkogel-hinter.-signalkogel-und-ueber-den-langbathsee-zurueck/191906661/'}
+  ],
+  5:[{l:'Rund um den Offensee',u:'https://www.alpenvereinaktiv.com/de/tour/familienwanderung-rund-um-den-offensee/8816026/'}],
+  6:[{l:'Rund um den Gosausee',u:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/rund-um-den-gosausee/35874289/'}],
+  7:[{l:'Fuschlsee-Rundwanderweg',u:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/fuschlsee-rundwanderweg/109173527/'}],
+  8:[{l:'Hintersee-Rundwanderweg',u:'https://www.outdooractive.com/de/route/wanderung/fuschlseeregion/hintersee-rundwanderweg/109173525/'}],
+  9:[{l:'Grundlsee-Umrundung mit Toplitzsee',u:'https://www.alpenvereinaktiv.com/de/tour/grundlsee-umrundung-mit-toplitzsee/24777331/'}],
+  10:[{l:'Toplitzsee mit Boot-Option',u:'https://www.outdooractive.com/de/route/wanderung/totes-gebirge/mit-dem-boot-ueber-den-toplitzsee/40118078/'}],
+  11:[{l:'Grünberg & Laudachsee',u:'https://www.alpenvereinaktiv.com/de/tour/gruenberg-rund-um-laudachsee/120789153/'}],
+  12:[{l:'Almsee-Rundwanderweg',u:'https://www.outdooractive.com/de/route/wanderung/traunsee-almtal/almsee-rundwanderweg/202358443/'}],
+  13:[{l:'Schiederweiher & Polsterlucke',u:'https://www.alpenvereinaktiv.com/de/tour/zu-schiederweiher-und-polsterlucke/802279569/'}],
+  14:[{l:'Rinnende Mauer Schluchtweg',u:'https://www.outdooractive.com/de/route/wanderweg/molln/rinnende-mauer-schluchtweg/55526269/'}],
+  15:[{l:'Leopoldsteinersee-Runde',u:'https://www.outdooractive.com/de/route/wanderung/erzberg-leoben/leopoldsteinerseerunde/805110987/'}],
+  16:[{l:'Rundwanderweg Zeller See',u:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundwanderweg-zeller-see/7750068/'}],
+  17:[{l:'Rundweg Klammsee',u:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundweg-klammsee/1362539/'}],
+  18:[{l:'Wanderung durchs Bluntautal',u:'https://www.outdooractive.com/de/route/wanderung/tennengau/wanderung-druch-das-bluntautal/23040799/'}],
+  19:[{l:'Malerwinkel-Rundweg Königssee',u:'https://www.outdooractive.com/de/route/wanderung/nationalpark-berchtesgaden/malerwinkel-rundweg-wandern-im-nationalpark-berchtesgaden/800513173/'}],
+  20:[{l:'Postalm Rundweg',u:'https://www.outdooractive.com/de/route/wanderung/abtenau/abtenau-ivv-rundwanderweg-postalm-rundweg-2-8-punkte-/1358920/'}],
+  21:[{l:'Gollinger Wasserfall',u:'https://www.alpenvereinaktiv.com/de/tour/gollinger-wasserfall-ein-naturschauspiel/23184843/'}],
+  22:[{l:'Ostuferwanderweg Hallstättersee',u:'https://www.outdooractive.com/de/route/wanderung/dachstein-salzkammergut/ostuferwanderweg-am-hallstaettersee/48109672/'}],
+  23:[
+    {l:'Miesweg am Traunsee',u:'https://www.outdooractive.com/de/route/wanderung/traunsee-almtal/miesweg/191418703/'},
+    {l:'Gmundnerberg Aussichtswanderung',u:'https://www.alpenvereinaktiv.com/de/tour/gmundnerberg/313217553/'}
+  ],
+  24:[
+    {l:'Molveno Seerundweg (10 km)',u:'https://www.outdooractive.com/en/route/hiking-route/altopiano-della-paganella/lake-molveno-walking-tour/17453714/'},
+    {l:'Ciclamino-Spazierweg (2,8 km)',u:'https://www.outdooractive.com/en/route/hiking-trail/altopiano-della-paganella/ciclamino-walk/19077979/'},
+    {l:'Molveno → Pradel Aussicht (3,8 km)',u:'https://www.outdooractive.com/en/route/hiking-trail/altopiano-della-paganella/walk-from-molveno-to-pradel/19077753/'},
+    {l:'Pradel: Malga Tovre & Rifugi (7,5 km)',u:'https://www.outdooractive.com/en/route/mountain-hike/altopiano-della-paganella/hiking-in-pradel-malga-tovre-la-montanara-refuge-and-croz-dell/17453367/'}
+  ],
+  25:[
+    {l:'Kranjska Gora → Jasna-See (2,9 km)',u:'https://www.outdooractive.com/de/route/wanderung/kranjska-gora/rundweg-von-kranjska-gora-zum-jasna-see/805673854/'},
+    {l:'Seerundgang Jasna (0,7 km)',u:'https://www.outdooractive.com/en/route/hiking-trail/upper-carniola/hike-around-lake-jasna-lake-jasna-/39072730/'},
+    {l:'Jasna → Gozd Martuljek (7,4 km)',u:'https://www.outdooractive.com/de/route/wanderung/kranjska-gora/ueber-drcev-rut-zum-jasnasee-und-durch-den-tofov-graben-nach-gozd-martuljek/806476654/'},
+    {l:'Zelenci Naturreservat – Sava-Quelle (3,8 km)',u:'https://www.outdooractive.com/en/route/hiking-trail/kranjska-gora/from-ratece-to-zelenci-source-of-the-sava-river/805166934/'}
+  ]
 };
 
 function parseKm(s){const m=s.match(/[\d,.]+/);return m?parseFloat(m[0].replace(',','.')):0}
@@ -388,7 +525,7 @@ function cardHTML(t){
       <div class="section"><div class="section-title" style="color:${t.color}"><span>⚠️</span>Einschränkungen</div><div class="restrict">${t.restrictions}</div></div>
       <div class="section"><div class="section-title" style="color:${t.color}"><span>💡</span>Gut zu wissen</div><div class="section-body" style="font-size:12px;color:#9CA3AF">${t.extraInfo}</div></div>
       ${t.personal?`<div class="section"><div class="section-title" style="color:${t.color}"><span>👨‍👩‍🐕</span>Für euch</div><div class="section-body">${personalHTML(t.personal,t.color)}</div></div>`:''}
-      ${routeUrls[t.id]?`<a href="${routeUrls[t.id]}" target="_blank" rel="noopener" class="link-btn" style="background:#1A2530;border:1px solid #f9731644;color:#FB923C;margin-top:10px;display:flex;justify-content:center;width:100%;padding:8px 12px;border-radius:8px;font-size:12px">🗺️ Route & Karte auf ${routeUrls[t.id].includes('outdooractive.com')?'Outdooractive':'Alpenvereinaktiv'} ↗</a>`:''}
+      ${(routeUrls[t.id]||[]).map((r,i)=>`<a href="${r.u}" target="_blank" rel="noopener" class="link-btn" style="background:#1A2530;border:1px solid #f9731644;color:#FB923C;margin-top:${i===0?10:4}px;display:flex;justify-content:center;width:100%;padding:8px 12px;border-radius:8px;font-size:12px">🗺️ ${r.l} · ${r.u.includes('outdooractive.com')?'Outdooractive':'Alpenvereinaktiv'} ↗</a>`).join('')}
       <div class="highlight-box" style="background:${t.color}0D;color:${t.color};border-color:${t.color}30">✨ ${t.highlight}</div>
     </div>
   </div>`;
@@ -454,8 +591,13 @@ function toggleCard(id){
   else{body.style.display='none';card.classList.remove('open')}
 }
 
-initFilters();
-render();
+function init(){initFilters();render()}
+
+// --- Start ---
+if(sessionStorage.getItem(PIN_SESSION_KEY)==='true'){
+  document.getElementById('pinOverlay').classList.add('hidden');
+  init();
+}
 </script>
 </body>
 </html>
