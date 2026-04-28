@@ -6,7 +6,7 @@ A standalone HTML app for planning motorhome-based hiking trips in the Salzkamme
 
 A personal trip planner built as a single HTML file. No frameworks, no dependencies, no backend — just open the file in any browser.
 
-**23 curated hiking routes** around lakes, rivers, gorges and alpine meadows, each with:
+**26 curated hiking routes** around lakes, rivers, gorges and alpine meadows, each with:
 
 - 🐕 Dog-friendliness ratings (1–5 paws) & dog swimming filter
 - 🚐 Verified motorhome parking (Park4Night links, Google Maps fallback)
@@ -35,9 +35,9 @@ Height restrictions and parking warnings are noted per tour.
 
 | Distance group | Range | Tours |
 |---|---|---|
-| 📍 Nahbereich | 0–30 km | 8 tours |
-| 🗺️ Entdeckungen | 30–60 km | 8 tours |
-| 🌍 Abenteuer | 60+ km | 7 tours |
+| 📍 Nahbereich | 0–30 km | 7 tours |
+| 🗺️ Entdeckungen | 30–60 km | 10 tours |
+| 🌍 Abenteuer | 60+ km | 9 tours |
 
 Water types: Lake loops, mountain lakes, river gorges, lake+river combos, alpine meadows.
 
