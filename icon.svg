@@ -1,119 +1,113 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <!-- Flat colours only (ImageMagick drops gradients to black on raster).
-       Bright alpine-sky background with a side-profile motorhome (the
-       app's signature "Womo" angle — Elnagh-inspired) and a small hiking
-       boot as accent. OS adds the corner mask on install. -->
+       Front view of a classic VW T1 Bulli: split V-windshield, round
+       centre badge with a heart, two heart-shaped headlights, chrome
+       bumper. Cream-over-turquoise two-tone with a soft cream sky.
+       OS adds the corner mask on install. -->
 
-  <!-- full-bleed bright sky background -->
-  <rect width="512" height="512" fill="#38BDF8"/>
+  <!-- full-bleed soft sky background -->
+  <rect width="512" height="512" fill="#7DD3FC"/>
 
-  <!-- distant mountain band (subtle outdoor framing) -->
-  <path d="M 0 320
-           L 90 230
-           L 160 280
-           L 230 220
-           L 320 280
-           L 400 240
-           L 512 270
-           L 512 380
-           L 0 380 Z"
-        fill="#1D4ED8"/>
-  <!-- snowcap on one peak -->
-  <path d="M 215 235
-           L 230 220
-           L 248 240
-           L 238 240
-           L 230 232
-           L 222 240 Z"
-        fill="#F9FAFB"/>
+  <!-- soft sun/glow disc -->
+  <circle cx="420" cy="110" r="44" fill="#FEF3C7"/>
 
-  <!-- green ground band -->
-  <rect x="0" y="380" width="512" height="132" fill="#15803D"/>
+  <!-- ground band -->
+  <rect x="0" y="450" width="512" height="62" fill="#86EFAC"/>
 
-  <!-- ============== MOTORHOME (side profile, facing right) ============== -->
+  <!-- ============== VW T1 BULLI FRONT VIEW ============== -->
+  <!-- All offsets centred on x=256. Body is wider than tall, roof curves
+       smoothly into the front face. -->
 
-  <!-- living-area body — tall white box -->
-  <rect x="76" y="200" width="240" height="160" rx="14" fill="#F9FAFB"
-        stroke="#1E3A8A" stroke-width="6"/>
+  <!-- ROOF / upper body (cream, rounded top) -->
+  <path d="M 96 200
+           Q 96 110 256 110
+           Q 416 110 416 200
+           L 416 248
+           L 96 248 Z"
+        fill="#FEF3C7"
+        stroke="#1E3A8A" stroke-width="5"/>
 
-  <!-- cab (driver area) — slightly shorter box on the right -->
-  <path d="M 316 240
-           L 316 360
-           L 436 360
-           L 436 290
-           Q 436 270 416 264
-           L 380 254
-           Q 360 248 348 240 Z"
-        fill="#F9FAFB" stroke="#1E3A8A" stroke-width="6"/>
+  <!-- LOWER body (turquoise / classic Bulli lower) -->
+  <path d="M 80 248
+           L 432 248
+           L 432 430
+           Q 432 442 420 442
+           L 92 442
+           Q 80 442 80 430 Z"
+        fill="#06B6D4"
+        stroke="#1E3A8A" stroke-width="5"/>
 
-  <!-- windshield (slanted, dark) -->
-  <path d="M 354 246
-           L 422 268
-           Q 428 270 428 278
-           L 428 296
-           Q 428 304 420 304
-           L 354 304 Z"
+  <!-- horizontal trim line between cream and turquoise -->
+  <rect x="80" y="246" width="352" height="6" fill="#1E3A8A"/>
+
+  <!-- ========= SPLIT-WINDOW WINDSCREEN (V-shape, the icon's signature) ========= -->
+  <!-- left pane -->
+  <path d="M 130 145
+           L 250 145
+           L 250 232
+           L 142 232
+           Q 134 232 132 226
+           L 124 178
+           Q 122 165 130 145 Z"
         fill="#1E3A8A"/>
+  <!-- right pane -->
+  <path d="M 262 145
+           L 382 145
+           L 388 178
+           Q 390 165 388 178
+           L 380 226
+           Q 378 232 370 232
+           L 262 232 Z"
+        fill="#1E3A8A"/>
+  <!-- centre divider (the V-strut) -->
+  <rect x="250" y="142" width="12" height="92" fill="#FEF3C7"
+        stroke="#1E3A8A" stroke-width="3"/>
 
-  <!-- side window of cab (driver door) -->
-  <rect x="334" y="266" width="14" height="36" fill="#1E3A8A"/>
+  <!-- ========= CENTRE ROUND BADGE (heart instead of VW) ========= -->
+  <circle cx="256" cy="310" r="42" fill="#FEF3C7"
+          stroke="#1E3A8A" stroke-width="5"/>
+  <!-- heart inside the badge -->
+  <path d="M 256 332
+           C 236 318 226 302 232 290
+           C 238 280 252 280 256 292
+           C 260 280 274 280 280 290
+           C 286 302 276 318 256 332 Z"
+        fill="#EF4444"/>
 
-  <!-- living-area windows (two) -->
-  <rect x="100" y="230" width="70" height="50" rx="6" fill="#1E3A8A"/>
-  <rect x="190" y="230" width="70" height="50" rx="6" fill="#1E3A8A"/>
+  <!-- ========= HEART HEADLIGHTS (left + right of the bumper area) ========= -->
+  <!-- left headlight -->
+  <path d="M 142 400
+           C 124 388 116 374 122 364
+           C 128 356 140 356 144 366
+           C 148 356 160 356 166 364
+           C 172 374 160 388 142 400 Z"
+        fill="#FBBF24"
+        stroke="#92400E" stroke-width="3"/>
+  <!-- right headlight -->
+  <path d="M 370 400
+           C 352 388 344 374 350 364
+           C 356 356 368 356 372 366
+           C 376 356 388 356 394 364
+           C 400 374 388 388 370 400 Z"
+        fill="#FBBF24"
+        stroke="#92400E" stroke-width="3"/>
 
-  <!-- door with small window (between windows and right edge) -->
-  <rect x="270" y="234" width="38" height="120" rx="4" fill="#FBBF24"
-        stroke="#1E3A8A" stroke-width="4"/>
-  <rect x="280" y="248" width="18" height="22" rx="2" fill="#1E3A8A"/>
-  <circle cx="302" cy="298" r="3" fill="#1E3A8A"/>
+  <!-- ========= CHROME BUMPER ========= -->
+  <rect x="64" y="430" width="384" height="20" rx="6"
+        fill="#E5E7EB" stroke="#1E3A8A" stroke-width="4"/>
 
-  <!-- decorative red stripe along the body -->
-  <rect x="82" y="320" width="234" height="10" fill="#EF4444"/>
+  <!-- ========= WHEELS (peeking under bumper) ========= -->
+  <circle cx="130" cy="468" r="26" fill="#1F2937"/>
+  <circle cx="130" cy="468" r="11" fill="#9CA3AF"/>
+  <circle cx="382" cy="468" r="26" fill="#1F2937"/>
+  <circle cx="382" cy="468" r="11" fill="#9CA3AF"/>
 
-  <!-- wheels -->
-  <circle cx="130" cy="370" r="28" fill="#1F2937"/>
-  <circle cx="130" cy="370" r="12" fill="#9CA3AF"/>
-  <circle cx="390" cy="370" r="28" fill="#1F2937"/>
-  <circle cx="390" cy="370" r="12" fill="#9CA3AF"/>
-
-  <!-- ============== HIKING BOOT (small accent, bottom-left) ============== -->
-
-  <!-- sole -->
-  <path d="M 38 480
-           L 38 466
-           Q 38 460 44 460
-           L 152 460
-           Q 162 460 170 466
-           L 170 480 Z"
-        fill="#1F2937"/>
-
-  <!-- upper -->
-  <path d="M 44 460
-           L 44 416
-           Q 44 408 52 408
-           L 96 408
-           Q 104 408 108 416
-           L 124 446
-           Q 130 458 142 460
-           L 170 460 Z"
-        fill="#92400E"/>
-
-  <!-- collar/cuff -->
-  <path d="M 44 416
-           Q 44 408 52 408
-           L 96 408
-           Q 104 408 108 416
-           L 104 422
-           Q 100 416 92 416
-           L 56 416
-           Q 50 416 50 424 Z"
-        fill="#FBBF24"/>
-
-  <!-- laces (3 short bars) -->
-  <g stroke="#FBBF24" stroke-width="3" stroke-linecap="round" fill="none">
-    <line x1="58" y1="428" x2="96" y2="428"/>
-    <line x1="58" y1="438" x2="96" y2="438"/>
-    <line x1="58" y1="448" x2="100" y2="448"/>
-  </g>
+  <!-- ========= TINY HEART FLOATING ABOVE ROOF (love accent) ========= -->
+  <path d="M 256 88
+           C 244 78 236 68 240 60
+           C 244 54 254 54 256 62
+           C 258 54 268 54 272 60
+           C 276 68 268 78 256 88 Z"
+        fill="#F472B6"
+        stroke="#831843" stroke-width="2"/>
 </svg>
