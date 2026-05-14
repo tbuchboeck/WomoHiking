@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Flat colours only, full-bleed navy matching app background #0A0A12.
+       OS adds the corner mask on install; transparent SVG corners
+       would paint white on Android. -->
+
+  <!-- full-bleed dark-navy background -->
+  <rect width="512" height="512" fill="#0A0A12"/>
+
+  <!-- distant mountain silhouette (subtle, sets the outdoor scene) -->
+  <path d="M 0 360 L 110 240 L 180 300 L 280 200 L 360 290 L 460 220 L 512 270 L 512 360 Z"
+        fill="#122040"/>
+  <path d="M 0 380 L 90 310 L 170 360 L 260 290 L 350 350 L 440 300 L 512 340 L 512 380 Z"
+        fill="#0C3547"/>
+
+  <!-- ground line -->
+  <rect x="0" y="400" width="512" height="6" fill="#1A1A28"/>
+
+  <!-- hiking boot (side profile, facing right) -->
+  <!-- sole (chunky, lugged) -->
+  <path d="M 80 408
+           L 80 388
+           Q 80 376 92 376
+           L 396 376
+           Q 416 376 432 388
+           L 432 408
+           Z"
+        fill="#67E8F9"/>
+
+  <!-- sole tread notches -->
+  <g fill="#0A0A12">
+    <rect x="100" y="390" width="14" height="14"/>
+    <rect x="130" y="390" width="14" height="14"/>
+    <rect x="160" y="390" width="14" height="14"/>
+    <rect x="190" y="390" width="14" height="14"/>
+    <rect x="220" y="390" width="14" height="14"/>
+    <rect x="250" y="390" width="14" height="14"/>
+    <rect x="280" y="390" width="14" height="14"/>
+    <rect x="310" y="390" width="14" height="14"/>
+    <rect x="340" y="390" width="14" height="14"/>
+    <rect x="370" y="390" width="14" height="14"/>
+    <rect x="400" y="390" width="14" height="14"/>
+  </g>
+
+  <!-- upper boot body -->
+  <path d="M 92 376
+           L 92 244
+           Q 92 220 116 220
+           L 240 220
+           Q 264 220 274 240
+           L 320 332
+           Q 332 356 358 360
+           L 416 372
+           Q 432 374 432 386
+           L 432 376
+           Z"
+        fill="#F3F4F6"/>
+
+  <!-- ankle collar (padded top edge) -->
+  <path d="M 92 244
+           Q 92 220 116 220
+           L 240 220
+           Q 264 220 274 240
+           L 260 252
+           Q 248 240 232 240
+           L 124 240
+           Q 108 240 108 256
+           Z"
+        fill="#3B82F6"/>
+
+  <!-- toe cap reinforcement -->
+  <path d="M 274 240
+           L 320 332
+           Q 332 356 358 360
+           L 416 372
+           Q 432 374 432 386
+           L 432 376
+           L 416 372
+           Q 380 366 360 348
+           L 320 280
+           Z"
+        fill="#1F2937"/>
+
+  <!-- laces (4 horizontal pairs with eyelets) -->
+  <g stroke="#3B82F6" stroke-width="6" stroke-linecap="round" fill="none">
+    <line x1="130" y1="262" x2="232" y2="262"/>
+    <line x1="130" y1="286" x2="232" y2="286"/>
+    <line x1="130" y1="310" x2="240" y2="310"/>
+    <line x1="130" y1="334" x2="250" y2="334"/>
+  </g>
+
+  <!-- eyelets -->
+  <g fill="#0A0A12">
+    <circle cx="130" cy="262" r="4"/>
+    <circle cx="232" cy="262" r="4"/>
+    <circle cx="130" cy="286" r="4"/>
+    <circle cx="232" cy="286" r="4"/>
+    <circle cx="130" cy="310" r="4"/>
+    <circle cx="240" cy="310" r="4"/>
+    <circle cx="130" cy="334" r="4"/>
+    <circle cx="250" cy="334" r="4"/>
+  </g>
+
+  <!-- tongue (peeking between laces) -->
+  <path d="M 156 244
+           L 156 340
+           Q 156 348 164 348
+           L 200 348
+           Q 208 348 208 340
+           L 208 244
+           Z"
+        fill="#E5E7EB"/>
+
+  <!-- vertical lace seam over tongue -->
+  <line x1="182" y1="252" x2="182" y2="342"
+        stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
+</svg>
