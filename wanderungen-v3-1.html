@@ -240,6 +240,41 @@ document.addEventListener('keydown',(e)=>{
   else if(e.key==='Backspace')pinDelete();
 });
 
+// --- Visit Tracking (localStorage) ---
+const VISITS_KEY='womoHikingVisits';
+function getVisits(){
+  try{return JSON.parse(localStorage.getItem(VISITS_KEY)||'{}')}
+  catch{return{}}
+}
+function saveVisits(v){localStorage.setItem(VISITS_KEY,JSON.stringify(v))}
+function recordVisit(id){
+  const v=getVisits();
+  if(!v[id])v[id]={count:0,lastVisit:null};
+  v[id].count++;
+  v[id].lastVisit=new Date().toISOString().slice(0,10);
+  saveVisits(v);
+  rerender();
+}
+function removeVisit(id){
+  const v=getVisits();
+  if(!v[id]||v[id].count<=0)return;
+  v[id].count--;
+  if(v[id].count===0)delete v[id];
+  else v[id].lastVisit=new Date().toISOString().slice(0,10);
+  saveVisits(v);
+  rerender();
+}
+function rerender(){
+  // Preserve open card state across re-render
+  const openIds=[...document.querySelectorAll('.card.open')].map(c=>c.id.replace('card-',''));
+  render();
+  openIds.forEach(id=>{
+    const body=document.getElementById('body-'+id);
+    const card=document.getElementById('card-'+id);
+    if(body&&card){body.style.display='block';card.classList.add('open')}
+  });
+}
+
 // --- Tour Data ---
 const tours=[
 // === NAH (0-30 km) ===
@@ -554,6 +589,7 @@ function cardHTML(t){
           <span style="color:#333">·</span>
           <span class="water-badge" style="color:${tc};background:${tc}15">${tl}</span>
           ${(()=>{const s=dogSwimMap[t.id];return s==='ja'?'<span class="water-badge" style="color:#22C55E;background:#22C55E15">🏊 Hund</span>':s==='teils'?'<span class="water-badge" style="color:#F59E0B;background:#F59E0B15">⚠️ Hund</span>':'<span class="water-badge" style="color:#EF4444;background:#EF444415">❌ Kein Baden</span>';})()}
+          ${(()=>{const v=getVisits()[t.id];return v&&v.count>0?`<span class="water-badge" style="color:#A78BFA;background:#A78BFA15">✅ ${v.count}× besucht</span>`:'';})()}
         </div>
       </div>
     </div>
@@ -561,6 +597,7 @@ function cardHTML(t){
       <div class="pills">
         ${['Distanz|'+t.distance,'Dauer|'+t.duration,'Höhe|'+t.elevation,'Anfahrt|'+t.distanceFromBase].map(p=>{const[l,v]=p.split('|');return`<div class="pill" style="background:${t.color}12;border:1px solid ${t.color}25"><span class="pill-label">${l}</span><span class="pill-value" style="color:${t.color}">${v}</span></div>`}).join('')}
       </div>
+      <div class="section"><div class="section-title" style="color:${t.color}"><span>📍</span>Deine Besuche</div><div class="section-body">${(()=>{const v=getVisits()[t.id];return v&&v.count>0?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap"><span style="font-size:14px;font-weight:800;color:${t.color}">${v.count}× besucht</span><span style="font-size:11px;color:#9CA3AF">· zuletzt am ${v.lastVisit}</span></div>`:'<div style="font-size:11.5px;color:#6B7280;margin-bottom:8px">Noch nicht besucht — Zeit für die erste Tour!</div>';})()}<div style="display:flex;gap:6px;flex-wrap:wrap"><button onclick="event.stopPropagation();recordVisit(${t.id})" style="background:#1A2530;border:1px solid ${t.color}66;color:${t.color};padding:6px 12px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer">+ Hier war ich</button>${(()=>{const v=getVisits()[t.id];return v&&v.count>0?`<button onclick="event.stopPropagation();removeVisit(${t.id})" style="background:#1A1A28;border:1px solid #6B728044;color:#9CA3AF;padding:6px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer">− Rückgängig</button>`:'';})()}</div></div></div>
       <div class="section"><div class="section-title" style="color:${t.color}"><span>🗺️</span>Route</div><div class="section-body">${t.description}</div></div>
       <div class="section"><div class="section-title" style="color:${t.color}"><span>🐕</span>Hund & Wasser</div><div class="section-body"><div class="paws" style="margin-bottom:3px">${paws(t.dogRating)} <span style="font-size:9px;color:#6B7280;margin-left:3px">Hundefreundlichkeit</span></div>${t.dogInfo}</div></div>
       <div class="section"><div class="section-title" style="color:${t.color}"><span>🚐</span>Womo-Tauglichkeit</div><div class="section-body"><div class="paws" style="margin-bottom:3px">${womoStars(womoRating[t.id]||3)} <span style="font-size:9px;color:#6B7280;margin-left:3px">Elnagh Baron 531</span></div></div></div>
@@ -599,6 +636,7 @@ function render(){
     <th onclick="sortTable(4)" style="cursor:pointer">Typ ⇅</th>
     <th onclick="sortTable(5)" style="cursor:pointer">Fahrzeit ⇅</th>
     <th onclick="sortTable(6)" style="cursor:pointer">Stellplatz ⇅</th>
+    <th onclick="sortTable(7)" style="cursor:pointer">✅ ⇅</th>
   </tr></thead><tbody>`;
   filtered.forEach(t=>{
     const tc=typeColors[t.type]||'#666';
@@ -610,6 +648,7 @@ function render(){
       <td data-sort="${t.type}"><span style="color:${tc};font-size:9px;font-weight:700">${(typeLabels[t.type]||'').replace(/^.+\s/,'')}</span></td>
       <td style="color:#9CA3AF" data-sort="${parseDrive(t.driveTime)}">${t.driveTime}</td>
       <td style="font-weight:700;color:#34D399" data-sort="${parseCost((t.stellplatz||t.parking).cost)}">${(t.stellplatz||t.parking).cost}</td>
+      <td data-sort="${(getVisits()[t.id]||{count:0}).count}" style="color:#A78BFA;font-weight:700">${(()=>{const v=getVisits()[t.id];return v&&v.count>0?v.count+'×':'—';})()}</td>
     </tr>`;
   });
   html+=`</tbody></table></div></div>`;
