@@ -14,8 +14,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Wanderungen">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./auth.css">
+<script defer src="./auth.js"></script>
 <style>
 :root{--bg:#0A0A12;--card:#13131D;--card-border:#252535;--card-hover:#1A1A28;--text:#E5E7EB;--text-dim:#9CA3AF;--text-faint:#6B7280;--accent:#3B82F6;--accent-glow:#3B82F620;--green:#059669;--warn:#92400E;--filter-bg:#111119}
 *{box-sizing:border-box;-webkit-font-smoothing:antialiased;margin:0;padding:0}
@@ -102,61 +103,30 @@ td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .new-badge{font-size:8px;font-weight:800;background:#EF4444;color:#fff;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;letter-spacing:.04em}
 
-/* PIN Lock Screen */
-.pin-overlay{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .3s}
-.pin-overlay.hidden{display:none}
-.pin-box{background:var(--card);border-radius:16px;border:1px solid var(--card-border);box-shadow:0 8px 32px rgba(0,0,0,.5);padding:2rem;max-width:320px;width:100%;text-align:center}
-.pin-icon{width:64px;height:64px;background:linear-gradient(160deg,#122040,#0C3547);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.8rem}
-.pin-box h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:#F9FAFB;margin-bottom:.25rem}
-.pin-subtitle{color:var(--text-faint);font-size:.85rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
-.pin-dots{display:flex;justify-content:center;gap:1rem;margin-bottom:1.5rem}
-.pin-dot{width:16px;height:16px;border-radius:50%;background:#1A1A28;border:1px solid var(--card-border);transition:background .15s,transform .15s}
-.pin-dot.filled{background:var(--accent);border-color:var(--accent);transform:scale(1.15)}
-.pin-error{background:#2A1515;color:#FCA5A5;border-radius:8px;padding:.5rem .75rem;font-size:.85rem;margin-bottom:1rem;display:none}
-.pin-error.visible{display:block}
-.pin-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;max-width:220px;margin:0 auto}
-.pin-numpad button{height:52px;border-radius:10px;border:none;background:#1A1A28;color:var(--text);font-size:1.3rem;font-weight:600;cursor:pointer;transition:background .1s}
-.pin-numpad button:hover{background:var(--card-border)}
-.pin-numpad button:active{background:var(--accent);color:#fff}
-.pin-numpad button.pin-del{font-size:1rem;color:var(--text-faint)}
-.pin-numpad button:disabled{opacity:.3;cursor:default}
-.pin-spinner{display:none;margin:1rem auto 0;width:20px;height:20px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:pin-spin .6s linear infinite}
-.pin-spinner.visible{display:block}
-@keyframes pin-spin{to{transform:rotate(360deg)}}
-@keyframes pin-shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-.pin-shake{animation:pin-shake .4s ease-in-out}
+/* Auth overlay styles live in auth.css (sibling file) */
 </style>
 </head>
 <body>
 
-<!-- PIN Lock Screen -->
-<div class="pin-overlay" id="pinOverlay">
-  <div class="pin-box">
-    <div class="pin-icon">🥾</div>
-    <h2>Wanderungen für euch</h2>
-    <p class="pin-subtitle">&#128274; PIN eingeben</p>
-    <div class="pin-error" id="pinError"></div>
-    <div class="pin-dots" id="pinDots">
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
+<!-- Auth overlay (WebAuthn passkey via auth.apps.buchboeck.at) -->
+<div class="auth-overlay" id="auth-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+  <div class="auth-box">
+    <div class="auth-icon" aria-hidden="true">🥾</div>
+    <h2 id="auth-title">Wanderungen für euch</h2>
+    <p class="auth-subtitle">Entsperren</p>
+    <div class="auth-error" id="auth-error" role="alert" aria-live="assertive"></div>
+
+    <div class="auth-choices" id="auth-choices">
+      <button type="button" class="auth-btn auth-btn-primary" id="auth-biometric">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+          <path d="M12 1a8 8 0 0 0-8 8v3a1 1 0 0 0 2 0V9a6 6 0 0 1 12 0v3a1 1 0 0 0 2 0V9a8 8 0 0 0-8-8zM7 11a1 1 0 0 0-1 1v3a6 6 0 0 0 6 6 1 1 0 0 0 0-2 4 4 0 0 1-4-4v-3a1 1 0 0 0-1-1zm10 0a1 1 0 0 0-1 1v3a8 8 0 0 1-1.36 4.46 1 1 0 1 0 1.65 1.13A10 10 0 0 0 18 15v-3a1 1 0 0 0-1-1zm-5 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1 1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm-5 5a1 1 0 0 0-1 1 5 5 0 0 0 .12 1.07 1 1 0 1 0 1.95-.41A3.05 3.05 0 0 1 8 17a1 1 0 0 0-1-1z"/>
+        </svg>
+        Mit Fingerabdruck entsperren
+      </button>
+      <button type="button" class="auth-link" id="auth-recovery-btn">Recovery-Code verwenden</button>
     </div>
-    <div class="pin-numpad" id="pinNumpad">
-      <button type="button" onclick="pinPress(1)">1</button>
-      <button type="button" onclick="pinPress(2)">2</button>
-      <button type="button" onclick="pinPress(3)">3</button>
-      <button type="button" onclick="pinPress(4)">4</button>
-      <button type="button" onclick="pinPress(5)">5</button>
-      <button type="button" onclick="pinPress(6)">6</button>
-      <button type="button" onclick="pinPress(7)">7</button>
-      <button type="button" onclick="pinPress(8)">8</button>
-      <button type="button" onclick="pinPress(9)">9</button>
-      <div></div>
-      <button type="button" onclick="pinPress(0)">0</button>
-      <button type="button" class="pin-del" onclick="pinDelete()">&larr;</button>
-    </div>
-    <div class="pin-spinner" id="pinSpinner"></div>
+
+    <div class="auth-spinner" id="auth-spinner" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -186,70 +156,6 @@ td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 <div class="cards" id="cards"></div>
 
 <script>
-// --- Supabase ---
-const SUPABASE_URL='https://wyiafjbpxbhaflhqvwcu.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5aWFmamJweGJoYWZsaHF2d2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODIzMTAsImV4cCI6MjA4OTE1ODMxMH0.zxwOwAp_Nj3j6wX1KUMOFecEXl0cnQ8EjvKMUu4Xv_8';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-
-// --- PIN Lock ---
-const PIN_SESSION_KEY='womoHikingPinVerified';
-const PIN_LENGTH=4;
-let pinBuffer='';
-let pinLoading=false;
-
-async function hashPin(pin){
-  const data=new TextEncoder().encode(pin);
-  const buf=await crypto.subtle.digest('SHA-256',data);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-function updatePinDots(){
-  document.querySelectorAll('#pinDots .pin-dot').forEach((dot,i)=>{
-    dot.classList.toggle('filled',i<pinBuffer.length);
-  });
-}
-function showPinError(msg){
-  const el=document.getElementById('pinError');
-  el.textContent=msg;el.classList.add('visible');
-  const dots=document.getElementById('pinDots');
-  dots.classList.add('pin-shake');
-  setTimeout(()=>dots.classList.remove('pin-shake'),500);
-}
-function clearPinError(){document.getElementById('pinError').classList.remove('visible')}
-async function verifyPin(pin){
-  try{
-    const{data,error}=await sb.from('app_config').select('value').eq('key','pin_hash').single();
-    if(error||!data)return{success:false,error:'Verbindungsfehler'};
-    const hash=await hashPin(pin);
-    if(hash===data.value){sessionStorage.setItem(PIN_SESSION_KEY,'true');return{success:true}}
-    return{success:false,error:'Falscher PIN'};
-  }catch(e){return{success:false,error:'Verbindungsfehler'}}
-}
-function pinPress(digit){
-  if(pinLoading||pinBuffer.length>=PIN_LENGTH)return;
-  clearPinError();pinBuffer+=digit;updatePinDots();
-  if(pinBuffer.length===PIN_LENGTH)pinSubmit();
-}
-function pinDelete(){
-  if(pinLoading||pinBuffer.length===0)return;
-  clearPinError();pinBuffer=pinBuffer.slice(0,-1);updatePinDots();
-}
-async function pinSubmit(){
-  pinLoading=true;
-  document.getElementById('pinSpinner').classList.add('visible');
-  document.querySelectorAll('#pinNumpad button').forEach(b=>b.disabled=true);
-  const result=await verifyPin(pinBuffer);
-  if(result.success){document.getElementById('pinOverlay').classList.add('hidden');init()}
-  else{showPinError(result.error);pinBuffer='';updatePinDots()}
-  pinLoading=false;
-  document.getElementById('pinSpinner').classList.remove('visible');
-  document.querySelectorAll('#pinNumpad button').forEach(b=>b.disabled=false);
-}
-document.addEventListener('keydown',(e)=>{
-  if(document.getElementById('pinOverlay').classList.contains('hidden'))return;
-  if(e.key>='0'&&e.key<='9')pinPress(parseInt(e.key));
-  else if(e.key==='Backspace')pinDelete();
-});
-
 // --- Visit Tracking (localStorage) ---
 const VISITS_KEY='womoHikingVisits';
 function getVisits(){
@@ -688,10 +594,10 @@ function toggleCard(id){
 function init(){initFilters();render()}
 
 // --- Start ---
-if(sessionStorage.getItem(PIN_SESSION_KEY)==='true'){
-  document.getElementById('pinOverlay').classList.add('hidden');
-  init();
-}
+// auth.js fires 'auth:unlocked' whenever the gate opens (either an existing
+// valid session was found at load, or the user just authenticated). Both
+// cases boot the app the same way.
+window.addEventListener('auth:unlocked',init);
 </script>
 </body>
 </html>

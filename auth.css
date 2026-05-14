@@ -1,0 +1,122 @@
+/* Auth overlay — WomoHiking palette adaptation of the LakeTemp pattern.
+   Public-data app: biometric + recovery-code paths only, no PIN UI. */
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #0B1120, #122040 40%, #0C3547 70%, #0A2A1F);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 9999;
+  animation: auth-fade-in 0.2s ease-out;
+}
+.auth-overlay.hidden { display: none; }
+@keyframes auth-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.auth-box {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  padding: 2rem 1.75rem;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(160deg, #122040, #0C3547);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1rem;
+  font-size: 1.8rem;
+}
+
+.auth-box h2 {
+  font-family: 'Playfair Display', serif;
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #F9FAFB;
+}
+.auth-subtitle {
+  margin: 0 0 1.25rem;
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+
+.auth-error {
+  background: #2A1515;
+  color: #FCA5A5;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+.auth-error.visible { display: block; }
+
+.auth-spinner {
+  display: none;
+  margin: 1rem auto 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--accent);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: auth-spin 0.6s linear infinite;
+}
+.auth-spinner.visible { display: block; }
+@keyframes auth-spin { to { transform: rotate(360deg); } }
+
+.auth-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+.auth-btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.auth-btn-primary:hover { background: #2563EB; }
+.auth-btn-primary:active { transform: scale(0.98); }
+.auth-btn:disabled { opacity: 0.55; cursor: progress; }
+.auth-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-family: inherit;
+}
+.auth-link:hover { color: var(--text); }
+
+body.auth-locked { overflow: hidden; }
