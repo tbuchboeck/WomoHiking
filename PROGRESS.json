@@ -5,7 +5,7 @@
   "iteration": 9,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
-  "status": "ready-to-launch",
+  "status": "completed",
   "phases": {
     "phase_0_preloop": {
       "label": "Pre-loop manual fixes (Initializer)",
@@ -329,19 +329,24 @@
     },
     "phase_7_pr": {
       "label": "Open PR + Final Report",
-      "done": false,
+      "done": true,
       "items": [
         {
           "id": "loop-log-summary",
           "label": "LOOP.log final summary written",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:35:00Z"
         },
         {
           "id": "pr-opened",
           "label": "gh pr create with phase-by-phase summary",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:35:00Z"
         }
-      ]
+      ],
+      "pr_number": 13,
+      "pr_url": "https://github.com/tbuchboeck/WomoHiking/pull/13"
     }
-  }
+  },
+  "completed_at": "2026-05-17T21:35:00Z"
 }

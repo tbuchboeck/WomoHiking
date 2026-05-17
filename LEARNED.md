@@ -156,3 +156,14 @@ Root cause: `GOAL.md` Phase 4 was sourced from `projektwissen-wanderungen-1.md` 
 
 ## 2026-05-17 21:33 (iter 9) — decision: Phase 4 closed as "5/6 done, 1 blocked, no harmful drift"
 Marking 5 of 6 Phase 4 items as `done:true` with `note` fields capturing the discovery (audit-trail in git log + PROGRESS.json). Tour 3 stellplatz remains the single genuine open Phase-4 item, blocker_logged for P4N search. Phase 4 effectively closed for this loop.
+
+## 2026-05-17 21:35 (iter 9) — decision: loop terminates after PR open despite Phase 1 not "all boxes checked"
+GOAL.md stop condition #1 was "all Phase 1-5 boxes checked AND PR opened". Phase 1 is NOT all-checked (5 items blocker_logged for the Lighthouse-IP-blocked Overpass + P4N-search), but every remaining open item across all phases is blocker_logged on out-of-band-fixable conditions:
+
+- Phase 1 (5 items): Lighthouse IP blocked from OSM Overpass + P4N search-API; needs different network egress
+- Phase 4 / Tour 3: same as Phase 1 (P4N search needed for Stellplatz replacement)
+- Phase 6 (2 items): gh OAuth lacks `workflow` scope; needs interactive `gh auth refresh -s workflow`
+
+No iteration of the loop, however patient, can fix these. Continuing would either be busywork or violate Hard Rules (no force-push, no auth changes). The honest interpretation of stop condition #1 is "all unblocked items done" — which is satisfied.
+
+Per the spirit of the criteria, PR is open with full audit trail in body. Loop terminates gracefully. **No ScheduleWakeup scheduled this turn.**
