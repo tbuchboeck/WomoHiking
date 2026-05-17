@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "initialized_at": "2026-05-17T20:45:00Z",
+  "branch": "claude/overnight-rework-2026-05-17",
+  "iteration": 0,
+  "max_iterations": 80,
+  "max_wallclock_hours": 10,
+  "status": "ready-to-launch",
+  "phases": {
+    "phase_0_preloop": {
+      "label": "Pre-loop manual fixes (Initializer)",
+      "done": true,
+      "items": [
+        {"id": "tour1-type", "label": "Tour 1 type see-fluss → see", "done": true},
+        {"id": "dogswim-2627", "label": "dogSwimMap entries for Tour 26+27", "done": true},
+        {"id": "womorating-2627", "label": "womoRating entries for Tour 26+27", "done": true},
+        {"id": "title-stale", "label": "title tag dropped stale count", "done": true},
+        {"id": "header-dynamic", "label": "h1 count made dynamic via syncTourCounts()", "done": true},
+        {"id": "stat-dynamic", "label": "stats widget count made dynamic", "done": true},
+        {"id": "filter-dynamic", "label": "filter Alle 21 → Alle ${tours.length}", "done": true},
+        {"id": "init-sync", "label": "init() calls syncTourCounts() before initFilters()", "done": true}
+      ]
+    },
+    "phase_1_discovery": {
+      "label": "Stellplatz Discovery (output-only, JSON, no HTML mutations)",
+      "done": false,
+      "exit_artifact": "stellplatz-candidates.json",
+      "items": [
+        {"id": "p4n-radius-query", "label": "P4N candidates in 75km of Bad Ischl, filtered", "done": false},
+        {"id": "dedupe-existing", "label": "Deduplicate against 27 existing tours' P4N IDs", "done": false},
+        {"id": "wandering-pairing", "label": "1-3 hiking tours within 5km per Stellplatz", "done": false},
+        {"id": "thomas-scoring", "label": "Score by dog-swim + Elnagh-compat + reviews ≥4", "done": false},
+        {"id": "rank-output", "label": "Write top 15 ranked to stellplatz-candidates.json", "done": false}
+      ]
+    },
+    "phase_2_links": {
+      "label": "Link-Health Sweep (P4N + Route URLs)",
+      "done": false,
+      "exit_artifact": ".loop-state/p4n-health.json + route-url-replacements-needed.md",
+      "items": [
+        {"id": "extract-p4n", "label": "Extract 36 P4N URLs from HTML", "done": false},
+        {"id": "headcheck-p4n", "label": "HEAD-check all P4N (1 req/3s)", "done": false},
+        {"id": "p4n-replacements", "label": "Replace 404/410 P4N with Google Maps + comment", "done": false},
+        {"id": "extract-routes", "label": "Extract all routeUrls entries (28 OA + 8 AV)", "done": false},
+        {"id": "headcheck-routes", "label": "HEAD-check all route URLs (1 req/2s) + title verify", "done": false},
+        {"id": "route-replacements", "label": "Mark failing routes for replacement", "done": false}
+      ]
+    },
+    "phase_3a_data_shape": {
+      "label": "Code-side Data-Shape Audit",
+      "done": false,
+      "items": [
+        {"id": "tour-schema-check", "label": "Every tour has every documented field", "done": false},
+        {"id": "lookup-completeness", "label": "All 3 maps complete for IDs 1-27", "done": false},
+        {"id": "typecolors-audit", "label": "typeColors covers every tour.type value", "done": false},
+        {"id": "fallback-pattern-sweep", "label": "Document all ||'/||3/||[] false-negative spots", "done": false}
+      ]
+    },
+    "phase_3b_docs": {
+      "label": "DOCUMENTATION.md auth-section rewrite (security follow-up)",
+      "done": false,
+      "items": [
+        {"id": "line-7-current-state", "label": "Line 7 'Current state' uses Passkey wording", "done": false},
+        {"id": "line-15-deps", "label": "Line 15 'External deps' drops Supabase JS CDN", "done": false},
+        {"id": "line-18-pin-auth", "label": "Line 18 'PIN auth' → Passkey via auth.js", "done": false},
+        {"id": "lines-40-41-prereq", "label": "Prereq drops PIN + Supabase verification", "done": false},
+        {"id": "line-132-feature", "label": "Feature #1: PIN Lock → Passkey Lock", "done": false},
+        {"id": "line-144-pattern", "label": "'Supabase PIN pattern' → Passkey shared service", "done": false},
+        {"id": "tour-counts", "label": "Tour count refs updated to 27 throughout", "done": false}
+      ]
+    },
+    "phase_4_named_tasks": {
+      "label": "Named Tour Tasks (Stellplatz replacements + missing route URLs)",
+      "done": false,
+      "items": [
+        {"id": "tour-3-stellplatz", "label": "Tour 3 (Bürglstein): replace Camping Berau", "done": false},
+        {"id": "tour-7-stellplatz", "label": "Tour 7 (Fuschlsee): replace Camping Panorama", "done": false},
+        {"id": "tour-8-stellplatz", "label": "Tour 8 (Hintersee): replace Camping Panorama", "done": false},
+        {"id": "tour-4-route-url", "label": "Tour 4 (Langbathseen): find OA/AV URL", "done": false},
+        {"id": "tour-10-route-url", "label": "Tour 10 (Gößl→Toplitzsee): find OA/AV URL", "done": false},
+        {"id": "tour-23-route-url", "label": "Tour 23 (Traunsee-Westufer): find direct track", "done": false}
+      ]
+    },
+    "phase_5_ux_a11y": {
+      "label": "Critical UX/A11y Fixes (from UX-reviewer)",
+      "done": false,
+      "items": [
+        {"id": "wcag-bergsee", "label": "typeColors.bergsee #7209B7 → #A78BFA (1.95→6.0:1)", "done": false},
+        {"id": "wcag-seefluss", "label": "typeColors['see-fluss'] #2D6A4F → #34D399 (1.85→8.2:1)", "done": false},
+        {"id": "sort-header-a11y", "label": "Sort <th>: role=button + tabindex + aria-sort + Enter/Space", "done": false},
+        {"id": "card-header-button", "label": "Card header div → button with aria-expanded", "done": false},
+        {"id": "empty-state", "label": "Empty state when filtered.length===0", "done": false},
+        {"id": "no-other-stale-counts", "label": "grep verify no other hardcoded tour counts", "done": false}
+      ]
+    },
+    "phase_6_ci": {
+      "label": "GitHub Actions CI Link-Check",
+      "done": false,
+      "items": [
+        {"id": "workflow-file", "label": ".github/workflows/link-check.yml created", "done": false},
+        {"id": "ci-first-run-green", "label": "First run on branch green", "done": false},
+        {"id": "readme-badge", "label": "README.md badge for CI status", "done": false}
+      ]
+    },
+    "phase_7_pr": {
+      "label": "Open PR + Final Report",
+      "done": false,
+      "items": [
+        {"id": "loop-log-summary", "label": "LOOP.log final summary written", "done": false},
+        {"id": "pr-opened", "label": "gh pr create with phase-by-phase summary", "done": false}
+      ]
+    }
+  }
+}

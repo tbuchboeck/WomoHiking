@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>26 Wanderungen für euch · Salzkammergut & Salzburger Land</title>
+<title>Wanderungen für euch · Salzkammergut & Salzburger Land</title>
 <link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
@@ -131,10 +131,10 @@ td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 
 <div class="header">
 <div class="header-sub">Salzkammergut · Salzburger Land · Berchtesgaden · Ab Bad Ischl</div>
-<h1>26 Wanderungen <em>für euch</em></h1>
+<h1><span id="hdrCount">27</span> Wanderungen <em>für euch</em></h1>
 <p>Seen · Flüsse · Klammen · Almen · mit Hund 🐕 · Wohnmobil-Stellplätze</p>
 <div class="header-stats">
-<div class="stat"><span class="stat-val">23</span><span class="stat-label">Touren</span></div>
+<div class="stat"><span class="stat-val" id="statCount">27</span><span class="stat-label">Touren</span></div>
 <div class="stat"><span class="stat-val">3–12 km</span><span class="stat-label">Distanz</span></div>
 <div class="stat"><span class="stat-val">0–100 km</span><span class="stat-label">Radius</span></div>
 <div class="stat"><span class="stat-val">🐾 3–5</span><span class="stat-label">Hund</span></div>
@@ -193,7 +193,7 @@ function rerender(){
 // --- Tour Data ---
 const tours=[
 // === NAH (0-30 km) ===
-{id:1,group:"nah",type:"see-fluss",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
+{id:1,group:"nah",type:"see",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
 
 {id:2,group:"nah",type:"see",name:"Altausseer Seerundweg",subtitle:"Altaussee · Dachsteinblick",distance:"7,5 km",duration:"2–2,5 h",difficulty:"Sehr leicht",elevation:"58 Hm",water:"Altausseer See",dogRating:5,dogInfo:"Zahlreiche naturbelassene Buchten zum Baden. Offizielle Strandbäder meiden. Am Süd-/Ostufer spontane Einstiege.",parking:{name:"Parkplatz Zentrum",address:"Altaussee Zentrum",cost:"9 €/Tag",extras:"Gebührenpflichtig 9–19 Uhr · keine Höhenbeschränkung",p4n:"https://www.google.com/maps?q=47.6406,13.7664"},stellplatz:{name:"Caravanpark Ausseerland",address:"Ischlbergstraße 52, 8990 Bad Aussee",cost:"30–35 €/Nacht",extras:"10 Plätze · Sanitär · Dusche · ganzjährig · 4,7★",p4n:"https://park4night.com/en/place/229737"},restrictions:"Steiermark: Leinen-/Maulkorbpflicht überall! Nachtparkverbot für Womos in Altaussee.",description:"Einer der schönsten Seewanderungen der Alpen. Komplett um den kristallklaren Altausseer See. Blick auf Trisselwand, Loser & Dachsteingletscher. Jausenstation Seewiese (James Bond 'Spectre').",highlight:"Spektakulärstes Panorama · James-Bond-Drehlocation · kinderwagentauglich",color:"#4895EF",icon:"🏔️",distanceFromBase:"30 km",driveTime:"35 Min.",extraInfo:"Salzbergwerk Altaussee · Loser-Panoramastraße · Grundlsee + Toplitzsee",personal:"🏰 Burg Pflindsberg (Ruine oberhalb Altaussee) — kurzer Abstecher, tolle Aussicht|🥗 Bad Aussee: Lebzelter (vegetarische Menüs), Café Lewandofsky (vegan-freundlich)",isNew:false},
 
@@ -371,7 +371,9 @@ const dogSwimMap={
   22:'teils',// Hallstättersee: Buchten ja, Strandbad nein
   23:'teils',// Traunsee: Kiesstrand ja, Strandbad nein
   24:'teils',// Lago di Molveno: Nordufer naturbelassen, Strandbäder nein
-  25:'ja'    // Jasna-See: Kiesufer, direkter Zugang, sehr kalt!
+  25:'ja',   // Jasna-See: Kiesufer, direkter Zugang, sehr kalt!
+  26:'nein', // Vilsalpsee: Naturschutzgebiet, Hundebaden offiziell untersagt — nur Vilsbach-Zuläufe zum Pfoten-Kühlen
+  27:'ja'    // Schwarzensee: Naturufer mit Schotter- & Wiesenstellen zum Baden, hundefreundlich
 };
 
 // Womo-Rating (1–5): Wie gut ist die Tour für den Elnagh Baron 531?
@@ -401,7 +403,9 @@ const womoRating={
   22:4, // P4N verifiziert, gute Lage, Kurtaxe
   23:5, // Wunderburg GRATIS + Toscanapark P4N, top für Womos
   24:3, // P4N verifiziert aber teuer (32–50€), 48h max, kein Campingverhalten, Brenner-Maut
-  25:3  // Planica Stellplatz P4N, aber Nachtparkverbot in KG, Vršič-Pass eng für Womo
+  25:3, // Planica Stellplatz P4N, aber Nachtparkverbot in KG, Vršič-Pass eng für Womo
+  26:2, // Vilsalpsee: Stellplatz UNVERIFIZIERT, nur Tagespark, Tannheim-Anfahrt eng
+  27:2  // Schwarzensee: kein Stellplatz (null), nur 8€ Nachtpark Wanderparkplatz, 3€ Tagespark
 };
 
 let activeDist='alle';
@@ -412,7 +416,7 @@ function initFilters(){
   const df=document.getElementById('distFilters');
   const tf=document.getElementById('typeFilters');
   const sf=document.getElementById('swimFilters');
-  df.innerHTML=`<button class="fbtn active" onclick="setDist('alle')">Alle 21</button>
+  df.innerHTML=`<button class="fbtn active" onclick="setDist('alle')">Alle ${tours.length}</button>
     <button class="fbtn" onclick="setDist('nah')">Nah (0–30)</button>
     <button class="fbtn" onclick="setDist('mittel')">Mittel (30–60)</button>
     <button class="fbtn" onclick="setDist('weit')">Weit (60+)</button>`;
@@ -590,7 +594,8 @@ function toggleCard(id){
   else{body.style.display='none';card.classList.remove('open')}
 }
 
-function init(){initFilters();render()}
+function syncTourCounts(){const n=tours.length;const a=document.getElementById('hdrCount');const b=document.getElementById('statCount');if(a)a.textContent=n;if(b)b.textContent=n;}
+function init(){syncTourCounts();initFilters();render()}
 
 // --- Start ---
 // auth.js fires 'auth:unlocked' whenever the gate opens (either an existing
