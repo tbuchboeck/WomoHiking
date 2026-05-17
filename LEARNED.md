@@ -84,3 +84,18 @@ Total Phase-2 surface: 73 external URLs (37 P4N + 36 OA/AV). Total elapsed acros
 
 ## 2026-05-17 21:04 (iter 3) — decision: broken route URLs set to `null` (not removed) to match existing pattern
 Tour 4 + Tour 10 already use `null` in routeUrls (per projektwissen-wanderungen-1.md TODO list, "nicht gefunden"). Tour 16 + Tour 17 now also use `null` with inline `// comment` linking to route-url-replacements-needed.md. Render code uses `routeUrls[t.id]||[]` → null falls through to empty array → no button shown. Consistent with existing pattern, no behavior surprise.
+
+## 2026-05-17 21:09 (iter 4) — data-quirk: routeUrls[26] (Vilsalpsee) was missing entirely
+Phase 0 (iter 0) added Tour 26 entries to `dogSwimMap` and `womoRating`, but Phase 3a audit caught that `routeUrls[26]` was still absent — not `null`, simply not in the map. With render code doing `routeUrls[t.id]||[]`, the missing-key falls through silently to empty array → no route button shown for Vilsalpsee. Fixed in iter 4 by inserting `26:null` (matches pattern of Tour 4, Tour 10, Tour 16, Tour 17). Replacement research deferred to Phase 4 (named tasks).
+
+## 2026-05-17 21:09 (iter 4) — heuristic: regex-based JS-object-literal field audit produces false positives
+Tried verifying every tour has every documented field via Python regex on the source. Hit two issues: (1) the leading `{id:N,...` opens without a comma so regex `(?:^|,)\s*(\w+)\s*:` misses `id`; (2) sub-object keys (`address`, `cost`, `extras`, `p4n` from `parking`+`stellplatz`) bubble up as extras. Result: 27 false-positive "drift" reports. **For real schema verification, parse JS with esprima/Acorn or convert to JSON first — regex on object literals is unreliable.** Schema check therefore documented-but-not-trusted; the embed-into-tour-object refactor (deferred Phase 6-alt) would let us use proper JSON tooling.
+
+## 2026-05-17 21:09 (iter 4) — operational: 4 documented false-negative-fallback sites in render code
+For the "fallback-pattern-sweep" audit, here are all `[t.id]||X` sites in `wanderungen-v3-1.html`:
+- line 460: `(dogSwimMap[t.id]||'nein')` — filter logic (a missing dogSwim entry would silently match the "no swimming" filter)
+- line 507: `womoStars(womoRating[t.id]||3)` — card display (missing entry shows 3 stars by default)
+- line 522: same `womoRating[t.id]||3` for Womo-Tauglichkeit section
+- line 527: `(routeUrls[t.id]||[]).map(...)` — route-button list (missing entry shows no button)
+- line 566: `data-sort="${womoRating[t.id]||3}"` + repeat — table cell + sort key
+These are the surface area for the data-map drift class of bugs. Phase 0 + Phase 3a have brought all 3 maps to 27/27 completeness, but the fallback pattern itself is unchanged — any future tour added without the 4-map-update discipline will silent-corrupt again. The structural fix (embed maps into tour objects) is in deferred backlog.

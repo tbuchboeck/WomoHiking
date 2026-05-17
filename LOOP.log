@@ -5,3 +5,7 @@
 [iter 3 | 2026-05-17 21:04 | phase 2 | extract-routes] 36 unique route URLs extracted (28 OA + 8 AV), tour-id mapping captured to .loop-state/route-url-tour-map.json
 [iter 3 | 2026-05-17 21:04 | phase 2 | headcheck-routes] 34/36 HTTP 200 + title-verified. 2 dead: OA#7750068 (Tour 16), OA#1362539 (Tour 17). Both returned proper 410 Gone. Zero soft-404s — the pre-seeded LEARNED.md warning about OA soft-404s did not materialize.
 [iter 3 | 2026-05-17 21:04 | phase 2 | route-replacements] Tour 16 + 17 routeUrls set to null + inline comment + route-url-replacements-needed.md written (lists 2 active + 3 pre-existing TODOs from projektwissen). Phase 2 done; Phase 2_links.done = true. Next: Phase 3a data-shape audit.
+[iter 4 | 2026-05-17 21:09 | phase 3a | tour-schema-check] Inventoried via Python+regex. False positives flagged (id missing detection bug, nested-key bleed). Tour count 27/27 confirmed. Real schema audit needs JS parser — noted in LEARNED.md as heuristic.
+[iter 4 | 2026-05-17 21:09 | phase 3a | lookup-completeness] dogSwimMap 27/27 ✓, womoRating 27/27 ✓, routeUrls 26/27 → FIXED: inserted 26:null for Vilsalpsee + updated route-url-replacements-needed.md
+[iter 4 | 2026-05-17 21:09 | phase 3a | typecolors-audit] 5 types used, 5 colors defined, no orphans (see-fluss still used by Tour 10 after Phase 0 Tour 1 fix)
+[iter 4 | 2026-05-17 21:09 | phase 3a | fallback-pattern-sweep] 4 sites documented in LEARNED.md (lines 460, 507, 522, 527, 566). All maps now 27/27 — no current silent corruption, but pattern remains for future-tour additions.

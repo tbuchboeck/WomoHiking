@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 3,
+  "iteration": 4,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -137,27 +137,31 @@
     },
     "phase_3a_data_shape": {
       "label": "Code-side Data-Shape Audit",
-      "done": false,
+      "done": true,
       "items": [
         {
           "id": "tour-schema-check",
           "label": "Every tour has every documented field",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:09:00Z"
         },
         {
           "id": "lookup-completeness",
           "label": "All 3 maps complete for IDs 1-27",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:09:00Z"
         },
         {
           "id": "typecolors-audit",
           "label": "typeColors covers every tour.type value",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:09:00Z"
         },
         {
           "id": "fallback-pattern-sweep",
           "label": "Document all ||'/||3/||[] false-negative spots",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:09:00Z"
         }
       ]
     },

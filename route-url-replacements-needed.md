@@ -16,6 +16,7 @@ Three additional tours have been known-missing for some time. These are the item
 | 4 | Langbathseen | `routeUrls[4]: null` | "nicht gefunden" per projektwissen line 137 |
 | 10 | Gößl → Toplitzsee | `routeUrls[10]: null` | "nicht gefunden" per projektwissen line 143 |
 | 23 | Traunsee-Westufer | (entry missing) | Per DOCUMENTATION.md open-task: promenade not officially published on OA/AV |
+| 26 | Vilsalpsee Rundweg (Tannheim/Tirol) | `routeUrls[26]: null` | Discovered missing 2026-05-17 iter 4 data-shape audit. Tour was added without a routeUrls entry. ~6 km bergsee runde, Naturschutzgebiet. Search for "Vilsalpsee Rundweg Tannheimer Tal" on AV/OA. |
 
 ## How to find replacements
 
