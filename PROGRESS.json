@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 8,
+  "iteration": 9,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -220,32 +220,43 @@
         {
           "id": "tour-3-stellplatz",
           "label": "Tour 3 (Bürglstein): replace Camping Berau",
-          "done": false
+          "done": false,
+          "blocker_logged": "LEARNED.md @ 2026-05-17 21:33 — only genuinely open Phase-4 item. Needs P4N search for Stellplatz near St. Wolfgang to replace Camping Berau; P4N search-API unreachable from Lighthouse (same blocker as Phase 1)."
         },
         {
           "id": "tour-7-stellplatz",
           "label": "Tour 7 (Fuschlsee): replace Camping Panorama",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:33:00Z",
+          "note": "discovered iter 9: already replaced — current stellplatz is Nachtparkplatz Fuschl Dorfstraße (P4N #440800), no Camping Panorama Mondsee anywhere"
         },
         {
           "id": "tour-8-stellplatz",
           "label": "Tour 8 (Hintersee): replace Camping Panorama",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:33:00Z",
+          "note": "discovered iter 9: already replaced — current stellplatz is Stellplatz Wunderburg Gmunden (free)"
         },
         {
           "id": "tour-4-route-url",
           "label": "Tour 4 (Langbathseen): find OA/AV URL",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:33:00Z",
+          "note": "discovered iter 9: already had 2 OA URLs in routeUrls (langbathseen-hochsteinalm-zellerweg, vord-signalkogel-langbathsee) — GOAL was based on stale projektwissen"
         },
         {
           "id": "tour-10-route-url",
           "label": "Tour 10 (Gößl→Toplitzsee): find OA/AV URL",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:33:00Z",
+          "note": "discovered iter 9: already had 1 OA URL (totes-gebirge/mit-dem-boot-ueber-den-toplitzsee) — added since projektwissen was written"
         },
         {
           "id": "tour-23-route-url",
           "label": "Tour 23 (Traunsee-Westufer): find direct track",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:33:00Z",
+          "note": "discovered iter 9: already had 2 URLs (OA miesweg + AV gmundnerberg)"
         }
       ]
     },

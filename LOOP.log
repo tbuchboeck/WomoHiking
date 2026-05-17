@@ -28,3 +28,4 @@
 [iter 8 | 2026-05-17 21:28 | phase 6 | workflow-file] BLOCKED: gh OAuth lacks `workflow` scope (push rejected). Workflow file relocated to docs/proposed/link-check.yml + install guide in docs/proposed/README.md. Thomas can `gh auth refresh -s workflow && git mv docs/proposed/link-check.yml .github/workflows/ && git commit + push` in the morning.
 [iter 8 | 2026-05-17 21:28 | phase 6 | ci-first-run-green] dependent on workflow-file install — blocker_logged.
 [iter 8 | 2026-05-17 21:28 | phase 6 | readme-badge] README badge pinned to ?branch=main — will go green automatically once workflow installed.
+[iter 9 | 2026-05-17 21:33 | phase 4 | assessment] 5 of 6 items discovered ALREADY DONE in HTML (Tour 4, 7, 8, 10, 23). Only Tour 3 stellplatz genuinely open + blocker_logged for P4N search (same Lighthouse blocker as Phase 1). Phase 4 effectively closed; root cause: GOAL.md was drafted from stale projektwissen, not from current HTML state.

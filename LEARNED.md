@@ -140,3 +140,19 @@ The Lighthouse gh token has scopes `gist,read:org,repo` (per `gh auth status` fr
 
 ## 2026-05-17 21:28 (iter 8) — heuristic: README badge for not-yet-existing workflow is OK
 The README badge added in this iter (`...actions/workflows/link-check.yml/badge.svg?branch=main`) will show "workflow not found" red until the file is moved into `.github/workflows/`. This is intentional — when Thomas installs the workflow, the badge automatically goes green on the next CI run. No README edit needed at install time. Documented in `docs/proposed/README.md`.
+
+## 2026-05-17 21:33 (iter 9) — data-quirk: GOAL.md Phase 4 was based on stale projektwissen
+Five of six "named tasks" in Phase 4 were ALREADY COMPLETED in the HTML at loop launch:
+
+  Tour 4 (Langbathseen): GOAL said "find OA/AV URL", but routeUrls[4] has 2 URLs
+  Tour 10 (Gößl→Toplitzsee): GOAL said "find OA/AV URL", routeUrls[10] has 1
+  Tour 23 (Traunsee-Westufer): GOAL said "find direct route track", routeUrls[23] has 2
+  Tour 7 (Fuschlsee): GOAL said "replace Camping Panorama Mondsee", stellplatz already = Nachtparkplatz Fuschl Dorfstraße
+  Tour 8 (Hintersee): GOAL said "replace Camping Panorama Mondsee", stellplatz already = Stellplatz Wunderburg Gmunden
+
+Only Tour 3 (Bürglstein) genuinely still has Camping Berau as stellplatz — and replacing it needs P4N search which is the same Lighthouse-blocked failure-mode from Phase 1.
+
+Root cause: `GOAL.md` Phase 4 was sourced from `projektwissen-wanderungen-1.md` ("Offene Aufgaben" section, lines 250-257) which describes a snapshot from ~Apr 2026, before subsequent PRs that added URLs and replaced Stellplätze. **Lesson for next Initializer session**: when drafting GOAL.md from older project-knowledge docs, do a pre-flight check against the current HTML state. The Critic agent caught some staleness (the URL-count discrepancy of 26 vs actual 36) but not the per-item TODO staleness.
+
+## 2026-05-17 21:33 (iter 9) — decision: Phase 4 closed as "5/6 done, 1 blocked, no harmful drift"
+Marking 5 of 6 Phase 4 items as `done:true` with `note` fields capturing the discovery (audit-trail in git log + PROGRESS.json). Tour 3 stellplatz remains the single genuine open Phase-4 item, blocker_logged for P4N search. Phase 4 effectively closed for this loop.
