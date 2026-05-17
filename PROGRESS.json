@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 5,
+  "iteration": 6,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -256,17 +256,20 @@
         {
           "id": "wcag-bergsee",
           "label": "typeColors.bergsee #7209B7 → #A78BFA (1.95→6.0:1)",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:18:00Z"
         },
         {
           "id": "wcag-seefluss",
           "label": "typeColors['see-fluss'] #2D6A4F → #34D399 (1.85→8.2:1)",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:18:00Z"
         },
         {
           "id": "sort-header-a11y",
           "label": "Sort <th>: role=button + tabindex + aria-sort + Enter/Space",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:18:00Z"
         },
         {
           "id": "card-header-button",
@@ -276,12 +279,14 @@
         {
           "id": "empty-state",
           "label": "Empty state when filtered.length===0",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:18:00Z"
         },
         {
           "id": "no-other-stale-counts",
           "label": "grep verify no other hardcoded tour counts",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:18:00Z"
         }
       ]
     },

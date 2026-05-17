@@ -102,3 +102,12 @@ These are the surface area for the data-map drift class of bugs. Phase 0 + Phase
 
 ## 2026-05-17 21:13 (iter 5) — decision: keep historical Timeline PIN/Supabase references unchanged
 DOCUMENTATION.md Timeline entries (lines 193–196) describe PR #1–9 chronologically. They mention "PIN lock screen" (line 196, PR #3). Per CLAUDE.md "do NOT touch auth stack" was about runtime code — the Timeline is a HISTORICAL log that accurately describes what was true on that date. Rewriting historical entries to retroactively use Passkey wording would falsify the record. Decision: leave PR #1–9 timeline as-is, append new entries for 2026-05-14 (Passkey migration) + 2026-05-17 (security incident response + this loop) instead.
+
+## 2026-05-17 21:18 (iter 6) — decision: card-header refactor deferred to iter 7
+UX-reviewer flagged the `.card-header` is currently `<div onclick>` instead of `<button aria-expanded>`. Investigation revealed the onclick is actually on the OUTER `.card` div (line 488), not on `.card-header`. Converting to a button requires (1) moving the onclick from card div to a new button element wrapping header content, (2) ensuring button-default CSS doesn't break the rendered look, (3) updating `toggleCard()` to set aria-expanded. The change is correct but touches CSS surface and could regress visual rendering. Decision: do it as its own focused iteration where I can verify visual sanity afterward, rather than bundling 5+ unrelated edits in one commit.
+
+## 2026-05-17 21:18 (iter 6) — heuristic: aria-sort dynamic update in 4 lines
+For sortable table headers, the minimal a11y addition is: (a) every `<th>` gets `role="button" tabindex="0" aria-sort="none"` plus `onkeydown` for Enter/Space, (b) the sort function appends `th.setAttribute('aria-sort', ascending|descending|none)` in its existing post-sort loop. That's the full pattern — no library needed, no focus-management complications because `<th>` already has its own selection model. Worked first-try here; reusable for other apps.
+
+## 2026-05-17 21:18 (iter 6) — heuristic: empty-state with `role="status" aria-live="polite"`
+For zero-match filter UIs, the empty-state container should be `role="status" aria-live="polite"` so screen readers announce the transition from "N tours found" to "zero matches" without requiring focus shift. The reset button doesn't need any special ARIA (default `<button type="button">` semantics are correct). Pattern: visible emoji-icon decorative-only (`aria-hidden="true"`), short headline, one-sentence guidance, one CTA button.

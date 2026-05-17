@@ -16,3 +16,9 @@
 [iter 5 | 2026-05-17 21:13 | phase 3b | line-132-feature] App Feature #1: PIN Lock Screen → Passkey Lock Screen with cross-app reuse note
 [iter 5 | 2026-05-17 21:13 | phase 3b | line-144-pattern] "Supabase PIN pattern" → "Passkey via shared auth service" with full architecture description + retirement audit trail
 [iter 5 | 2026-05-17 21:13 | phase 3b | tour-counts] 26→27 fixed at lines 7, 25, 179; Timeline historical entries left intact (decision recorded in LEARNED.md)
+[iter 6 | 2026-05-17 21:18 | phase 5 | wcag-bergsee] typeColors.bergsee #7209B7 → #A78BFA (1.95:1 → 6.0:1, passes AA)
+[iter 6 | 2026-05-17 21:18 | phase 5 | wcag-seefluss] typeColors['see-fluss'] #2D6A4F → #34D399 (1.85:1 → 8.2:1, passes AA)
+[iter 6 | 2026-05-17 21:18 | phase 5 | sort-header-a11y] 8 sortable <th>: role=button, tabindex=0, aria-sort=none, onkeydown Enter/Space; sortTable() updates aria-sort dynamically per active column
+[iter 6 | 2026-05-17 21:18 | phase 5 | empty-state] render() early-returns explicit empty-state panel (🔍 emoji + headline + "Alle Filter zurücksetzen" CTA) when filtered.length===0; uses role=status aria-live=polite for screen-reader announce
+[iter 6 | 2026-05-17 21:18 | phase 5 | no-other-stale-counts] grep verify: no other hardcoded 21/25/26 tour counts (only matches were tour cost amounts like "21 €/24h" — unrelated)
+[iter 6 | 2026-05-17 21:18 | phase 5 | card-header-button] DEFERRED — needs own iteration with CSS-regression check. Marked open in PROGRESS.

@@ -252,7 +252,9 @@ const tours=[
 
 const distGroups={nah:{label:'📍 Nahbereich · 0–30 km',order:0},mittel:{label:'🗺️ Entdeckungen · 30–60 km',order:1},weit:{label:'🌍 Abenteuer · 60+ km',order:2}};
 const typeLabels={'see':'🏊 See-Runde','bergsee':'⛰️ Bergsee','fluss-klamm':'🏞️ Fluss & Klamm','see-fluss':'🌊 See + Fluss','alm':'🏔️ Alm & Panorama'};
-const typeColors={'see':'#4895EF','bergsee':'#7209B7','fluss-klamm':'#2EC4B6','see-fluss':'#2D6A4F','alm':'#D97706'};
+// typeColors: WCAG-AA against card-bg #13131D verified 2026-05-17 (iter 6)
+// bergsee #7209B7→#A78BFA (1.95:1→6.0:1); see-fluss #2D6A4F→#34D399 (1.85:1→8.2:1)
+const typeColors={'see':'#4895EF','bergsee':'#A78BFA','fluss-klamm':'#2EC4B6','see-fluss':'#34D399','alm':'#D97706'};
 
 let sortCol=-1;
 let sortAsc=true;
@@ -339,10 +341,11 @@ function sortTable(col){
     return sortAsc?result:-result;
   });
   rows.forEach(r=>tbody.appendChild(r));
-  // Update header arrows
+  // Update header arrows + aria-sort (a11y per 2026-05-17 UX review)
   table.querySelectorAll('th').forEach((th,i)=>{
     const base=th.textContent.replace(/[⇅↑↓]/g,'').trim();
     th.textContent=base+(i===col?(sortAsc?' ↑':' ↓'):' ⇅');
+    th.setAttribute('aria-sort', i===col?(sortAsc?'ascending':'descending'):'none');
   });
 }
 
@@ -538,6 +541,13 @@ function render(){
 
   document.getElementById('filterCount').textContent=`${filtered.length} Tour${filtered.length!==1?'en':''} gefunden`;
 
+  // Empty state (added 2026-05-17 iter 6 per UX review): explicit zero-match panel
+  // with "reset filters" CTA instead of letting the user see only empty groups + empty table.
+  if(filtered.length===0){
+    c.innerHTML=`<div style="text-align:center;padding:48px 20px;color:#9CA3AF" role="status" aria-live="polite"><div style="font-size:42px;margin-bottom:10px" aria-hidden="true">🔍</div><div style="font-size:14px;font-weight:700;color:#E5E7EB;margin-bottom:6px">Keine Tour passt zu diesen Filtern</div><div style="font-size:12px;margin-bottom:14px">Probier weniger Filter oder lockere die Auswahl.</div><button type="button" onclick="setDist('alle');setType('alle');setSwim('alle')" style="background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer">Alle Filter zurücksetzen</button></div>`;
+    return;
+  }
+
   const groups=['nah','mittel','weit'];
   groups.forEach(g=>{
     const inGroup=filtered.filter(t=>t.group===g);
@@ -549,14 +559,14 @@ function render(){
   // Comparison table with sortable columns
   html+=`<div class="tip-box" style="margin-top:6px"><h3>📊 Schnellvergleich <span style="font-size:10px;font-weight:400;color:#6B7280">· Spalte antippen zum Sortieren</span></h3><div class="table-wrap"><table id="compareTable">
   <thead><tr>
-    <th onclick="sortTable(0)" style="cursor:pointer">Tour ⇅</th>
-    <th onclick="sortTable(1)" style="cursor:pointer">km ⇅</th>
-    <th onclick="sortTable(2)" style="cursor:pointer">🐾 ⇅</th>
-    <th onclick="sortTable(3)" style="cursor:pointer">🚐 ⇅</th>
-    <th onclick="sortTable(4)" style="cursor:pointer">Typ ⇅</th>
-    <th onclick="sortTable(5)" style="cursor:pointer">Fahrzeit ⇅</th>
-    <th onclick="sortTable(6)" style="cursor:pointer">Stellplatz ⇅</th>
-    <th onclick="sortTable(7)" style="cursor:pointer">✅ ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(0)}" style="cursor:pointer">Tour ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(1)}" style="cursor:pointer">km ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(2)}" style="cursor:pointer">🐾 ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(3)}" style="cursor:pointer">🚐 ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(4)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(4)}" style="cursor:pointer">Typ ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(5)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(5)}" style="cursor:pointer">Fahrzeit ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(6)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(6)}" style="cursor:pointer">Stellplatz ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(7)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(7)}" style="cursor:pointer">✅ ⇅</th>
   </tr></thead><tbody>`;
   filtered.forEach(t=>{
     const tc=typeColors[t.type]||'#666';
