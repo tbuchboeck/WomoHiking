@@ -2,3 +2,6 @@
 [iter 2 | 2026-05-17 21:00 | phase 2 | extract-p4n] 37 unique P4N URLs extracted (GOAL.md estimated 36; actual 37 because Tour 27 Schwarzensee #409728 added).
 [iter 2 | 2026-05-17 21:00 | phase 2 | headcheck-p4n] 35/37 HTTP 200, 2 dead (#213799 Schiederweiher, #58708 P7 Schafbergbahn). Total elapsed 126s, no 429s — rate-limit at 1 req/3s was conservative.
 [iter 2 | 2026-05-17 21:00 | phase 2 | p4n-replacements] Tour 3 + Tour 13 patched to Google Maps address fallback (per heuristic: address-form safer than coord-form for unattended).
+[iter 3 | 2026-05-17 21:04 | phase 2 | extract-routes] 36 unique route URLs extracted (28 OA + 8 AV), tour-id mapping captured to .loop-state/route-url-tour-map.json
+[iter 3 | 2026-05-17 21:04 | phase 2 | headcheck-routes] 34/36 HTTP 200 + title-verified. 2 dead: OA#7750068 (Tour 16), OA#1362539 (Tour 17). Both returned proper 410 Gone. Zero soft-404s — the pre-seeded LEARNED.md warning about OA soft-404s did not materialize.
+[iter 3 | 2026-05-17 21:04 | phase 2 | route-replacements] Tour 16 + 17 routeUrls set to null + inline comment + route-url-replacements-needed.md written (lists 2 active + 3 pre-existing TODOs from projektwissen). Phase 2 done; Phase 2_links.done = true. Next: Phase 3a data-shape audit.

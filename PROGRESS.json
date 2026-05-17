@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 2,
+  "iteration": 3,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -94,7 +94,7 @@
     },
     "phase_2_links": {
       "label": "Link-Health Sweep (P4N + Route URLs)",
-      "done": false,
+      "done": true,
       "exit_artifact": ".loop-state/p4n-health.json + route-url-replacements-needed.md",
       "items": [
         {
@@ -118,17 +118,20 @@
         {
           "id": "extract-routes",
           "label": "Extract all routeUrls entries (28 OA + 8 AV)",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:04:00Z"
         },
         {
           "id": "headcheck-routes",
           "label": "HEAD-check all route URLs (1 req/2s) + title verify",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:04:00Z"
         },
         {
           "id": "route-replacements",
           "label": "Mark failing routes for replacement",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:04:00Z"
         }
       ]
     },

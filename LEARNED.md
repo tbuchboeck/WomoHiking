@@ -75,3 +75,12 @@ For dead P4N replacements, used `?q=<URL-encoded street-address>` instead of gue
 
 ## 2026-05-17 21:00 (iter 2) — operational: dead-rate close to Phase 6 CI threshold
 Today's dead-rate: 2/37 = 5.4%, just above the 5% threshold GOAL.md §"Phase 6" defines as CI-fail. If next quarter another P4N place goes 404, CI will start failing weekly. Decision deferred — Thomas should choose between (a) raise threshold to 8%, (b) add a `--ignore=<dead-ids>` allowlist mechanism, (c) accept periodic CI-red as a signal to do quarterly cleanup. Noted for Phase 6 implementation.
+
+## 2026-05-17 21:04 (iter 3) — data-quirk: outdooractive.com uses proper HTTP 410 (not soft-404)
+The pre-seeded LEARNED.md entry (iter 0) warned that OA/AV "commonly return HTML 200 even for missing-page errors (soft 404)". Empirically tested across 36 route URLs: zero soft-404s observed. Two URLs returned proper HTTP 410 Gone (Tour 16 Rundwanderweg Zeller See OA#7750068, Tour 17 Rundweg Klammsee OA#1362539). OA's behavior is correct: retired/removed routes return 410 with empty body. Soft-404 worry was unfounded for the 2026-vintage OA platform; the title-check still ran with zero cost.
+
+## 2026-05-17 21:04 (iter 3) — operational: Phase 2 complete network behavior summary
+Total Phase-2 surface: 73 external URLs (37 P4N + 36 OA/AV). Total elapsed across iter 2-3: 216s (126 + 90). Zero rate-limit hits. Combined alive: 69/73 = 94.5%. All failures (2 P4N 404 + 2 OA 410) replaced/nulled with audit trail in git log + route-url-replacements-needed.md. Phase 2 closes cleanly with no blockers and no manual intervention needed before morning review.
+
+## 2026-05-17 21:04 (iter 3) — decision: broken route URLs set to `null` (not removed) to match existing pattern
+Tour 4 + Tour 10 already use `null` in routeUrls (per projektwissen-wanderungen-1.md TODO list, "nicht gefunden"). Tour 16 + Tour 17 now also use `null` with inline `// comment` linking to route-url-replacements-needed.md. Render code uses `routeUrls[t.id]||[]` → null falls through to empty array → no button shown. Consistent with existing pattern, no behavior surprise.
