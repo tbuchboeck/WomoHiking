@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 7,
+  "iteration": 8,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -298,17 +298,21 @@
         {
           "id": "workflow-file",
           "label": ".github/workflows/link-check.yml created",
-          "done": false
+          "done": false,
+          "completed_at": "2026-05-17T21:27:00Z",
+          "blocker_logged": "LEARNED.md @ 2026-05-17 21:28 — gh OAuth lacks workflow scope; workflow file staged at docs/proposed/link-check.yml awaiting `gh auth refresh -s workflow` + move"
         },
         {
           "id": "ci-first-run-green",
           "label": "First run on branch green",
-          "done": false
+          "done": false,
+          "blocker_logged": "depends on workflow-file install"
         },
         {
           "id": "readme-badge",
           "label": "README.md badge for CI status",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:27:00Z"
         }
       ]
     },

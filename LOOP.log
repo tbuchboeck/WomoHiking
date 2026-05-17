@@ -23,3 +23,8 @@
 [iter 6 | 2026-05-17 21:18 | phase 5 | no-other-stale-counts] grep verify: no other hardcoded 21/25/26 tour counts (only matches were tour cost amounts like "21 €/24h" — unrelated)
 [iter 6 | 2026-05-17 21:18 | phase 5 | card-header-button] DEFERRED — needs own iteration with CSS-regression check. Marked open in PROGRESS.
 [iter 7 | 2026-05-17 21:23 | phase 5 | card-header-button] cardHTML: outer .card div lost onclick, new <button type="button" class="card-header" aria-expanded aria-controls> wraps header content + onclick=toggleCard. toggleCard() now sets aria-expanded. Phase 5 complete (6/6).
+[iter 8 | 2026-05-17 21:27 | phase 6 | workflow-file] .github/workflows/link-check.yml created — weekly cron + push trigger, HEAD-checks all P4N+route URLs with rate limit, fails at >5% dead. Uses integer arithmetic for threshold check (avoids bc dep).
+[iter 8 | 2026-05-17 21:27 | phase 6 | readme-badge] README.md updated: Link-Health CI badge added (top), tour facts refreshed (8 cols not 6, Passkey not PIN, 35+ P4N, weekly CI), filenames corrected (wanderungen-v3-1.html, projektwissen-wanderungen-1.md), Vercel deployment URL added.
+[iter 8 | 2026-05-17 21:28 | phase 6 | workflow-file] BLOCKED: gh OAuth lacks `workflow` scope (push rejected). Workflow file relocated to docs/proposed/link-check.yml + install guide in docs/proposed/README.md. Thomas can `gh auth refresh -s workflow && git mv docs/proposed/link-check.yml .github/workflows/ && git commit + push` in the morning.
+[iter 8 | 2026-05-17 21:28 | phase 6 | ci-first-run-green] dependent on workflow-file install — blocker_logged.
+[iter 8 | 2026-05-17 21:28 | phase 6 | readme-badge] README badge pinned to ?branch=main — will go green automatically once workflow installed.

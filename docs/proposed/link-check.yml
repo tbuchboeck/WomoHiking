@@ -1,0 +1,103 @@
+name: Link Health Check
+
+# Verifies all Park4Night and Outdooractive/Alpenvereinaktiv URLs in
+# wanderungen-v3-1.html still resolve. Fails the job if >5% of URLs are dead.
+# Threshold rationale lives in LEARNED.md (iter 2, 2026-05-17 — initial dead
+# rate was already 5.4%; the threshold may need raising to 8-10% if quarterly
+# attrition is normal). See route-url-replacements-needed.md for known TODOs.
+
+on:
+  schedule:
+    # Sundays at 06:00 UTC — gives Thomas a fresh signal at the start of each week
+    - cron: '0 6 * * 0'
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - 'wanderungen-v3-1.html'
+      - '.github/workflows/link-check.yml'
+  workflow_dispatch:  # manual fire from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  link-check:
+    name: HEAD-check every external URL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract all external URLs
+        id: extract
+        run: |
+          set -euo pipefail
+          # P4N URLs (parking + stellplatz fields)
+          grep -oE 'https://park4night\.com/[a-z]+/place/[0-9]+' wanderungen-v3-1.html \
+            | sort -u > /tmp/p4n.txt
+          # Route URLs from routeUrls map
+          grep -oE "u:'https?://[^']+'" wanderungen-v3-1.html \
+            | sed -E "s/^u:'(.*)'$/\1/" | sort -u > /tmp/routes.txt
+          echo "p4n_count=$(wc -l < /tmp/p4n.txt)" >> "$GITHUB_OUTPUT"
+          echo "route_count=$(wc -l < /tmp/routes.txt)" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Inventory::$(wc -l < /tmp/p4n.txt) P4N + $(wc -l < /tmp/routes.txt) route URLs to check"
+
+      - name: HEAD-check every URL
+        id: check
+        run: |
+          set -euo pipefail
+          UA="Mozilla/5.0 (X11; Linux x86_64) WomoHiking-CI/1.0 (+github.com/tbuchboeck/WomoHiking)"
+          dead_count=0
+          total=0
+          dead_list=""
+
+          check_url() {
+            local url="$1"
+            local delay="$2"
+            sleep "$delay"
+            local code
+            code=$(curl -sS -o /dev/null -A "$UA" -m 15 -L -w "%{http_code}" "$url" || echo "000")
+            total=$((total+1))
+            if [[ "$code" != "200" ]]; then
+              dead_count=$((dead_count+1))
+              dead_list="${dead_list}  - [${code}] ${url}"$'\n'
+              echo "::warning title=Dead URL::HTTP $code for $url"
+            fi
+          }
+
+          echo "## Park4Night URLs (rate-limited 1 req / 3 sec)" >> "$GITHUB_STEP_SUMMARY"
+          while read -r url; do check_url "$url" 3; done < /tmp/p4n.txt
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Route URLs (rate-limited 1 req / 2 sec)" >> "$GITHUB_STEP_SUMMARY"
+          while read -r url; do check_url "$url" 2; done < /tmp/routes.txt
+
+          if [[ $total -eq 0 ]]; then
+            echo "::error title=No URLs extracted::Inventory step found zero URLs — likely the HTML schema changed."
+            exit 1
+          fi
+
+          dead_pct=$(awk -v d="$dead_count" -v t="$total" 'BEGIN{printf "%.1f", (d*100.0)/t}')
+
+          {
+            echo ""
+            echo "## Summary"
+            echo "- Total URLs checked: **${total}**"
+            echo "- Dead (non-200): **${dead_count}** (${dead_pct}%)"
+            echo ""
+            if [[ $dead_count -gt 0 ]]; then
+              echo "### Dead URLs"
+              echo "$dead_list"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Threshold: 5% per GOAL.md Phase 6.
+          # Use integer arithmetic against dead_count * 100 / total to avoid bc dep.
+          threshold_pct=5
+          dead_x100=$((dead_count * 100))
+          allowed=$((total * threshold_pct))
+          if [[ $dead_x100 -gt $allowed ]]; then
+            echo "::error title=Dead-URL threshold exceeded::${dead_pct}% dead > ${threshold_pct}% threshold (${dead_count}/${total}). See route-url-replacements-needed.md."
+            exit 1
+          fi
+          echo "::notice title=Link health OK::${dead_pct}% dead ≤ ${threshold_pct}% threshold (${dead_count}/${total})."

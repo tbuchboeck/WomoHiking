@@ -122,3 +122,21 @@ The visible change: card-header is now keyboard-focusable (Tab through cards wor
 
 ## 2026-05-17 21:23 (iter 7) — decision: no custom :focus-visible style added for card-header button
 Default browser focus outline preserves accessibility (sighted keyboard users see focus ring). Could be styled with `.card-header:focus-visible { outline: 2px solid var(--c); outline-offset: -2px; }` for a more polished look, but that's polish work and risks visual regression. Default outline preserved; Thomas can decide morning whether to add custom focus styling.
+
+## 2026-05-17 21:27 (iter 8) — operational: GitHub Actions link-check rate-limited 1 req/3s for P4N, 1 req/2s for routes
+The workflow inherits the same throttling we discovered iter 2-3 from Lighthouse (P4N tolerates 1/3s, OA/AV 1/2s — both with zero 429s observed). Total expected runtime: ~37 P4N × 3s + ~34 OA × 2s ≈ ~3 minutes per fire. Weekly cron + push-trigger (paths: HTML or workflow file only) keeps the CI ~3 minutes/week + on-demand. Well under the GitHub Actions Free-tier 2000-minutes/month budget.
+
+## 2026-05-17 21:27 (iter 8) — heuristic: README badge URL hardcodes branch=main
+The Link-Health badge URL ends with `?branch=main` so it shows the production-branch health, not the feature-branch health. This means the badge will go red right after merge if any URL dies — exactly when you want to know. Adding branch=main rather than letting it default also avoids the awkward "last fired on claude/... branch" badge when the workflow runs on this loop branch before merge.
+
+## 2026-05-17 21:28 (iter 8) — failure-mode: gh OAuth token lacks `workflow` scope
+First `git push` of `.github/workflows/link-check.yml` was rejected by GitHub:
+
+  ! [remote rejected]: refusing to allow an OAuth App to create or
+    update workflow `.github/workflows/link-check.yml` without
+    `workflow` scope
+
+The Lighthouse gh token has scopes `gist,read:org,repo` (per `gh auth status` from iter 0 inventory) — no `workflow`. Adding it requires interactive `gh auth refresh -s workflow` which the loop cannot do unattended (opens a browser-flow). **Workaround applied**: workflow file relocated to `docs/proposed/link-check.yml` with a sibling README explaining the install procedure. Phase 6 `workflow-file` and `ci-first-run-green` items remain `done:false` with blocker_logged set. Thomas can do the 30-second `gh auth refresh -s workflow` + `git mv` + commit in the morning to complete Phase 6.
+
+## 2026-05-17 21:28 (iter 8) — heuristic: README badge for not-yet-existing workflow is OK
+The README badge added in this iter (`...actions/workflows/link-check.yml/badge.svg?branch=main`) will show "workflow not found" red until the file is moved into `.github/workflows/`. This is intentional — when Thomas installs the workflow, the badge automatically goes green on the next CI run. No README edit needed at install time. Documented in `docs/proposed/README.md`.

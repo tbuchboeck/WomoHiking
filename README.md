@@ -1,5 +1,7 @@
 # Wanderungen für euch 🥾
 
+[![Link Health](https://github.com/tbuchboeck/WomoHiking/actions/workflows/link-check.yml/badge.svg?branch=main)](https://github.com/tbuchboeck/WomoHiking/actions/workflows/link-check.yml)
+
 A standalone HTML app for planning motorhome-based hiking trips in the Salzkammergut, Salzburger Land & Berchtesgaden region — starting from Bad Ischl, Austria.
 
 ## What is this?
@@ -18,10 +20,12 @@ A personal trip planner built as a single HTML file. No frameworks, no dependenc
 
 - **Dark mode** design, mobile-first
 - **Triple filter** — combine distance, water type & dog swimming
-- **Sortable comparison table** with 6 clickable columns
-- **Expandable tour cards** with full details
-- **28 verified Park4Night IDs** in the footer
+- **Sortable comparison table** with 8 keyboard-accessible columns (aria-sort)
+- **Expandable tour cards** with full details (keyboard-focusable, aria-expanded)
+- **35+ verified Park4Night IDs** + Google Maps fallbacks for the rest
 - **Stellplatz-First approach** — parking viability drives tour selection
+- **Passkey authentication** via the shared `auth.apps.buchboeck.at` service
+- **Weekly link-health CI** — broken P4N / Outdooractive URLs surface within 7 days
 
 ## Vehicle specs
 
@@ -35,9 +39,9 @@ Height restrictions and parking warnings are noted per tour.
 
 | Distance group | Range | Tours |
 |---|---|---|
-| 📍 Nahbereich | 0–30 km | 8 tours |
-| 🗺️ Entdeckungen | 30–60 km | 10 tours |
-| 🌍 Abenteuer | 60+ km | 9 tours |
+| 📍 Nahbereich | 0–30 km | ~9 tours |
+| 🗺️ Entdeckungen | 30–60 km | ~10 tours |
+| 🌍 Abenteuer | 60+ km | ~8 tours |
 
 Water types: Lake loops, mountain lakes, river gorges, lake+river combos, alpine meadows.
 
@@ -45,22 +49,27 @@ Water types: Lake loops, mountain lakes, river gorges, lake+river combos, alpine
 
 | File | Description |
 |---|---|
-| `wanderungen-v3.html` | The app — open in any browser |
-| `projektwissen-wanderungen.md` | Project knowledge document (German) — context for AI-assisted development |
+| `wanderungen-v3-1.html` | The app — open in any browser |
+| `auth.js` + `auth.css` | Passkey auth flow against `auth.apps.buchboeck.at` |
+| `projektwissen-wanderungen-1.md` | Project knowledge document (German) — context for AI-assisted development |
+| `DOCUMENTATION.md` | Architecture, data schema, technical patterns |
+| `route-url-replacements-needed.md` | Open TODOs from link-health CI |
 | `README.md` | This file |
 
 ## Usage
 
-1. Download `wanderungen-v3.html`
-2. Open in any browser
-3. That's it — everything runs locally, no internet needed (except for external links)
+1. Visit [womohiking.apps.buchboeck.at](https://womohiking.apps.buchboeck.at) (or open `wanderungen-v3-1.html` locally)
+2. Authenticate via Passkey
+3. Filter, browse, plan trips
 
 ## Tech
 
-- Vanilla HTML / CSS / JS
+- Vanilla HTML / CSS / JS (~88 KB single file)
 - Google Fonts (DM Sans + Playfair Display)
-- No build step, no dependencies
-- ~65 KB single file
+- Passkey auth via `auth.apps.buchboeck.at`
+- PWA installable
+- No build step, no application dependencies; deployed via Vercel
+- Weekly GitHub Actions link-health check
 
 ## Credits
 
