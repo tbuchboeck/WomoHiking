@@ -493,8 +493,8 @@ function personalHTML(p,color){
 function cardHTML(t){
   const tc=typeColors[t.type]||'#666';
   const tl=typeLabels[t.type]||t.type;
-  return `<div class="card" id="card-${t.id}" style="--c:${t.color}" onclick="toggleCard(${t.id})">
-    <div class="card-header">
+  return `<div class="card" id="card-${t.id}" style="--c:${t.color}">
+    <button type="button" class="card-header" aria-expanded="false" aria-controls="body-${t.id}" onclick="toggleCard(${t.id})">
       <div class="card-icon" style="background:linear-gradient(135deg,${t.color},${t.color}AA);box-shadow:0 3px 10px ${t.color}33">${t.icon}</div>
       <div class="card-info">
         <div class="card-top">
@@ -515,7 +515,7 @@ function cardHTML(t){
           ${(()=>{const v=getVisits()[t.id];return v&&v.count>0?`<span class="water-badge" style="color:#A78BFA;background:#A78BFA15">✅ ${v.count}× besucht</span>`:'';})()}
         </div>
       </div>
-    </div>
+    </button>
     <div class="card-body" id="body-${t.id}" style="display:none" onclick="event.stopPropagation()">
       <div class="pills">
         ${['Distanz|'+t.distance,'Dauer|'+t.duration,'Höhe|'+t.elevation,'Anfahrt|'+t.distanceFromBase].map(p=>{const[l,v]=p.split('|');return`<div class="pill" style="background:${t.color}12;border:1px solid ${t.color}25"><span class="pill-label">${l}</span><span class="pill-value" style="color:${t.color}">${v}</span></div>`}).join('')}
@@ -601,8 +601,11 @@ function render(){
 function toggleCard(id){
   const body=document.getElementById('body-'+id);
   const card=document.getElementById('card-'+id);
-  if(body.style.display==='none'){body.style.display='block';card.classList.add('open')}
+  const header=card.querySelector('.card-header');
+  const opening=body.style.display==='none';
+  if(opening){body.style.display='block';card.classList.add('open')}
   else{body.style.display='none';card.classList.remove('open')}
+  if(header)header.setAttribute('aria-expanded',String(opening));
 }
 
 function syncTourCounts(){const n=tours.length;const a=document.getElementById('hdrCount');const b=document.getElementById('statCount');if(a)a.textContent=n;if(b)b.textContent=n;}

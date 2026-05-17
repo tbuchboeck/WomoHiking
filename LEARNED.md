@@ -111,3 +111,14 @@ For sortable table headers, the minimal a11y addition is: (a) every `<th>` gets 
 
 ## 2026-05-17 21:18 (iter 6) — heuristic: empty-state with `role="status" aria-live="polite"`
 For zero-match filter UIs, the empty-state container should be `role="status" aria-live="polite"` so screen readers announce the transition from "N tours found" to "zero matches" without requiring focus shift. The reset button doesn't need any special ARIA (default `<button type="button">` semantics are correct). Pattern: visible emoji-icon decorative-only (`aria-hidden="true"`), short headline, one-sentence guidance, one CTA button.
+
+## 2026-05-17 21:23 (iter 7) — heuristic: card-header CSS was already button-prepared
+Refactor risk was much lower than expected because:
+1. `.card-header` CSS (line 55) already had `border:none; background:none; cursor:pointer; width:100%; text-align:left` — exactly the resets you'd want for a `<button>`. Someone anticipated this conversion.
+2. `.card-body` already had inline `onclick="event.stopPropagation()"` so body-clicks didn't bubble — no behavior change from moving onclick out of outer card.
+3. The visit-tracking buttons inside .card-body also had per-button `event.stopPropagation()` on their onclicks. Consistent pattern.
+
+The visible change: card-header is now keyboard-focusable (Tab through cards works), Enter/Space toggles, screen readers announce "expanded/collapsed" via aria-expanded. Outer card div lost its onclick (was the only barrier to clicks-on-card-body propagating, but stopPropagation already prevented that).
+
+## 2026-05-17 21:23 (iter 7) — decision: no custom :focus-visible style added for card-header button
+Default browser focus outline preserves accessibility (sighted keyboard users see focus ring). Could be styled with `.card-header:focus-visible { outline: 2px solid var(--c); outline-offset: -2px; }` for a more polished look, but that's polish work and risks visual regression. Default outline preserved; Thomas can decide morning whether to add custom focus styling.

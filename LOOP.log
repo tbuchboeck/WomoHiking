@@ -22,3 +22,4 @@
 [iter 6 | 2026-05-17 21:18 | phase 5 | empty-state] render() early-returns explicit empty-state panel (🔍 emoji + headline + "Alle Filter zurücksetzen" CTA) when filtered.length===0; uses role=status aria-live=polite for screen-reader announce
 [iter 6 | 2026-05-17 21:18 | phase 5 | no-other-stale-counts] grep verify: no other hardcoded 21/25/26 tour counts (only matches were tour cost amounts like "21 €/24h" — unrelated)
 [iter 6 | 2026-05-17 21:18 | phase 5 | card-header-button] DEFERRED — needs own iteration with CSS-regression check. Marked open in PROGRESS.
+[iter 7 | 2026-05-17 21:23 | phase 5 | card-header-button] cardHTML: outer .card div lost onclick, new <button type="button" class="card-header" aria-expanded aria-controls> wraps header content + onclick=toggleCard. toggleCard() now sets aria-expanded. Phase 5 complete (6/6).

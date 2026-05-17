@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 6,
+  "iteration": 7,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -251,7 +251,7 @@
     },
     "phase_5_ux_a11y": {
       "label": "Critical UX/A11y Fixes (from UX-reviewer)",
-      "done": false,
+      "done": true,
       "items": [
         {
           "id": "wcag-bergsee",
@@ -274,7 +274,8 @@
         {
           "id": "card-header-button",
           "label": "Card header div → button with aria-expanded",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:23:00Z"
         },
         {
           "id": "empty-state",
