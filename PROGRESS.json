@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 1,
+  "iteration": 2,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -100,17 +100,20 @@
         {
           "id": "extract-p4n",
           "label": "Extract 36 P4N URLs from HTML",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:00:00Z"
         },
         {
           "id": "headcheck-p4n",
           "label": "HEAD-check all P4N (1 req/3s)",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:00:00Z"
         },
         {
           "id": "p4n-replacements",
           "label": "Replace 404/410 P4N with Google Maps + comment",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:00:00Z"
         },
         {
           "id": "extract-routes",

@@ -1,1 +1,4 @@
 [iter 1 | 2026-05-17 20:52 | phase 1 | p4n-radius-query] BLOCKED — P4N API gone (SPA only) + Overpass 406s from OCI cloud-IP. Phase 1 deferred (see LEARNED.md failure-mode entries). Pivoting to Phase 2 next iteration.
+[iter 2 | 2026-05-17 21:00 | phase 2 | extract-p4n] 37 unique P4N URLs extracted (GOAL.md estimated 36; actual 37 because Tour 27 Schwarzensee #409728 added).
+[iter 2 | 2026-05-17 21:00 | phase 2 | headcheck-p4n] 35/37 HTTP 200, 2 dead (#213799 Schiederweiher, #58708 P7 Schafbergbahn). Total elapsed 126s, no 429s — rate-limit at 1 req/3s was conservative.
+[iter 2 | 2026-05-17 21:00 | phase 2 | p4n-replacements] Tour 3 + Tour 13 patched to Google Maps address fallback (per heuristic: address-form safer than coord-form for unattended).
