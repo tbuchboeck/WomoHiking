@@ -99,3 +99,6 @@ For the "fallback-pattern-sweep" audit, here are all `[t.id]||X` sites in `wande
 - line 527: `(routeUrls[t.id]||[]).map(...)` — route-button list (missing entry shows no button)
 - line 566: `data-sort="${womoRating[t.id]||3}"` + repeat — table cell + sort key
 These are the surface area for the data-map drift class of bugs. Phase 0 + Phase 3a have brought all 3 maps to 27/27 completeness, but the fallback pattern itself is unchanged — any future tour added without the 4-map-update discipline will silent-corrupt again. The structural fix (embed maps into tour objects) is in deferred backlog.
+
+## 2026-05-17 21:13 (iter 5) — decision: keep historical Timeline PIN/Supabase references unchanged
+DOCUMENTATION.md Timeline entries (lines 193–196) describe PR #1–9 chronologically. They mention "PIN lock screen" (line 196, PR #3). Per CLAUDE.md "do NOT touch auth stack" was about runtime code — the Timeline is a HISTORICAL log that accurately describes what was true on that date. Rewriting historical entries to retroactively use Passkey wording would falsify the record. Decision: leave PR #1–9 timeline as-is, append new entries for 2026-05-14 (Passkey migration) + 2026-05-17 (security incident response + this loop) instead.

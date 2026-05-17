@@ -4,7 +4,7 @@
 
 A standalone single-file HTML app for planning motorhome-based hiking trips in the Salzkammergut, Salzburger Land & Berchtesgaden region, starting from Bad Ischl, Austria. Built for an Elnagh Baron 531 motorhome (5.99m L, 2.35m W, 3.20m H, 3500 kg GVW).
 
-**Current state:** 26 curated hiking tours with verified parking, overnight options, dog ratings, Womo ratings, route links, and PIN-protected access via Supabase.
+**Current state:** 27 curated hiking tours with verified parking, overnight options, dog ratings, Womo ratings, route links, and Passkey-protected access via [auth.apps.buchboeck.at](https://auth.apps.buchboeck.at).
 
 **Repo:** [github.com/tbuchboeck/WomoHiking](https://github.com/tbuchboeck/WomoHiking)
 
@@ -12,17 +12,17 @@ A standalone single-file HTML app for planning motorhome-based hiking trips in t
 
 - **Single HTML file** — no framework, no build step, no backend
 - **Vanilla JS/CSS** — all logic inline in `<script>`, all styles in `<style>`
-- **External dependencies:** Google Fonts (DM Sans + Playfair Display), Supabase JS SDK (CDN)
+- **External dependencies:** Google Fonts (DM Sans + Playfair Display); `auth.js`/`auth.css` for Passkey flow against the auth.apps.buchboeck.at service (no Supabase SDK loaded — migrated 2026-05-14 in commit `df789a2`)
 - **Design:** Dark mode (#0A0A12), mobile-first, Playfair Display headers
 - **Data:** Tour objects in a JS array, ratings/routes in separate map objects
-- **PIN auth:** Supabase `app_config` table, SHA-256 hash, sessionStorage persistence
+- **Passkey auth:** WebAuthn flow against `auth.apps.buchboeck.at` (shared service across family apps), session JWT in `sessionStorage`. The previous Supabase-PIN scheme using a shared `app_config` table was retired 2026-05-14 (commit `df789a2`); the leaked legacy anon-key was disabled 2026-05-17.
 - **Stellplatz-First philosophy:** Parking viability drives tour selection, not the other way around
 
 ## File Inventory
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `wanderungen-v3-1.html` | The app — 26 tours, single-file vanilla JS/CSS, ~86 KB | Active |
+| `wanderungen-v3-1.html` | The app — 27 tours, single-file vanilla JS/CSS, ~88 KB | Active |
 | `projektwissen-wanderungen-1.md` | Project knowledge document (German) — context for AI-assisted development | Active |
 | `README.md` | Public-facing repo description | Active |
 | `.gitignore` | Excludes `CLAUDE.md` from repo | Active |
@@ -37,8 +37,8 @@ A standalone single-file HTML app for planning motorhome-based hiking trips in t
 ### Prerequisites
 
 - Any modern web browser (Chrome, Firefox, Safari, Edge)
-- Internet connection for: Google Fonts, Supabase PIN verification, external route/parking links
-- The 4-digit PIN (stored as SHA-256 hash in shared Supabase instance)
+- Internet connection for: Google Fonts, Passkey authentication via `auth.apps.buchboeck.at`, external route/parking links (Park4Night, Outdooractive, Alpenvereinaktiv)
+- A registered Passkey (one-time enrollment via the auth.apps.buchboeck.at service; same Passkey is reused across the family-app stack like LakeTemp)
 
 ### Running the App
 
@@ -129,7 +129,7 @@ const routeUrls = { 1:[{l:'Name',u:'URL'}], ... }; // Route track arrays
 
 ## App Features
 
-1. **PIN Lock Screen** — 4-digit numpad, SHA-256 via Supabase `app_config`, sessionStorage
+1. **Passkey Lock Screen** — WebAuthn flow rendered by `auth.js`/`auth.css`, verified against `auth.apps.buchboeck.at`, session JWT in `sessionStorage`. Same Passkey usable across the family-app stack (LakeTemp, future PathFinder, etc.).
 2. **Triple Filter** — distance + water type + dog swimming (combinable)
 3. **Sortable Comparison Table** — 7 columns: Tour, km, 🐾, 🚐, Typ, Fahrzeit, Stellplatz
 4. **Expandable Tour Cards** — pills, route, dog info, Womo rating, parking, restrictions, tips, highlights
@@ -141,7 +141,7 @@ const routeUrls = { 1:[{l:'Name',u:'URL'}], ... }; // Route track arrays
 
 - **Park4Night link verification**: All P4N IDs are manually verified — never guessed. Format: `https://park4night.com/en/place/XXXXX`. Fallback: Google Maps `?q=LAT,LNG`
 - **Standalone HTML over frameworks**: Chosen because `target="_blank"` links are blocked in Claude's artifact sandbox. All external links use `target="_blank" rel="noopener"`.
-- **Supabase PIN pattern**: Shared across multiple apps (EcoFlowMon, CoffeeTrack, EveryFood). Same `app_config` table, same anon key, different `sessionStorage` keys per app.
+- **Passkey via shared auth service**: The Passkey flow targets `auth.apps.buchboeck.at`, a small Node service (repo: `auth-buchboeck`) holding `passkeys` + `auth_users` + `webauthn_challenges` tables in the `everyfood` Supabase project. Same Passkey works across LakeTemp + WomoHiking + any future family app that imports `auth.js`/`auth.css`. The previous "Supabase PIN" pattern (4-digit SHA-256 in shared `app_config`) was retired 2026-05-14 across all apps; the leaked legacy anon-key from that era was disabled 2026-05-17 (Supabase Management API `PUT /v1/projects/wyiafjbpxbhaflhqvwcu/api-keys/legacy?enabled=false`).
 - **Route URL arrays**: `routeUrls[id]` is an array of `{l:'Label', u:'URL'}` objects. Short property names (`l`, `u` instead of `label`, `url`) save ~800 bytes across 33 entries.
 - **CSS custom properties for theming**: All colors defined in `:root` — `--bg`, `--card`, `--accent`, etc. Makes dark mode consistent.
 - **Paw/star rating rendering**: `paws(n)` and `womoStars(n)` generate 5 emoji spans with opacity 1 (filled) or 0.15 (empty).
@@ -176,7 +176,7 @@ These parking locations are genuinely not on Park4Night:
 - **Coordinate searches find P4N entries**: When text search fails, use the P4N API with lat/lng radius search
 - **Height restrictions are critical**: Tour 11 (Gmunden Seilbahn Parkhaus) has 2.10m limit — Elnagh with 3.20m doesn't fit. Always note height in restrictions.
 - **Overnight bans need verification**: Postalm timeline shows rules changed from free → banned → 20€/night ticket over 2021–2023
-- **Standalone HTML scales surprisingly well**: 25 tours, 36 P4N IDs, 33 route links, PIN auth — all in a single 80 KB file with no build tooling
+- **Standalone HTML scales surprisingly well**: 27 tours, 37 P4N IDs, 36 route links, Passkey auth (via small external auth.js/auth.css pair) — all the app logic still in a single ~88 KB HTML file with no build tooling. The single-file pattern has held up across two auth-stack migrations.
 
 ## Open Tasks
 
@@ -198,3 +198,7 @@ From `projektwissen-wanderungen-1.md`:
 | 2026-04-04 | PR #5: Replace 5 more Google Maps fallbacks with verified P4N links (42 P4N / 6 GM remaining) |
 | 2026-04-11 | PR #6: Add visit tracking — mark tours as visited with count and date (still open at time of writing) |
 | 2026-05-14 | PR #9: Add hiking-boot favicon + PWA manifest (installable as standalone PWA) |
+| 2026-05-14 | Commit `df789a2`: replace Supabase-PIN auth with Passkey via shared `auth.apps.buchboeck.at` service. Drops Supabase JS CDN dependency; auth.js/auth.css now the only auth surface. |
+| 2026-05-14 | PR #11/#12: AI-generated Bulli icon (favicon and apple-touch-icon refreshed) |
+| 2026-05-17 | Security incident response: rotated leaked legacy Supabase anon-key, migrated all 5 affected family apps + auth-buchboeck to new sb_publishable_/sb_secret_ keys, disabled legacy keys on Supabase project `wyiafjbpxbhaflhqvwcu`. App functionality unchanged (the migration to Passkey on 2026-05-14 had already removed the runtime dependency). |
+| 2026-05-17 | Overnight rework loop (Reflexion pattern + Two-Agent harness) on branch `claude/overnight-rework-2026-05-17`: Phase 0 data-bug fixes (Tour 1 type, dogSwimMap/womoRating for Tour 26+27, stale counts → dynamic), Phase 2 link-health (35/37 P4N + 34/36 OA-AV alive; 4 replaced or nulled), Phase 3 data-shape audit + docs sync. Tour count 26 → 27 (Schwarzensee added). |

@@ -9,3 +9,10 @@
 [iter 4 | 2026-05-17 21:09 | phase 3a | lookup-completeness] dogSwimMap 27/27 ✓, womoRating 27/27 ✓, routeUrls 26/27 → FIXED: inserted 26:null for Vilsalpsee + updated route-url-replacements-needed.md
 [iter 4 | 2026-05-17 21:09 | phase 3a | typecolors-audit] 5 types used, 5 colors defined, no orphans (see-fluss still used by Tour 10 after Phase 0 Tour 1 fix)
 [iter 4 | 2026-05-17 21:09 | phase 3a | fallback-pattern-sweep] 4 sites documented in LEARNED.md (lines 460, 507, 522, 527, 566). All maps now 27/27 — no current silent corruption, but pattern remains for future-tour additions.
+[iter 5 | 2026-05-17 21:13 | phase 3b | line-7-current-state] "26 tours...PIN via Supabase" → "27 tours...Passkey via auth.apps.buchboeck.at"
+[iter 5 | 2026-05-17 21:13 | phase 3b | line-15-deps] external deps: dropped Supabase JS SDK reference, added auth.js/auth.css note
+[iter 5 | 2026-05-17 21:13 | phase 3b | line-18-pin-auth] PIN auth bullet → Passkey WebAuthn bullet with migration history
+[iter 5 | 2026-05-17 21:13 | phase 3b | lines-40-41-prereq] Prereqs rewritten: Passkey enrollment instead of 4-digit PIN
+[iter 5 | 2026-05-17 21:13 | phase 3b | line-132-feature] App Feature #1: PIN Lock Screen → Passkey Lock Screen with cross-app reuse note
+[iter 5 | 2026-05-17 21:13 | phase 3b | line-144-pattern] "Supabase PIN pattern" → "Passkey via shared auth service" with full architecture description + retirement audit trail
+[iter 5 | 2026-05-17 21:13 | phase 3b | tour-counts] 26→27 fixed at lines 7, 25, 179; Timeline historical entries left intact (decision recorded in LEARNED.md)

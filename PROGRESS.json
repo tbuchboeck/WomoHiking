@@ -2,7 +2,7 @@
   "schema_version": 1,
   "initialized_at": "2026-05-17T20:45:00Z",
   "branch": "claude/overnight-rework-2026-05-17",
-  "iteration": 4,
+  "iteration": 5,
   "max_iterations": 80,
   "max_wallclock_hours": 10,
   "status": "ready-to-launch",
@@ -167,42 +167,49 @@
     },
     "phase_3b_docs": {
       "label": "DOCUMENTATION.md auth-section rewrite (security follow-up)",
-      "done": false,
+      "done": true,
       "items": [
         {
           "id": "line-7-current-state",
           "label": "Line 7 'Current state' uses Passkey wording",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "line-15-deps",
           "label": "Line 15 'External deps' drops Supabase JS CDN",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "line-18-pin-auth",
           "label": "Line 18 'PIN auth' → Passkey via auth.js",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "lines-40-41-prereq",
           "label": "Prereq drops PIN + Supabase verification",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "line-132-feature",
           "label": "Feature #1: PIN Lock → Passkey Lock",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "line-144-pattern",
           "label": "'Supabase PIN pattern' → Passkey shared service",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         },
         {
           "id": "tour-counts",
           "label": "Tour count refs updated to 27 throughout",
-          "done": false
+          "done": true,
+          "completed_at": "2026-05-17T21:13:00Z"
         }
       ]
     },
