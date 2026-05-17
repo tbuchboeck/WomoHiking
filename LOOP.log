@@ -1,0 +1,1 @@
+[iter 1 | 2026-05-17 20:52 | phase 1 | p4n-radius-query] BLOCKED — P4N API gone (SPA only) + Overpass 406s from OCI cloud-IP. Phase 1 deferred (see LEARNED.md failure-mode entries). Pivoting to Phase 2 next iteration.
