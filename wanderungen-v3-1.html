@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>26 Wanderungen für euch · Salzkammergut & Salzburger Land</title>
+<title>Wanderungen für euch · Salzkammergut & Salzburger Land</title>
 <link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
@@ -131,10 +131,10 @@ td{padding:5px 6px;border-bottom:1px solid #1A1A28}
 
 <div class="header">
 <div class="header-sub">Salzkammergut · Salzburger Land · Berchtesgaden · Ab Bad Ischl</div>
-<h1>26 Wanderungen <em>für euch</em></h1>
+<h1><span id="hdrCount">27</span> Wanderungen <em>für euch</em></h1>
 <p>Seen · Flüsse · Klammen · Almen · mit Hund 🐕 · Wohnmobil-Stellplätze</p>
 <div class="header-stats">
-<div class="stat"><span class="stat-val">23</span><span class="stat-label">Touren</span></div>
+<div class="stat"><span class="stat-val" id="statCount">27</span><span class="stat-label">Touren</span></div>
 <div class="stat"><span class="stat-val">3–12 km</span><span class="stat-label">Distanz</span></div>
 <div class="stat"><span class="stat-val">0–100 km</span><span class="stat-label">Radius</span></div>
 <div class="stat"><span class="stat-val">🐾 3–5</span><span class="stat-label">Hund</span></div>
@@ -193,11 +193,11 @@ function rerender(){
 // --- Tour Data ---
 const tours=[
 // === NAH (0-30 km) ===
-{id:1,group:"nah",type:"see-fluss",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
+{id:1,group:"nah",type:"see",name:"Nussensee-Runde",subtitle:"Bad Ischl · Direkt vor der Haustür",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht–Mittel",elevation:"175 Hm",water:"Nussensee, Ischl, Traun",dogRating:5,dogInfo:"Naturbelassene Buchten am Nussensee — Hund kann frei ins Wasser. Traun & Ischl bieten zusätzliche Flussbadestellen.",parking:{name:"Stellplatz Kaiservilla",address:"Götzstraße 9, 4820 Bad Ischl",cost:"12 €/24h",extras:"8 Plätze · Strom 1€/4h · Wasser 1€ · V+E · ganzjährig",p4n:"https://park4night.com/en/place/54915"},stellplatz:null,restrictions:"Leinenpflicht im Ortsgebiet Bad Ischl. Waldwege: empfohlen. Am See: keine.",description:"Startpunkt mitten in Bad Ischl. Entlang der Esplanade an der Traun, vorbei am Sissi-Park zur Ruine Wildenstein (13. Jh.), weiter durch Wald zum versteckten Nussensee. Rückweg am Ischlfluss.",highlight:"Bestes Preis-Leistungs-Verhältnis (12€) · Fluss + See · kaiserliche Geschichte",color:"#2D6A4F",icon:"🌲",distanceFromBase:"0 km",driveTime:"0 Min.",extraInfo:"Katrin-Seilbahn am Weg · SPAR in der Nähe · first-come Prinzip",personal:"🏰 Ruine Wildenstein (13. Jh.) direkt AM Rundweg — kaiserlicher Pflegersitz|🥗 Bad Ischl: Café Ramsauer (veg.), Weinhaus Attwenger, Asia-Restaurant Lilly (viele veg. Gerichte)",isNew:false},
 
 {id:2,group:"nah",type:"see",name:"Altausseer Seerundweg",subtitle:"Altaussee · Dachsteinblick",distance:"7,5 km",duration:"2–2,5 h",difficulty:"Sehr leicht",elevation:"58 Hm",water:"Altausseer See",dogRating:5,dogInfo:"Zahlreiche naturbelassene Buchten zum Baden. Offizielle Strandbäder meiden. Am Süd-/Ostufer spontane Einstiege.",parking:{name:"Parkplatz Zentrum",address:"Altaussee Zentrum",cost:"9 €/Tag",extras:"Gebührenpflichtig 9–19 Uhr · keine Höhenbeschränkung",p4n:"https://www.google.com/maps?q=47.6406,13.7664"},stellplatz:{name:"Caravanpark Ausseerland",address:"Ischlbergstraße 52, 8990 Bad Aussee",cost:"30–35 €/Nacht",extras:"10 Plätze · Sanitär · Dusche · ganzjährig · 4,7★",p4n:"https://park4night.com/en/place/229737"},restrictions:"Steiermark: Leinen-/Maulkorbpflicht überall! Nachtparkverbot für Womos in Altaussee.",description:"Einer der schönsten Seewanderungen der Alpen. Komplett um den kristallklaren Altausseer See. Blick auf Trisselwand, Loser & Dachsteingletscher. Jausenstation Seewiese (James Bond 'Spectre').",highlight:"Spektakulärstes Panorama · James-Bond-Drehlocation · kinderwagentauglich",color:"#4895EF",icon:"🏔️",distanceFromBase:"30 km",driveTime:"35 Min.",extraInfo:"Salzbergwerk Altaussee · Loser-Panoramastraße · Grundlsee + Toplitzsee",personal:"🏰 Burg Pflindsberg (Ruine oberhalb Altaussee) — kurzer Abstecher, tolle Aussicht|🥗 Bad Aussee: Lebzelter (vegetarische Menüs), Café Lewandofsky (vegan-freundlich)",isNew:false},
 
-{id:3,group:"nah",type:"see",name:"Bürglstein Runde",subtitle:"Wolfgangsee · Holzstege über türkisem Wasser",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht",elevation:"40 Hm",water:"Wolfgangsee",dogRating:4,dogInfo:"Hundebadestellen bei Abersee (Zinkenbach), Berau & Schwarzenbach. Offizielle Strandbäder: Hunde verboten.",parking:{name:"P7 Schafbergbahn",address:"Au 22, 5360 St. Wolfgang",cost:"10–25 €/Tag",extras:"Offen · keine Höhenbeschränkung · WC",p4n:"https://park4night.com/en/place/58708"},stellplatz:{name:"Camping Berau",address:"Schwarzenbach 16, St. Wolfgang",cost:"ca. 30 €/Nacht",extras:"4★ · direkt am See · ganzjährig · Hunde erlaubt",p4n:"https://park4night.com/en/place/131827"},restrictions:"Salzburger Land: Leinenpflicht im Ortsgebiet. Strandbäder ohne Hund.",description:"Von St. Wolfgang am Seeufer über Schwarzenbach nach Strobl, dann auf die Bürglpromenade — Holzstege über türkisblauem Wasser. Seerosenförmige Holzliegen. Blick auf Schafberg & Bleckwand.",highlight:"Holzstege über dem Wasser · Wolfgangsee-Flair",color:"#4361EE",icon:"🌊",distanceFromBase:"12 km",driveTime:"15 Min.",extraInfo:"Schafbergbahn am Parkplatz · Wolfgangsee-Schifffahrt · Kurze Variante ab Strobl: 5 km",personal:"🏰 Burg Falkenstein am Wolfgangsee-Nordufer — mystische Felskapelle|🥗 Strobl: Gasthof Brunnwirt (veg. Optionen), St. Wolfgang: Cafés mit Strudel",isNew:false},
+{id:3,group:"nah",type:"see",name:"Bürglstein Runde",subtitle:"Wolfgangsee · Holzstege über türkisem Wasser",distance:"9 km",duration:"2–2,5 h",difficulty:"Leicht",elevation:"40 Hm",water:"Wolfgangsee",dogRating:4,dogInfo:"Hundebadestellen bei Abersee (Zinkenbach), Berau & Schwarzenbach. Offizielle Strandbäder: Hunde verboten.",parking:{name:"P7 Schafbergbahn",address:"Au 22, 5360 St. Wolfgang",cost:"10–25 €/Tag",extras:"Offen · keine Höhenbeschränkung · WC",p4n:"https://www.google.com/maps?q=Au+22,+5360+St.+Wolfgang"},stellplatz:{name:"Camping Berau",address:"Schwarzenbach 16, St. Wolfgang",cost:"ca. 30 €/Nacht",extras:"4★ · direkt am See · ganzjährig · Hunde erlaubt",p4n:"https://park4night.com/en/place/131827"},restrictions:"Salzburger Land: Leinenpflicht im Ortsgebiet. Strandbäder ohne Hund.",description:"Von St. Wolfgang am Seeufer über Schwarzenbach nach Strobl, dann auf die Bürglpromenade — Holzstege über türkisblauem Wasser. Seerosenförmige Holzliegen. Blick auf Schafberg & Bleckwand.",highlight:"Holzstege über dem Wasser · Wolfgangsee-Flair",color:"#4361EE",icon:"🌊",distanceFromBase:"12 km",driveTime:"15 Min.",extraInfo:"Schafbergbahn am Parkplatz · Wolfgangsee-Schifffahrt · Kurze Variante ab Strobl: 5 km",personal:"🏰 Burg Falkenstein am Wolfgangsee-Nordufer — mystische Felskapelle|🥗 Strobl: Gasthof Brunnwirt (veg. Optionen), St. Wolfgang: Cafés mit Strudel",isNew:false},
 
 {id:4,group:"nah",type:"bergsee",name:"Langbathseen",subtitle:"Ebensee · Zwei Bergseen im Höllengebirge",distance:"7,5 km",duration:"2 h",difficulty:"Leicht",elevation:"140 Hm",water:"Vorderer & Hinterer Langbathsee",dogRating:3,dogInfo:"Naturschutzgebiet — strikte Leinenpflicht! Kleine Buchten nutzbar. Hinterer See: Badeverbot. Tipp: Traun-Mündung bei Ebensee.",parking:{name:"Tagesparkplatz Langbathsee",address:"Langbathseestraße, 4802 Ebensee",cost:"12 €/Tag",extras:"1,50€/Std · 8–18 Uhr · Münzen! · Nachtparkverbot",p4n:"https://park4night.com/en/place/256696"},stellplatz:{name:"Stellplatz Trauneck",address:"9 Trauneck, 4802 Ebensee",cost:"30 €/24h + Kurtaxe",extras:"25 Plätze · Strom · V+E · WC · am Traunsee · max. 3 Nächte",p4n:"https://park4night.com/en/place/20458"},restrictions:"Naturschutzgebiet — Leinenpflicht! Hinterer See: Badeverbot. Nachtparkverbot.",description:"Dramatische Gebirgslandschaft am Fuß des Höllengebirges. Türkis-schimmerndes Wasser, Brunnkogel, kaiserliches Jagdschloss.",highlight:"Kaiserliches Jagdschloss · dramatische Felsen · Kombi mit Offensee",color:"#7209B7",icon:"⛰️",distanceFromBase:"20 km",driveTime:"25 Min.",extraInfo:"Kombination mit Offensee ideal — gleiche Basis Ebensee · Münzen mitnehmen!",personal:"🏰 Schloss Orth am Traunsee (Gmunden, 20 Min.) — Seeschloss mit Brücke|🥗 Ebensee: Konditorei Wallner, Gmunden: Restaurants mit veg. Angebot",isNew:false},
 
@@ -219,7 +219,7 @@ const tours=[
 {id:12,group:"mittel",type:"see",name:"Almsee Rundweg",subtitle:"Grünau im Almtal · Spiegelsee",distance:"6,5 km",duration:"1,5–2 h",difficulty:"Sehr leicht",elevation:"30 Hm",water:"Almsee, Almfluss",dogRating:4,dogInfo:"Hunde erlaubt, viele Hundebesitzer. Kiesbuchten. Almfluss zum Baden. Naturschutzgebiet — anleinen! Wildpark: Hunde NICHT erlaubt.",parking:{name:"Parkplatz Almsee / GH Seehaus",address:"Seehaus, 4645 Grünau im Almtal",cost:"5–8 €/Tag",extras:"Großer Parkplatz · WC · GH Seehaus (seit 1652!)",p4n:"https://park4night.com/en/place/148911"},stellplatz:{name:"Almcamp Schatzlmühle",address:"1a Viechtwang, 4644 Scharnstein",cost:"25–33 €/Nacht",extras:"Am Almfluss · Hunde erlaubt · ganzjährig · 4,8★ · 20 Min. zum See",p4n:"https://park4night.com/en/place/97721"},restrictions:"⚠️ WOMO am Almsee-Parkplatz VERBOTEN — aggressiv kontrolliert! Almcamp nutzen. Leinenpflicht.",description:"Fotogenster See OÖ. Ikonisches Häuschen im See. Totes Gebirge spiegelt sich. Auwälder, Flussläufe, 'Echoplatzerl'. Cumberland Wildpark auf Anfahrt.",highlight:"Instagram-Ikone Seehaus · Totes-Gebirge-Spiegelung · Wildpark",color:"#606C38",icon:"🦌",distanceFromBase:"50 km",driveTime:"50 Min.",extraInfo:"Cumberland Wildpark (Hunde verboten!) · GH Seehaus seit 1652 · Ameisstein-Tour möglich",personal:"🏰 Schloss Scharnstein (am Weg!) — Renaissanceschloss mit Krippenmuseum|🥗 GH Seehaus: Kuchen ok. Grünau: eingeschränkte veg. Auswahl — Jause mitnehmen!",isNew:false},
 
 // === WEIT (60+ km) ===
-{id:13,group:"weit",type:"fluss-klamm",name:"Schiederweiher & Polsterlucke",subtitle:"Hinterstoder · Perle des Stodertals",distance:"7 km",duration:"2 h",difficulty:"Leicht",elevation:"50 Hm",water:"Schiederweiher, Krumme Steyr",dogRating:5,dogInfo:"Sehr hundefreundlich! Krumme Steyr: viele Flussstellen. Schiederweiher: Buchten. Polsterstüberl: Hunde im Gastgarten.",parking:{name:"Parkplatz Schiederweiher",address:"Goierweg, 4573 Hinterstoder",cost:"5 €/24h",extras:"Großer Schotterparkplatz · offen · Kiosk",p4n:"https://park4night.com/en/place/213799"},stellplatz:{name:"Womo-Stellplatz Hinterstoder",address:"Hinterstoder 5A (Hössbahn)",cost:"15 €/Nacht + 3 € Kurtaxe",extras:"30 Plätze · Strom · V+E · Hunde erlaubt · Online-Buchung · 7.4.–24.5. ZU!",p4n:"https://park4night.com/en/place/482487"},restrictions:"Polsterstüberl: Mo+Di Ruhetag. Wochenende: Parkplatz-Lotsen.",description:"2018 'Schönster Platz Österreichs' (ORF). Über Johannishof entlang der Krummen Steyr zum türkisfarbenen Schiederweiher. Weiter zur Polsterlucke (Ponys, Biergarten).",highlight:"ORF-Sieger · Fluss + Stausee · Polsterstüberl · nur 15€/Nacht",color:"#2EC4B6",icon:"✨",distanceFromBase:"55 km",driveTime:"55 Min.",extraInfo:"Dr. Vogelgesang Klamm in der Nähe · Prielschutzhaus +1.000 Hm · Nur online buchbar!",personal:"🏰 Schloss Leonstein (20 Min.) — Renaissanceschloss an der Steyr|🥗 Polsterstüberl: Kuchen, veg. begrenzt. Hinterstoder: Hotels mit besserer Auswahl",isNew:false},
+{id:13,group:"weit",type:"fluss-klamm",name:"Schiederweiher & Polsterlucke",subtitle:"Hinterstoder · Perle des Stodertals",distance:"7 km",duration:"2 h",difficulty:"Leicht",elevation:"50 Hm",water:"Schiederweiher, Krumme Steyr",dogRating:5,dogInfo:"Sehr hundefreundlich! Krumme Steyr: viele Flussstellen. Schiederweiher: Buchten. Polsterstüberl: Hunde im Gastgarten.",parking:{name:"Parkplatz Schiederweiher",address:"Goierweg, 4573 Hinterstoder",cost:"5 €/24h",extras:"Großer Schotterparkplatz · offen · Kiosk",p4n:"https://www.google.com/maps?q=Goierweg,+4573+Hinterstoder"},stellplatz:{name:"Womo-Stellplatz Hinterstoder",address:"Hinterstoder 5A (Hössbahn)",cost:"15 €/Nacht + 3 € Kurtaxe",extras:"30 Plätze · Strom · V+E · Hunde erlaubt · Online-Buchung · 7.4.–24.5. ZU!",p4n:"https://park4night.com/en/place/482487"},restrictions:"Polsterstüberl: Mo+Di Ruhetag. Wochenende: Parkplatz-Lotsen.",description:"2018 'Schönster Platz Österreichs' (ORF). Über Johannishof entlang der Krummen Steyr zum türkisfarbenen Schiederweiher. Weiter zur Polsterlucke (Ponys, Biergarten).",highlight:"ORF-Sieger · Fluss + Stausee · Polsterstüberl · nur 15€/Nacht",color:"#2EC4B6",icon:"✨",distanceFromBase:"55 km",driveTime:"55 Min.",extraInfo:"Dr. Vogelgesang Klamm in der Nähe · Prielschutzhaus +1.000 Hm · Nur online buchbar!",personal:"🏰 Schloss Leonstein (20 Min.) — Renaissanceschloss an der Steyr|🥗 Polsterstüberl: Kuchen, veg. begrenzt. Hinterstoder: Hotels mit besserer Auswahl",isNew:false},
 
 {id:14,group:"weit",type:"fluss-klamm",name:"Rinnende Mauer",subtitle:"Molln · Naturwunder Steyrschlucht",distance:"8,7 km",duration:"2,5–3 h",difficulty:"Mittel",elevation:"70 Hm",water:"Steyr, Krumme Steyrling",dogRating:4,dogInfo:"Mit Hund gut machbar. Steyr: Badeplätze an Schotterbänken. Alpiner Steig: Hund muss trittsicher sein! Leinenpflicht.",parking:{name:"Parkplatz Stefaniebrücke",address:"Buseckerstraße 2, 4591 Molln",cost:"Kostenlos",extras:"Großer Parkplatz · Pizzeria Dolce Vita daneben · Bus 433",p4n:"https://www.google.com/maps?q=47.8836,14.2526"},stellplatz:{name:"Parkplatz Gradau (kurze Runde)",address:"Haunoldmühlstr., 4591 Breitenau",cost:"Kostenlos",extras:"Kürzere Runde: 4,7 km, 1:15h",p4n:"https://www.google.com/maps?q=47.8780,14.2680"},restrictions:"Naturschutzgebiet — Leinenpflicht! Trittsicherheit nötig! Steinschlaggefahr bei Regen. 1.4.–1.7.: Schotterinsel gesperrt.",description:"Naturwunder: 50m lange Konglomeratwand, aus der Grundwasser als Sprühregen austritt — 5–7m über der smaragdgrünen Steyr. Schluchtweg ab Stefaniebrücke, über Zinkensteg zur Rinnenden Mauer. Spektakuläre Tiefblicke.",highlight:"Einzigartiges Naturwunder · smaragdgrüne Steyr · KOSTENLOS · Pizza danach",color:"#7B2D8E",icon:"💧",distanceFromBase:"75 km",driveTime:"1:10 h",extraInfo:"3 Routen: Schluchtweg (8,7 km), Flötzersteig (1:15h), Gradau-Runde (4,7 km) · Maultrommel-Werkstatt · Dolce Vita (4,3★) · Badeschuhe!",personal:"🏰 Schloss Leonstein — Renaissance-Juwel an der Steyr! Burg Altpernstein (30 Min.) — mittelalterlich mit Führungen|🥗 Pizzeria Dolce Vita: Pizza, Pasta, Salate — vegetarisch top! Landgasthof Klausner: Käsegerichte",isNew:false},
 
@@ -252,7 +252,9 @@ const tours=[
 
 const distGroups={nah:{label:'📍 Nahbereich · 0–30 km',order:0},mittel:{label:'🗺️ Entdeckungen · 30–60 km',order:1},weit:{label:'🌍 Abenteuer · 60+ km',order:2}};
 const typeLabels={'see':'🏊 See-Runde','bergsee':'⛰️ Bergsee','fluss-klamm':'🏞️ Fluss & Klamm','see-fluss':'🌊 See + Fluss','alm':'🏔️ Alm & Panorama'};
-const typeColors={'see':'#4895EF','bergsee':'#7209B7','fluss-klamm':'#2EC4B6','see-fluss':'#2D6A4F','alm':'#D97706'};
+// typeColors: WCAG-AA against card-bg #13131D verified 2026-05-17 (iter 6)
+// bergsee #7209B7→#A78BFA (1.95:1→6.0:1); see-fluss #2D6A4F→#34D399 (1.85:1→8.2:1)
+const typeColors={'see':'#4895EF','bergsee':'#A78BFA','fluss-klamm':'#2EC4B6','see-fluss':'#34D399','alm':'#D97706'};
 
 let sortCol=-1;
 let sortAsc=true;
@@ -277,8 +279,8 @@ const routeUrls={
   13:[{l:'Schiederweiher & Polsterlucke',u:'https://www.alpenvereinaktiv.com/de/tour/zu-schiederweiher-und-polsterlucke/802279569/'}],
   14:[{l:'Rinnende Mauer Schluchtweg',u:'https://www.outdooractive.com/de/route/wanderweg/molln/rinnende-mauer-schluchtweg/55526269/'}],
   15:[{l:'Leopoldsteinersee-Runde',u:'https://www.outdooractive.com/de/route/wanderung/erzberg-leoben/leopoldsteinerseerunde/805110987/'}],
-  16:[{l:'Rundwanderweg Zeller See',u:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundwanderweg-zeller-see/7750068/'}],
-  17:[{l:'Rundweg Klammsee',u:'https://www.outdooractive.com/de/route/wanderung/zell-am-see-kaprun/rundweg-klammsee/1362539/'}],
+  16:null, // OA #7750068 (Rundwanderweg Zeller See) → 410 Gone 2026-05-17, replacement needed (see route-url-replacements-needed.md)
+  17:null, // OA #1362539 (Rundweg Klammsee) → 410 Gone 2026-05-17, replacement needed (see route-url-replacements-needed.md)
   18:[{l:'Wanderung durchs Bluntautal',u:'https://www.outdooractive.com/de/route/wanderung/tennengau/wanderung-druch-das-bluntautal/23040799/'}],
   19:[{l:'Malerwinkel-Rundweg Königssee',u:'https://www.outdooractive.com/de/route/wanderung/nationalpark-berchtesgaden/malerwinkel-rundweg-wandern-im-nationalpark-berchtesgaden/800513173/'}],
   20:[{l:'Postalm Rundweg',u:'https://www.outdooractive.com/de/route/wanderung/abtenau/abtenau-ivv-rundwanderweg-postalm-rundweg-2-8-punkte-/1358920/'}],
@@ -300,6 +302,7 @@ const routeUrls={
     {l:'Jasna → Gozd Martuljek (7,4 km)',u:'https://www.outdooractive.com/de/route/wanderung/kranjska-gora/ueber-drcev-rut-zum-jasnasee-und-durch-den-tofov-graben-nach-gozd-martuljek/806476654/'},
     {l:'Zelenci Naturreservat – Sava-Quelle (3,8 km)',u:'https://www.outdooractive.com/en/route/hiking-trail/kranjska-gora/from-ratece-to-zelenci-source-of-the-sava-river/805166934/'}
   ],
+  26:null, // Vilsalpsee — no AlpenVereinAktiv/Outdooractive track verified yet, see route-url-replacements-needed.md
   27:[
     {l:'Sattelweg zum Schwarzensee, über Hofalm zurück',u:'https://www.alpenvereinaktiv.com/de/tour/sattelweg-zum-schwarzensee-ueber-hofalm-zurueck/207892066/'},
     {l:'Wanderung von St. Wolfgang zum Schwarzensee',u:'https://www.outdooractive.com/de/route/wanderung/oesterreich/wanderung-von-st.-wolfgang-zum-schwarzensee/23027987/'},
@@ -338,10 +341,11 @@ function sortTable(col){
     return sortAsc?result:-result;
   });
   rows.forEach(r=>tbody.appendChild(r));
-  // Update header arrows
+  // Update header arrows + aria-sort (a11y per 2026-05-17 UX review)
   table.querySelectorAll('th').forEach((th,i)=>{
     const base=th.textContent.replace(/[⇅↑↓]/g,'').trim();
     th.textContent=base+(i===col?(sortAsc?' ↑':' ↓'):' ⇅');
+    th.setAttribute('aria-sort', i===col?(sortAsc?'ascending':'descending'):'none');
   });
 }
 
@@ -371,7 +375,9 @@ const dogSwimMap={
   22:'teils',// Hallstättersee: Buchten ja, Strandbad nein
   23:'teils',// Traunsee: Kiesstrand ja, Strandbad nein
   24:'teils',// Lago di Molveno: Nordufer naturbelassen, Strandbäder nein
-  25:'ja'    // Jasna-See: Kiesufer, direkter Zugang, sehr kalt!
+  25:'ja',   // Jasna-See: Kiesufer, direkter Zugang, sehr kalt!
+  26:'nein', // Vilsalpsee: Naturschutzgebiet, Hundebaden offiziell untersagt — nur Vilsbach-Zuläufe zum Pfoten-Kühlen
+  27:'ja'    // Schwarzensee: Naturufer mit Schotter- & Wiesenstellen zum Baden, hundefreundlich
 };
 
 // Womo-Rating (1–5): Wie gut ist die Tour für den Elnagh Baron 531?
@@ -401,7 +407,9 @@ const womoRating={
   22:4, // P4N verifiziert, gute Lage, Kurtaxe
   23:5, // Wunderburg GRATIS + Toscanapark P4N, top für Womos
   24:3, // P4N verifiziert aber teuer (32–50€), 48h max, kein Campingverhalten, Brenner-Maut
-  25:3  // Planica Stellplatz P4N, aber Nachtparkverbot in KG, Vršič-Pass eng für Womo
+  25:3, // Planica Stellplatz P4N, aber Nachtparkverbot in KG, Vršič-Pass eng für Womo
+  26:2, // Vilsalpsee: Stellplatz UNVERIFIZIERT, nur Tagespark, Tannheim-Anfahrt eng
+  27:2  // Schwarzensee: kein Stellplatz (null), nur 8€ Nachtpark Wanderparkplatz, 3€ Tagespark
 };
 
 let activeDist='alle';
@@ -412,7 +420,7 @@ function initFilters(){
   const df=document.getElementById('distFilters');
   const tf=document.getElementById('typeFilters');
   const sf=document.getElementById('swimFilters');
-  df.innerHTML=`<button class="fbtn active" onclick="setDist('alle')">Alle 21</button>
+  df.innerHTML=`<button class="fbtn active" onclick="setDist('alle')">Alle ${tours.length}</button>
     <button class="fbtn" onclick="setDist('nah')">Nah (0–30)</button>
     <button class="fbtn" onclick="setDist('mittel')">Mittel (30–60)</button>
     <button class="fbtn" onclick="setDist('weit')">Weit (60+)</button>`;
@@ -485,8 +493,8 @@ function personalHTML(p,color){
 function cardHTML(t){
   const tc=typeColors[t.type]||'#666';
   const tl=typeLabels[t.type]||t.type;
-  return `<div class="card" id="card-${t.id}" style="--c:${t.color}" onclick="toggleCard(${t.id})">
-    <div class="card-header">
+  return `<div class="card" id="card-${t.id}" style="--c:${t.color}">
+    <button type="button" class="card-header" aria-expanded="false" aria-controls="body-${t.id}" onclick="toggleCard(${t.id})">
       <div class="card-icon" style="background:linear-gradient(135deg,${t.color},${t.color}AA);box-shadow:0 3px 10px ${t.color}33">${t.icon}</div>
       <div class="card-info">
         <div class="card-top">
@@ -507,7 +515,7 @@ function cardHTML(t){
           ${(()=>{const v=getVisits()[t.id];return v&&v.count>0?`<span class="water-badge" style="color:#A78BFA;background:#A78BFA15">✅ ${v.count}× besucht</span>`:'';})()}
         </div>
       </div>
-    </div>
+    </button>
     <div class="card-body" id="body-${t.id}" style="display:none" onclick="event.stopPropagation()">
       <div class="pills">
         ${['Distanz|'+t.distance,'Dauer|'+t.duration,'Höhe|'+t.elevation,'Anfahrt|'+t.distanceFromBase].map(p=>{const[l,v]=p.split('|');return`<div class="pill" style="background:${t.color}12;border:1px solid ${t.color}25"><span class="pill-label">${l}</span><span class="pill-value" style="color:${t.color}">${v}</span></div>`}).join('')}
@@ -533,6 +541,13 @@ function render(){
 
   document.getElementById('filterCount').textContent=`${filtered.length} Tour${filtered.length!==1?'en':''} gefunden`;
 
+  // Empty state (added 2026-05-17 iter 6 per UX review): explicit zero-match panel
+  // with "reset filters" CTA instead of letting the user see only empty groups + empty table.
+  if(filtered.length===0){
+    c.innerHTML=`<div style="text-align:center;padding:48px 20px;color:#9CA3AF" role="status" aria-live="polite"><div style="font-size:42px;margin-bottom:10px" aria-hidden="true">🔍</div><div style="font-size:14px;font-weight:700;color:#E5E7EB;margin-bottom:6px">Keine Tour passt zu diesen Filtern</div><div style="font-size:12px;margin-bottom:14px">Probier weniger Filter oder lockere die Auswahl.</div><button type="button" onclick="setDist('alle');setType('alle');setSwim('alle')" style="background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer">Alle Filter zurücksetzen</button></div>`;
+    return;
+  }
+
   const groups=['nah','mittel','weit'];
   groups.forEach(g=>{
     const inGroup=filtered.filter(t=>t.group===g);
@@ -544,14 +559,14 @@ function render(){
   // Comparison table with sortable columns
   html+=`<div class="tip-box" style="margin-top:6px"><h3>📊 Schnellvergleich <span style="font-size:10px;font-weight:400;color:#6B7280">· Spalte antippen zum Sortieren</span></h3><div class="table-wrap"><table id="compareTable">
   <thead><tr>
-    <th onclick="sortTable(0)" style="cursor:pointer">Tour ⇅</th>
-    <th onclick="sortTable(1)" style="cursor:pointer">km ⇅</th>
-    <th onclick="sortTable(2)" style="cursor:pointer">🐾 ⇅</th>
-    <th onclick="sortTable(3)" style="cursor:pointer">🚐 ⇅</th>
-    <th onclick="sortTable(4)" style="cursor:pointer">Typ ⇅</th>
-    <th onclick="sortTable(5)" style="cursor:pointer">Fahrzeit ⇅</th>
-    <th onclick="sortTable(6)" style="cursor:pointer">Stellplatz ⇅</th>
-    <th onclick="sortTable(7)" style="cursor:pointer">✅ ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(0)}" style="cursor:pointer">Tour ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(1)}" style="cursor:pointer">km ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(2)}" style="cursor:pointer">🐾 ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(3)}" style="cursor:pointer">🚐 ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(4)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(4)}" style="cursor:pointer">Typ ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(5)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(5)}" style="cursor:pointer">Fahrzeit ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(6)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(6)}" style="cursor:pointer">Stellplatz ⇅</th>
+    <th role="button" tabindex="0" aria-sort="none" onclick="sortTable(7)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sortTable(7)}" style="cursor:pointer">✅ ⇅</th>
   </tr></thead><tbody>`;
   filtered.forEach(t=>{
     const tc=typeColors[t.type]||'#666';
@@ -586,11 +601,15 @@ function render(){
 function toggleCard(id){
   const body=document.getElementById('body-'+id);
   const card=document.getElementById('card-'+id);
-  if(body.style.display==='none'){body.style.display='block';card.classList.add('open')}
+  const header=card.querySelector('.card-header');
+  const opening=body.style.display==='none';
+  if(opening){body.style.display='block';card.classList.add('open')}
   else{body.style.display='none';card.classList.remove('open')}
+  if(header)header.setAttribute('aria-expanded',String(opening));
 }
 
-function init(){initFilters();render()}
+function syncTourCounts(){const n=tours.length;const a=document.getElementById('hdrCount');const b=document.getElementById('statCount');if(a)a.textContent=n;if(b)b.textContent=n;}
+function init(){syncTourCounts();initFilters();render()}
 
 // --- Start ---
 // auth.js fires 'auth:unlocked' whenever the gate opens (either an existing

@@ -1,2 +1,19 @@
-CLAUDE.md
+# Vercel local config
 .vercel
+
+# Loop runtime state (regenerated each run; not source-of-truth)
+.loop-state/
+
+# Per-session memsearch memory (Claude Code internal)
+.memsearch/
+
+# Supabase CLI temp / credentials
+supabase/.temp/
+
+# Security baseline (per .gitignore audit 2026-05-17)
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.*
