@@ -304,20 +304,23 @@
     },
     "phase_6_ci": {
       "label": "GitHub Actions CI Link-Check",
-      "done": false,
+      "done": true,
       "items": [
         {
           "id": "workflow-file",
           "label": ".github/workflows/link-check.yml created",
-          "done": false,
-          "completed_at": "2026-05-17T21:27:00Z",
-          "blocker_logged": "LEARNED.md @ 2026-05-17 21:28 — gh OAuth lacks workflow scope; workflow file staged at docs/proposed/link-check.yml awaiting `gh auth refresh -s workflow` + move"
+          "done": true,
+          "completed_at": "2026-05-18T18:57:00Z",
+          "blocker_logged": "LEARNED.md @ 2026-05-17 21:28 — gh OAuth lacks workflow scope; workflow file staged at docs/proposed/link-check.yml awaiting `gh auth refresh -s workflow` + move",
+          "note": "installed 2026-05-18 after gh auth refresh -s workflow"
         },
         {
           "id": "ci-first-run-green",
           "label": "First run on branch green",
-          "done": false,
-          "blocker_logged": "depends on workflow-file install"
+          "done": true,
+          "blocker_logged": "depends on workflow-file install",
+          "completed_at": "2026-05-18T19:02:05Z",
+          "note": "GitHub Actions run 26054030937: 0/69 dead, 0.0% — passed"
         },
         {
           "id": "readme-badge",

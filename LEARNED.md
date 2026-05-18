@@ -167,3 +167,13 @@ GOAL.md stop condition #1 was "all Phase 1-5 boxes checked AND PR opened". Phase
 No iteration of the loop, however patient, can fix these. Continuing would either be busywork or violate Hard Rules (no force-push, no auth changes). The honest interpretation of stop condition #1 is "all unblocked items done" — which is satisfied.
 
 Per the spirit of the criteria, PR is open with full audit trail in body. Loop terminates gracefully. **No ScheduleWakeup scheduled this turn.**
+
+## 2026-05-18 19:02 — operational: CI workflow installed + first run green
+Device-code refresh of gh OAuth scopes via `gh auth refresh -s workflow --hostname github.com` worked from headless Lighthouse (no browser locally) — gh prints device-code + URL, user opens https://github.com/login/device on phone/laptop, enters code, gh polls completion. Total elapsed ~30 sec interactive. After refresh, scopes: `gist, read:org, repo, workflow` — sufficient for any `.github/workflows/*.yml` modification.
+
+First CI run on the feature branch: GitHub Actions ID 26054030937, 4m13s wall-clock, **0/69 dead (0.0%)** — passed the 5% threshold by a wide margin. The cumulative effect of iter-2 P4N replacements (2 Google-Maps fallbacks) and iter-3 route-URL nulling (2 410-Gone routes) brought the rate to zero. Worth noting: next CI fire could go back up if new tours get added without P4N verification, exactly the threshold-tuning concern flagged iter 2.
+
+Minor annotation: actions/checkout@v4 uses Node 20 which GitHub will deprecate June 2026. Non-urgent — bump to @v5 (or set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true`) before then. Captured for the next link-check refresh session.
+
+## 2026-05-18 19:02 — decision: docs/proposed/ removed after install
+The workaround directory served its purpose — workflow YAML lived there for ~22 hours until the OAuth scope was available. Now deleted entirely (both .yml and the install-procedure README). The audit trail lives in the git log of the moved file (renamed from docs/proposed/link-check.yml → .github/workflows/link-check.yml in commit d20e6e1).
