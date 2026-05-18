@@ -13,7 +13,7 @@ A standalone single-file HTML app for planning motorhome-based hiking trips in t
 - **Single HTML file** — no framework, no build step, no backend
 - **Vanilla JS/CSS** — all logic inline in `<script>`, all styles in `<style>`
 - **External dependencies:** Google Fonts (DM Sans + Playfair Display); `auth.js`/`auth.css` for Passkey flow against the auth.apps.buchboeck.at service (no Supabase SDK loaded — migrated 2026-05-14 in commit `df789a2`)
-- **Design:** Dark mode (#0A0A12), mobile-first, Playfair Display headers
+- **Design:** Dark mode (body `#0A0A12` / card `#181826` / hover `#20203A`), mobile-first, Playfair Display headers. Color palette + 6-step type scale (10/12/14/16/20/26) WCAG-AA compliant — see 2026-05-18 design-refresh commit for full audit. `--text-faint` is `#94A3B8` (7.19:1 on card-bg).
 - **Data:** Tour objects in a JS array, ratings/routes in separate map objects
 - **Passkey auth:** WebAuthn flow against `auth.apps.buchboeck.at` (shared service across family apps), session JWT in `sessionStorage`. The previous Supabase-PIN scheme using a shared `app_config` table was retired 2026-05-14 (commit `df789a2`); the leaked legacy anon-key was disabled 2026-05-17.
 - **Stellplatz-First philosophy:** Parking viability drives tour selection, not the other way around
@@ -202,3 +202,5 @@ From `projektwissen-wanderungen-1.md`:
 | 2026-05-14 | PR #11/#12: AI-generated Bulli icon (favicon and apple-touch-icon refreshed) |
 | 2026-05-17 | Security incident response: rotated leaked legacy Supabase anon-key, migrated all 5 affected family apps + auth-buchboeck to new sb_publishable_/sb_secret_ keys, disabled legacy keys on Supabase project `wyiafjbpxbhaflhqvwcu`. App functionality unchanged (the migration to Passkey on 2026-05-14 had already removed the runtime dependency). |
 | 2026-05-17 | Overnight rework loop (Reflexion pattern + Two-Agent harness) on branch `claude/overnight-rework-2026-05-17`: Phase 0 data-bug fixes (Tour 1 type, dogSwimMap/womoRating for Tour 26+27, stale counts → dynamic), Phase 2 link-health (35/37 P4N + 34/36 OA-AV alive; 4 replaced or nulled), Phase 3 data-shape audit + docs sync. Tour count 26 → 27 (Schwarzensee added). |
+| 2026-05-18 | PR #13 merged. Weekly link-health CI installed (`.github/workflows/link-check.yml`) — first run green, 0/69 dead. |
+| 2026-05-18 | PR #14 (design refresh, Tier 1+2+3): contrast fix (`--text-faint` 3.82:1→7.19:1), 20-rule type-scale cleanup (14 sizes → 6-step scale, smallest body text now 11px), card surface refresh (bg #13131D→#181826, border #252535→#2F2F45, +shadow, +section dividers, +active-filter glow). WCAG-AA throughout. |
