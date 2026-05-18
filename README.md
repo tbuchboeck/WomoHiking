@@ -70,6 +70,8 @@ Water types: Lake loops, mountain lakes, river gorges, lake+river combos, alpine
 - PWA installable
 - No build step, no application dependencies; deployed via Vercel
 - Weekly GitHub Actions link-health check
+- WCAG-AA compliant color palette + 6-step type scale (10/12/14/16/20/26)
+- Keyboard-accessible sort headers (`aria-sort`) + card toggles (`aria-expanded`)
 
 ## Credits
 
